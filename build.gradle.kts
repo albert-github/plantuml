@@ -402,7 +402,7 @@ tasks.register("site") {
 		"teavm"
 	)
 	
-	doFirst {
+	doLast {
 		siteDir.mkdirs()
 
 		// Generate timestamp
@@ -455,10 +455,7 @@ tasks.register("site") {
 			from(layout.buildDirectory.dir("teavm/js"))
 			into("$siteDir/js-plantuml")
 		}
-
-	}
 	
-	doLast {
 		println("========================================")
 		println("Project site generated successfully!")
 		println("========================================")
