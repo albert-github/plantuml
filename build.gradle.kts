@@ -613,7 +613,18 @@ tasks.register<JavaExec>("generateJavaScript") {
 	}
 	
 	doLast {
-		println("JavaScript generation complete!")
+		println("[TEAVM] JavaScript generation complete!")
+		println("[TEAVM] Checking output directory: ${outputDir.absolutePath}")
+		println("[TEAVM] outputDir.exists() = ${outputDir.exists()}")
+		if (outputDir.exists()) {
+			println("[TEAVM] outputDir contents:")
+			outputDir.listFiles()?.forEach { println("[TEAVM]   - ${it.name} (${it.length()} bytes)") }
+		}
+		val classesJs = file("${outputDir.absolutePath}/classes.js")
+		println("[TEAVM] classes.js exists: ${classesJs.exists()}")
+		if (!classesJs.exists()) {
+			println("[TEAVM] WARNING: classes.js was NOT generated!")
+		}
 	}
 }
 
