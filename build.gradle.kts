@@ -403,7 +403,20 @@ tasks.register("site") {
 	)
 	
 	doLast {
+		println("[SITE] Starting site generation...")
+		println("[SITE] siteDir = ${siteDir.absolutePath}")
 		siteDir.mkdirs()
+
+		// Check TeaVM output
+		val teavmDir = layout.buildDirectory.dir("teavm/js").get().asFile
+		println("[SITE] teavmDir = ${teavmDir.absolutePath}")
+		println("[SITE] teavmDir.exists() = ${teavmDir.exists()}")
+		if (teavmDir.exists()) {
+			println("[SITE] teavmDir contents:")
+			teavmDir.listFiles()?.forEach { println("[SITE]   - ${it.name} (${it.length()} bytes)") }
+		} else {
+			println("[SITE] WARNING: teavmDir does not exist!")
+		}
 
 		// Generate timestamp
 		val timestamp = LocalDateTime.now().toString().replace('T', ' ').substring(0, 19)
@@ -451,9 +464,25 @@ tasks.register("site") {
 			into("$siteDir/jdepend")
 		}
 
+		println("[SITE] Copying teavm/js to js-plantuml...")
 		copy {
 			from(layout.buildDirectory.dir("teavm/js"))
 			into("$siteDir/js-plantuml")
+		}
+		
+		// Verify copy result
+		val jsPlantUmlDir = file("$siteDir/js-plantuml")
+		println("[SITE] js-plantuml dir exists: ${jsPlantUmlDir.exists()}")
+		if (jsPlantUmlDir.exists()) {
+			println("[SITE] js-plantuml contents:")
+			jsPlantUmlDir.listFiles()?.forEach { println("[SITE]   - ${it.name} (${it.length()} bytes)") }
+		}
+		
+		// Check for classes.js specifically
+		val classesJs = file("$siteDir/js-plantuml/classes.js")
+		println("[SITE] classes.js exists: ${classesJs.exists()}")
+		if (classesJs.exists()) {
+			println("[SITE] classes.js size: ${classesJs.length()} bytes")
 		}
 	
 		println("========================================")
