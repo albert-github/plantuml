@@ -61,6 +61,7 @@ import net.sourceforge.plantuml.nio.PathSystem;
 import net.sourceforge.plantuml.preproc.Defines;
 import net.sourceforge.plantuml.security.SImageIO;
 import net.sourceforge.plantuml.style.ISkinSimple;
+import net.sourceforge.plantuml.teavm.browser.BrowserLog;
 import net.sourceforge.plantuml.text.StringLocated;
 
 public class EmbeddedDiagram implements Line, Atom {
@@ -68,58 +69,18 @@ public class EmbeddedDiagram implements Line, Atom {
 	public static final String EMBEDDED_START = "{{";
 	public static final String EMBEDDED_END = "}}";
 
-	public static String getEmbeddedType(CharSequence cs) {
-		if (cs == null)
-			return null;
+	private PortableImage image;
+	private String svg;
+	private final Diagram diagram;
 
-		final String s = StringUtils.trin(cs.toString());
-		if (s.startsWith(EMBEDDED_START) == false)
-			return null;
+	private EmbeddedDiagram(ISkinSimple skinParam, List<StringLocated> strings) {
 
-		switch (s) {
-		case EMBEDDED_START:
-			return "uml";
-		case EMBEDDED_START + "ditaa":
-			return "ditaa";
-		case EMBEDDED_START + "salt":
-			return "salt";
-		case EMBEDDED_START + "uml":
-			return "uml";
-		case EMBEDDED_START + "wbs":
-			return "wbs";
-		case EMBEDDED_START + "mindmap":
-			return "mindmap";
-		case EMBEDDED_START + "gantt":
-			return "gantt";
-		case EMBEDDED_START + "json":
-			return "json";
-		case EMBEDDED_START + "yaml":
-			return "yaml";
-		case EMBEDDED_START + "wire":
-			return "wire";
-		case EMBEDDED_START + "creole":
-			return "creole";
-		case EMBEDDED_START + "board":
-			return "board";
-		case EMBEDDED_START + "ebnf":
-			return "ebnf";
-		case EMBEDDED_START + "regex":
-			return "regex";
-		case EMBEDDED_START + "files":
-			return "files";
-		case EMBEDDED_START + "chronology":
-			return "chronology";
-		case EMBEDDED_START + "chen":
-			return "chen";
-		case EMBEDDED_START + "chart":
-			return "chart";
-		case EMBEDDED_START + "nwdiag":
-			return "nwdiag";
-		case EMBEDDED_START + "packetdiag":
-			return "packetdiag";
-		default:
-			return null;
-		}
+		final Previous previous = skinParam == null ? Previous.createEmpty() : Previous.createFrom(skinParam.values());
+		final BlockUml blockUml = new BlockUml(null, PathSystem.fetch(), strings, Defines.createEmpty(), previous,
+				null);
+
+		this.diagram = blockUml.getDiagram();
+
 	}
 
 	public static EmbeddedDiagram createAndSkip(String type, Iterator<CharSequence> it, ISkinSimple skinParam) {
@@ -141,16 +102,6 @@ public class EmbeddedDiagram implements Line, Atom {
 		result.add("@end" + type);
 		return EmbeddedDiagram.from(skinParam, result);
 
-	}
-
-	private final List<StringLocated> list;
-	private final ISkinSimple skinParam;
-	private PortableImage image;
-	private String svg;
-
-	private EmbeddedDiagram(ISkinSimple skinParam, List<StringLocated> system) {
-		this.list = system;
-		this.skinParam = skinParam;
 	}
 
 	public static EmbeddedDiagram from(ISkinSimple skinParam, List<String> strings) {
@@ -207,23 +158,23 @@ public class EmbeddedDiagram implements Line, Atom {
 	}
 
 	private String getImageSvgSlow() throws IOException, InterruptedException {
-		final Diagram system = getSystem();
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		system.exportDiagram(os, 0, new FileFormatOption(FileFormat.SVG));
+		diagram.exportDiagram(os, 0, new FileFormatOption(FileFormat.SVG));
 		os.close();
 		return new String(os.toByteArray());
 	}
 
 	private PortableImage getImage() throws IOException, InterruptedException {
+		BrowserLog.consoleLog(getClass(), "=======getImage");
 		if (image == null)
 			image = getImageSlow();
 		return image;
 	}
 
 	private PortableImage getImageSlow() throws IOException, InterruptedException {
-		final Diagram system = getSystem();
+		BrowserLog.consoleLog(getClass(), "=======getImageSlow");
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		system.exportDiagram(os, 0, new FileFormatOption(FileFormat.PNG));
+		diagram.exportDiagram(os, 0, new FileFormatOption(FileFormat.PNG));
 		os.close();
 		return SImageIO.read(os.toByteArray());
 	}
@@ -232,16 +183,63 @@ public class EmbeddedDiagram implements Line, Atom {
 		return HorizontalAlignment.LEFT;
 	}
 
-	private Diagram getSystem() throws IOException, InterruptedException {
-		final Previous previous = skinParam == null ? Previous.createEmpty() : Previous.createFrom(skinParam.values());
-		final BlockUml blockUml = new BlockUml(null, PathSystem.fetch(), list, Defines.createEmpty(), previous, null);
-		return blockUml.getDiagram();
-
-	}
-
 	@Override
 	public List<Neutron> getNeutrons() {
 		return Arrays.asList(Neutron.create(this));
+	}
+
+	public static String getEmbeddedType(CharSequence cs) {
+		if (cs == null)
+			return null;
+
+		final String s = StringUtils.trin(cs.toString());
+		if (s.startsWith(EMBEDDED_START) == false)
+			return null;
+
+		switch (s) {
+		case EMBEDDED_START:
+			return "uml";
+		case EMBEDDED_START + "ditaa":
+			return "ditaa";
+		case EMBEDDED_START + "salt":
+			return "salt";
+		case EMBEDDED_START + "uml":
+			return "uml";
+		case EMBEDDED_START + "wbs":
+			return "wbs";
+		case EMBEDDED_START + "mindmap":
+			return "mindmap";
+		case EMBEDDED_START + "gantt":
+			return "gantt";
+		case EMBEDDED_START + "json":
+			return "json";
+		case EMBEDDED_START + "yaml":
+			return "yaml";
+		case EMBEDDED_START + "wire":
+			return "wire";
+		case EMBEDDED_START + "creole":
+			return "creole";
+		case EMBEDDED_START + "board":
+			return "board";
+		case EMBEDDED_START + "ebnf":
+			return "ebnf";
+		case EMBEDDED_START + "regex":
+			return "regex";
+		case EMBEDDED_START + "files":
+			return "files";
+		case EMBEDDED_START + "chronology":
+			return "chronology";
+		case EMBEDDED_START + "chen":
+			return "chen";
+		case EMBEDDED_START + "chart":
+			return "chart";
+		case EMBEDDED_START + "nwdiag":
+			return "nwdiag";
+		case EMBEDDED_START + "packetdiag":
+			return "packetdiag";
+		default:
+			return null;
+		}
 	}
 
 }
