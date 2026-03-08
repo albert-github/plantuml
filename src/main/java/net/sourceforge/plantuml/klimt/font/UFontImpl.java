@@ -45,9 +45,7 @@ public final class UFontImpl implements UFont {
 	private final FontStack fontStack;
 	/**
 	 * The full font face (italic axis + CSS weight 100-900).  This is the
-	 * canonical weight/style store; the legacy {@code int style} field has been
-	 * removed.  Use {@link UFontFace#toLegacyStyle()} when a binary
-	 * {@code java.awt.Font} style flag is needed (e.g. for EPS/SVG).
+	 * canonical weight/style store.
 	 */
 	private final UFontFace face;
 	private final int size;

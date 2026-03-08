@@ -186,33 +186,33 @@ class UFontFaceTest {
 	// toLegacyStyle round-trip
 	// -----------------------------------------------------------------------
 
-	@Test
-	void toLegacyStylePreservesPlain() {
-		assertThat(UFontFace.normal().toLegacyStyle()).isEqualTo(0); // Font.PLAIN
-	}
-
-	@Test
-	void toLegacyStylePreservesBold() {
-		assertThat(UFontFace.bold().toLegacyStyle()).isEqualTo(1); // Font.BOLD
-	}
-
-	@Test
-	void toLegacyStylePreservesItalic() {
-		assertThat(UFontFace.italic().toLegacyStyle()).isEqualTo(2); // Font.ITALIC
-	}
-
-	@Test
-	void toLegacyStyleMapsNonBoldWeightToPlain() {
-		// weight 500 is not >= 700, so legacy considers it non-bold
-		final UFontFace face = UFontFace.fromCssWeight("500");
-		assertThat(face.toLegacyStyle() & 1).isEqualTo(0); // & Font.BOLD
-	}
-
-	@Test
-	void toLegacyStyleMapsWeight700ToBold() {
-		final UFontFace face = UFontFace.fromCssWeight("700");
-		assertThat(face.toLegacyStyle() & 1).isEqualTo(1); // & Font.BOLD == Font.BOLD
-	}
+//	@Test
+//	void toLegacyStylePreservesPlain() {
+//		assertThat(UFontFace.normal().toLegacyStyle()).isEqualTo(0); // Font.PLAIN
+//	}
+//
+//	@Test
+//	void toLegacyStylePreservesBold() {
+//		assertThat(UFontFace.bold().toLegacyStyle()).isEqualTo(1); // Font.BOLD
+//	}
+//
+//	@Test
+//	void toLegacyStylePreservesItalic() {
+//		assertThat(UFontFace.italic().toLegacyStyle()).isEqualTo(2); // Font.ITALIC
+//	}
+//
+//	@Test
+//	void toLegacyStyleMapsNonBoldWeightToPlain() {
+//		// weight 500 is not >= 700, so legacy considers it non-bold
+//		final UFontFace face = UFontFace.fromCssWeight("500");
+//		assertThat(face.toLegacyStyle() & 1).isEqualTo(0); // & Font.BOLD
+//	}
+//
+//	@Test
+//	void toLegacyStyleMapsWeight700ToBold() {
+//		final UFontFace face = UFontFace.fromCssWeight("700");
+//		assertThat(face.toLegacyStyle() & 1).isEqualTo(1); // & Font.BOLD == Font.BOLD
+//	}
 
 	// -----------------------------------------------------------------------
 	// toTextAttributeWeight — mapping to AWT TextAttribute

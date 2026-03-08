@@ -160,20 +160,6 @@ public class UFontFace {
 	}
 
 	/**
-	 * Returns the legacy {@link java.awt.Font} style flags corresponding to this
-	 * face. This is useful for renderers that do not support fine-grained weights
-	 * (e.g. EPS).
-	 */
-	public int toLegacyStyle() {
-		int result = Font.PLAIN;
-		if (isItalic())
-			result |= Font.ITALIC;
-		if (isBold())
-			result |= Font.BOLD;
-		return result;
-	}
-
-	/**
 	 * Returns a new face with the given style, keeping the current weight.
 	 */
 	public UFontFace withStyle(UFontStyle newStyle) {
@@ -228,9 +214,7 @@ public class UFontFace {
 	 * Derives a new {@link java.awt.Font} from the given base font, applying both
 	 * style (italic) and weight via {@link TextAttribute}s.
 	 * <p>
-	 * This is the primary integration point for Java2D rendering (PNG). For
-	 * renderers that do not support fine-grained weights (EPS, SVG text), use
-	 * {@link #toLegacyStyle()} instead.
+	 * This is the primary integration point for Java2D rendering (PNG).
 	 */
 	public Font deriveFont(Font baseFont) {
 		final Map<TextAttribute, Object> attrs = new HashMap<>();
