@@ -46,6 +46,7 @@ import net.sourceforge.plantuml.klimt.drawing.UGraphic;
 import net.sourceforge.plantuml.klimt.font.FontConfiguration;
 import net.sourceforge.plantuml.klimt.font.StringBounder;
 import net.sourceforge.plantuml.klimt.font.UFont;
+import net.sourceforge.plantuml.klimt.font.UFontFace;
 import net.sourceforge.plantuml.klimt.font.UFontFactory;
 import net.sourceforge.plantuml.klimt.geom.HorizontalAlignment;
 import net.sourceforge.plantuml.klimt.geom.XDimension2D;
@@ -57,7 +58,7 @@ public class GraphicsSudoku implements TextBlock {
 	// ::remove folder when __MIT__ or __EPL__ or __BSD__ or __ASL__ or __LGPL__
 
 	private final ISudoku sudoku;
-	private final UFont numberFont = UFontFactory.sansSerif(20).bold();
+	private final UFont numberFont = UFontFactory.sansSerif(20).withFontFace(UFontFace.bold());
 	private final UFont font = UFontFactory.sansSerif(11);
 
 	public GraphicsSudoku(ISudoku sudoku) {

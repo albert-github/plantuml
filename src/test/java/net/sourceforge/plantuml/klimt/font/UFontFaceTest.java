@@ -2,7 +2,6 @@ package net.sourceforge.plantuml.klimt.font;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.awt.Font;
 import java.awt.font.TextAttribute;
 
 import org.junit.jupiter.api.Test;
@@ -128,38 +127,6 @@ class UFontFaceTest {
 	}
 
 	// -----------------------------------------------------------------------
-	// fromLegacyStyle
-	// -----------------------------------------------------------------------
-
-	@Test
-	void fromLegacyStylePlain() {
-		final UFontFace face = UFontFace.fromLegacyStyle(Font.PLAIN);
-		assertThat(face.getCssWeight()).isEqualTo(400);
-		assertThat(face.isItalic()).isFalse();
-	}
-
-	@Test
-	void fromLegacyStyleBold() {
-		final UFontFace face = UFontFace.fromLegacyStyle(Font.BOLD);
-		assertThat(face.getCssWeight()).isEqualTo(700);
-		assertThat(face.isItalic()).isFalse();
-	}
-
-	@Test
-	void fromLegacyStyleItalic() {
-		final UFontFace face = UFontFace.fromLegacyStyle(Font.ITALIC);
-		assertThat(face.getCssWeight()).isEqualTo(400);
-		assertThat(face.isItalic()).isTrue();
-	}
-
-	@Test
-	void fromLegacyStyleBoldItalic() {
-		final UFontFace face = UFontFace.fromLegacyStyle(Font.BOLD | Font.ITALIC);
-		assertThat(face.getCssWeight()).isEqualTo(700);
-		assertThat(face.isItalic()).isTrue();
-	}
-
-	// -----------------------------------------------------------------------
 	// withWeight / withStyle — immutability and mutation
 	// -----------------------------------------------------------------------
 
@@ -221,30 +188,30 @@ class UFontFaceTest {
 
 	@Test
 	void toLegacyStylePreservesPlain() {
-		assertThat(UFontFace.normal().toLegacyStyle()).isEqualTo(Font.PLAIN);
+		assertThat(UFontFace.normal().toLegacyStyle()).isEqualTo(0); // Font.PLAIN
 	}
 
 	@Test
 	void toLegacyStylePreservesBold() {
-		assertThat(UFontFace.bold().toLegacyStyle()).isEqualTo(Font.BOLD);
+		assertThat(UFontFace.bold().toLegacyStyle()).isEqualTo(1); // Font.BOLD
 	}
 
 	@Test
 	void toLegacyStylePreservesItalic() {
-		assertThat(UFontFace.italic().toLegacyStyle()).isEqualTo(Font.ITALIC);
+		assertThat(UFontFace.italic().toLegacyStyle()).isEqualTo(2); // Font.ITALIC
 	}
 
 	@Test
 	void toLegacyStyleMapsNonBoldWeightToPlain() {
 		// weight 500 is not >= 700, so legacy considers it non-bold
 		final UFontFace face = UFontFace.fromCssWeight("500");
-		assertThat(face.toLegacyStyle() & Font.BOLD).isEqualTo(0);
+		assertThat(face.toLegacyStyle() & 1).isEqualTo(0); // & Font.BOLD
 	}
 
 	@Test
 	void toLegacyStyleMapsWeight700ToBold() {
 		final UFontFace face = UFontFace.fromCssWeight("700");
-		assertThat(face.toLegacyStyle() & Font.BOLD).isEqualTo(Font.BOLD);
+		assertThat(face.toLegacyStyle() & 1).isEqualTo(1); // & Font.BOLD == Font.BOLD
 	}
 
 	// -----------------------------------------------------------------------
@@ -278,12 +245,6 @@ class UFontFaceTest {
 	// -----------------------------------------------------------------------
 	// equals / hashCode
 	// -----------------------------------------------------------------------
-
-	@Test
-	void equalFacesAreEqual() {
-		assertThat(UFontFace.normal()).isEqualTo(UFontFace.fromLegacyStyle(Font.PLAIN));
-		assertThat(UFontFace.bold()).isEqualTo(UFontFace.fromLegacyStyle(Font.BOLD));
-	}
 
 	@Test
 	void differentWeightFacesAreNotEqual() {

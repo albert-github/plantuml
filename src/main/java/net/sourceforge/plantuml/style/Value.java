@@ -37,10 +37,10 @@ package net.sourceforge.plantuml.style;
 
 import net.sourceforge.plantuml.klimt.color.HColor;
 import net.sourceforge.plantuml.klimt.color.HColorSet;
+import net.sourceforge.plantuml.klimt.font.UFontFace;
 import net.sourceforge.plantuml.klimt.geom.HorizontalAlignment;
 
 public interface Value {
-    // ::remove file when __HAXE__
 
 	public String asString();
 
@@ -54,15 +54,10 @@ public interface Value {
 
 	public boolean asBoolean();
 
-	public int asFontStyle();
-
 	/**
-	 * Returns the CSS font-weight as a numeric value (100-900), or {@code 0} if
-	 * no weight was specified or the value could not be parsed.  Accepts the
-	 * keywords {@code normal} (400), {@code bold} (700), {@code lighter} (300),
-	 * {@code bolder} (800) as well as bare integers in the range 100-900.
+	 * Returns the font face (weight + italic axis) represented by this value.
 	 */
-	public int asFontWeight();
+	public UFontFace asFontFace();
 
 	public HorizontalAlignment asHorizontalAlignment();
 

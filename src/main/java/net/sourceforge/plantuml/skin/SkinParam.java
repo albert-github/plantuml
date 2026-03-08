@@ -35,7 +35,6 @@
  */
 package net.sourceforge.plantuml.skin;
 
-import java.awt.Font;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -76,6 +75,7 @@ import net.sourceforge.plantuml.klimt.creole.legacy.CreoleParser;
 import net.sourceforge.plantuml.klimt.font.FontConfiguration;
 import net.sourceforge.plantuml.klimt.font.FontParam;
 import net.sourceforge.plantuml.klimt.font.UFont;
+import net.sourceforge.plantuml.klimt.font.UFontFace;
 import net.sourceforge.plantuml.klimt.font.UFontFactory;
 import net.sourceforge.plantuml.klimt.geom.HorizontalAlignment;
 import net.sourceforge.plantuml.klimt.geom.Rankdir;
@@ -483,7 +483,7 @@ public class SkinParam implements ISkinParam {
 		return null;
 	}
 
-	private int getFontStyle(Stereotype stereotype, boolean inPackageTitle, FontParam... param) {
+	private UFontFace getFontFace(Stereotype stereotype, boolean inPackageTitle, FontParam... param) {
 		String value = null;
 		if (stereotype != null) {
 			checkStereotype(stereotype);
@@ -497,16 +497,18 @@ public class SkinParam implements ISkinParam {
 			value = getValue("defaultfontstyle");
 
 		if (value == null)
-			return param[0].getDefaultFontStyle(this, inPackageTitle);
+			return param[0].getDefaultFontFace(this, inPackageTitle);
 
-		int result = Font.PLAIN;
-		if (StringUtils.goLowerCase(value).contains("bold"))
-			result = result | Font.BOLD;
-
-		if (StringUtils.goLowerCase(value).contains("italic"))
-			result = result | Font.ITALIC;
-
-		return result;
+		final String lower = StringUtils.goLowerCase(value);
+		final boolean bold = lower.contains("bold");
+		final boolean italic = lower.contains("italic");
+		if (bold && italic)
+			return UFontFace.boldItalic();
+		if (bold)
+			return UFontFace.bold();
+		if (italic)
+			return UFontFace.italic();
+		return UFontFace.normal();
 	}
 
 	@Override
@@ -515,9 +517,9 @@ public class SkinParam implements ISkinParam {
 			checkStereotype(stereotype);
 
 		final String fontFamily = getFontFamily(stereotype, fontParam);
-		final int fontStyle = getFontStyle(stereotype, inPackageTitle, fontParam);
+		final UFontFace face = getFontFace(stereotype, inPackageTitle, fontParam);
 		final int fontSize = getFontSize(stereotype, fontParam);
-		return UFontFactory.build(fontFamily, fontStyle, fontSize);
+		return UFontFactory.build(fontFamily, face, fontSize);
 	}
 
 	@Override

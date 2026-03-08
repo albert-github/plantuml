@@ -35,7 +35,6 @@
  */
 package net.sourceforge.plantuml.svg.parser;
 
-import java.awt.Font;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,6 +59,7 @@ import net.sourceforge.plantuml.klimt.drawing.UGraphic;
 import net.sourceforge.plantuml.klimt.font.FontConfiguration;
 import net.sourceforge.plantuml.klimt.font.StringBounder;
 import net.sourceforge.plantuml.klimt.font.UFont;
+import net.sourceforge.plantuml.klimt.font.UFontFace;
 import net.sourceforge.plantuml.klimt.font.UFontFactory;
 import net.sourceforge.plantuml.klimt.geom.XDimension2D;
 import net.sourceforge.plantuml.klimt.shape.TextBlock;
@@ -302,7 +302,7 @@ public class SvgNanoParser implements ISvgSpriteParser, GrayLevelRange {
 			String fontFamily = getTextFontFamily(s, stackG);
 			if (fontFamily == null)
 				fontFamily = "SansSerif";
-			final UFont font = UFontFactory.build(fontFamily, Font.PLAIN, fontSize);
+			final UFont font = UFontFactory.build(fontFamily, UFontFace.normal(), fontSize);
 			final FontConfiguration fc = FontConfiguration.create(font, color, color, null);
 			final UText utext = UText.build(text, fc);
 			UGraphic ug = ugs.getUg();

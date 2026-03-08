@@ -108,17 +108,6 @@ public class UFontFace {
 	}
 
 	/**
-	 * Creates a face from a legacy {@link java.awt.Font} style constant
-	 * ({@code Font.PLAIN}, {@code Font.BOLD}, {@code Font.ITALIC},
-	 * {@code Font.BOLD | Font.ITALIC}).
-	 */
-	public static UFontFace fromLegacyStyle(int fontStyle) {
-		final UFontStyle s = (fontStyle & Font.ITALIC) != 0 ? UFontStyle.ITALIC : UFontStyle.NORMAL;
-		final int w = (fontStyle & Font.BOLD) != 0 ? 700 : 400;
-		return new UFontFace(s, UFontWeight.fromCssValue(w));
-	}
-
-	/**
 	 * Parses a CSS {@code font-weight} string. Accepts numeric values (100-900)
 	 * and keywords: {@code normal}, {@code bold}, {@code lighter},
 	 * {@code bolder}.

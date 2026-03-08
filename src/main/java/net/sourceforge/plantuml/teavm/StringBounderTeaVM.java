@@ -49,7 +49,7 @@ public class StringBounderTeaVM implements StringBounder {
 
 		final String fontFamily = font.getFamily(null, null);
 		final int fontSize = font.getSize();
-		final String fontWeight = font.isBold() ? "bold" : "normal";
+		final String fontWeight = font.getFontFace().isBold() ? "bold" : "normal";
 
 		final double[] metrics = SvgGraphicsTeaVM.measureTextCanvas(text, fontFamily, fontSize, fontWeight);
 		final double width = metrics[0];
@@ -77,7 +77,7 @@ public class StringBounderTeaVM implements StringBounder {
 
 		final String fontFamily = font.getFamily(null, null);
 		final int fontSize = font.getSize();
-		final String fontWeight = font.isBold() ? "bold" : "normal";
+		final String fontWeight = font.getFontFace().isBold() ? "bold" : "normal";
 
 		final double[] metrics = SvgGraphicsTeaVM.getDetailedTextMetrics(text, fontFamily, fontSize, fontWeight);
 		// metrics[0] = width

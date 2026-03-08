@@ -57,18 +57,6 @@ public final class UFontImpl implements UFont {
 	}
 
 	/**
-	 * Legacy constructor: converts the binary {@code java.awt.Font} style flag to
-	 * a {@link UFontFace} (bold → weight 700, italic → italic axis).  Any
-	 * intermediate CSS weight is not representable through this path; prefer
-	 * {@link #UFontImpl(FontStack, UFontFace, int)} for new code.
-	 */
-	UFontImpl(FontStack fontStack, int style, int size) {
-		this.fontStack = fontStack;
-		this.face = UFontFace.fromLegacyStyle(style);
-		this.size = size;
-	}
-
-	/**
 	 * Face-aware constructor.  Stores the full {@link UFontFace} so that
 	 * intermediate CSS weights (100-900) are preserved and applied via
 	 * {@link TextAttribute#WEIGHT} during Java2D rendering.
@@ -106,51 +94,12 @@ public final class UFontImpl implements UFont {
 		return new UFontImpl(fontStack, newFace, this.size);
 	}
 
-	/**
-	 * @deprecated Use {@link #withFontFace(UFontFace)} to preserve CSS weight.
-	 *             This method converts the binary italic/bold flags to a
-	 *             {@link UFontFace}, losing any intermediate weight.
-	 */
-	@Deprecated
-	public UFont withStyle(int style) {
-		return new UFontImpl(fontStack, UFontFace.fromLegacyStyle(style), this.size);
-	}
-
-	@Deprecated
-	public UFont bold() {
-		return withFontFace(UFontFace.bold());
-	}
-
-	@Deprecated
-	public UFont italic() {
-		return withFontFace(UFontFace.italic());
-	}
-
-	/**
-	 * @deprecated Use {@link #getFontFace()} and {@link UFontFace#toLegacyStyle()}
-	 *             instead.  This method discards any intermediate CSS weight.
-	 */
-	@Deprecated
-	public int getStyle() {
-		return face.toLegacyStyle();
-	}
-
 	public int getSize() {
 		return size;
 	}
 
 	public double getSize2D() {
 		return size;
-	}
-
-	@Deprecated
-	public boolean isBold() {
-		return face.isBold();
-	}
-
-	@Deprecated
-	public boolean isItalic() {
-		return face.isItalic();
 	}
 
 	public String getFamily(String text, UFontContext context) {

@@ -64,8 +64,8 @@ public class FontConfiguration {
 	}
 
 	private static EnumSet<FontStyle> getStyles(UFont font) {
-		final boolean bold = font.isBold();
-		final boolean italic = font.isItalic();
+		final boolean bold = font.getFontFace().isBold();
+		final boolean italic = font.getFontFace().isItalic();
 		if (bold && italic)
 			return EnumSet.of(FontStyle.ITALIC, FontStyle.BOLD);
 
