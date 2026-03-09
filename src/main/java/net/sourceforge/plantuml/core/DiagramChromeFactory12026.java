@@ -113,13 +113,11 @@ public final class DiagramChromeFactory12026 {
 	 * @param annotated     provides title, caption, legend, header, footer and
 	 *                      mainframe
 	 * @param skinParam     skin parameters used for styling
-	 * @param stringBounder the string bounder for text measurement
 	 * @return a new {@link TextBlock} that draws the raw content surrounded by all
 	 *         its chrome elements
 	 */
-	public static TextBlock create(TextBlock raw, Annotated annotated, ISkinParam skinParam,
-			StringBounder stringBounder) {
-		return create(raw, annotated, skinParam, stringBounder, Collections.emptyList());
+	public static TextBlock create(TextBlock raw, Annotated annotated, ISkinParam skinParam) {
+		return create(raw, annotated, skinParam, Collections.emptyList());
 	}
 
 	/**
@@ -131,19 +129,18 @@ public final class DiagramChromeFactory12026 {
 	 * @param annotated     provides title, caption, legend, header, footer and
 	 *                      mainframe
 	 * @param skinParam     skin parameters used for styling
-	 * @param stringBounder the string bounder for text measurement
 	 * @param warnings      collection of warnings to display as a banner above the
 	 *                      diagram; may be empty
 	 * @return a new {@link TextBlock} that draws the raw content surrounded by all
 	 *         its chrome elements
 	 */
 	public static TextBlock create(TextBlock raw, Annotated annotated, ISkinParam skinParam,
-			StringBounder stringBounder, Collection<Warning> warnings) {
+			Collection<Warning> warnings) {
 
 		TextBlock result = raw;
 		BrowserLog.consoleLog(DiagramChromeFactory12026.class, "create " + warnings);
 		result = addWarnings(result, warnings);
-		result = decorateWithFrame(result, annotated, skinParam, stringBounder);
+		result = decorateWithFrame(result, annotated, skinParam);
 		result = addLegend(result, annotated, skinParam);
 		result = addTitle(result, annotated, skinParam);
 		result = addCaption(result, annotated, skinParam);
@@ -257,8 +254,7 @@ public final class DiagramChromeFactory12026 {
 	// Mainframe
 	// -----------------------------------------------------------------------
 
-	private static TextBlock decorateWithFrame(TextBlock original, Annotated annotated, ISkinParam skinParam,
-			StringBounder stringBounder) {
+	private static TextBlock decorateWithFrame(TextBlock original, Annotated annotated, ISkinParam skinParam) {
 
 		final Display mainFrame = annotated.getMainFrame().getDisplay();
 		if (Display.isNull(mainFrame))
@@ -268,34 +264,29 @@ public final class DiagramChromeFactory12026 {
 				.getMergedStyle(skinParam.getCurrentStyleBuilder());
 		final FontConfiguration fontConfiguration = FontConfiguration.create(skinParam, style);
 		final TextBlock title = mainFrame.create(fontConfiguration, HorizontalAlignment.CENTER, skinParam);
-		final XDimension2D dimTitle = title.calculateDimension(stringBounder);
 
 		final Fashion symbolContext = style.getSymbolContext(skinParam.getIHtmlColorSet());
 		final ClockwiseTopRightBottomLeft margin = style.getMargin();
-		final ClockwiseTopRightBottomLeft padding = style.getPadding().incTop(dimTitle.getHeight() + 10);
 
-		final MinMax originalMinMax = TextBlockUtils.getMinMax(original, stringBounder, false);
-
-		final double ww = originalMinMax.getMinX() >= 0 ? originalMinMax.getMaxX() : originalMinMax.getWidth();
-		final double hh = originalMinMax.getMinY() >= 0 ? originalMinMax.getMaxY() : originalMinMax.getHeight();
-		final double dx = originalMinMax.getMinX() < 0 ? -originalMinMax.getMinX() : 0;
-		final double dy = originalMinMax.getMinY() < 0 ? -originalMinMax.getMinY() : 0;
-		final UTranslate delta = new UTranslate(dx, dy);
-
-		final double width = padding.getLeft() + Math.max(ww + 12, dimTitle.getWidth() + 10) + padding.getRight();
-		final double height = padding.getTop() + dimTitle.getHeight() + hh + padding.getBottom();
-
-		final TextBlock frame = new BigFrame(title, width, height, symbolContext);
+		final TextBlock frame = new BigFrame(title, original, style.getPadding(), symbolContext);
 
 		return new TextBlock() {
 
 			public void drawU(UGraphic ug) {
+				final StringBounder stringBounder = ug.getStringBounder();
+				final ClockwiseTopRightBottomLeft padding = computePadding(stringBounder);
+				final UTranslate delta = computeDelta(stringBounder);
 				frame.drawU(ug.apply(margin.getTranslate()));
 				original.drawU(ug.apply(margin.getTranslate().compose(padding.getTranslate().compose(delta))));
 			}
 
 			@Override
 			public XRectangle2D getInnerPosition(CharSequence member, StringBounder sb) {
+				final ClockwiseTopRightBottomLeft padding = computePadding(sb);
+				final XDimension2D dimTitle = title.calculateDimension(sb);
+				final MinMax originalMinMax = TextBlockUtils.getMinMax(original, sb, false);
+				final double dx = originalMinMax.getMinX() < 0 ? -originalMinMax.getMinX() : 0;
+				final double dy = originalMinMax.getMinY() < 0 ? -originalMinMax.getMinY() : 0;
 				final XRectangle2D rect = original.getInnerPosition(member, sb);
 				return new XRectangle2D(dx + rect.getX() + margin.getLeft() + padding.getLeft(),
 						dy + rect.getY() + margin.getTop() + padding.getTop() + dimTitle.getHeight(), rect.getWidth(),
@@ -303,12 +294,25 @@ public final class DiagramChromeFactory12026 {
 			}
 
 			public XDimension2D calculateDimension(StringBounder sb) {
-				return new XDimension2D(margin.getLeft() + width + margin.getRight(),
-						margin.getTop() + height + margin.getBottom());
+				final XDimension2D frameDim = frame.calculateDimension(sb);
+				return new XDimension2D(margin.getLeft() + frameDim.getWidth() + margin.getRight(),
+						margin.getTop() + frameDim.getHeight() + margin.getBottom());
 			}
 
 			public HColor getBackcolor() {
 				return symbolContext.getBackColor();
+			}
+
+			private ClockwiseTopRightBottomLeft computePadding(StringBounder sb) {
+				final XDimension2D dimTitle = title.calculateDimension(sb);
+				return style.getPadding().incTop(dimTitle.getHeight() + 10);
+			}
+
+			private UTranslate computeDelta(StringBounder sb) {
+				final MinMax originalMinMax = TextBlockUtils.getMinMax(original, sb, false);
+				final double dx = originalMinMax.getMinX() < 0 ? -originalMinMax.getMinX() : 0;
+				final double dy = originalMinMax.getMinY() < 0 ? -originalMinMax.getMinY() : 0;
+				return new UTranslate(dx, dy);
 			}
 		};
 	}

@@ -462,9 +462,7 @@ public abstract class TitledDiagram extends UgDiagram implements Annotated, With
 	@Override
 	public TextBlock addChrome(TextBlock result, FileFormatOption fileFormatOption) {
 		final TitledDiagram titledDiagram = (TitledDiagram) this;
-		final StringBounder stringBounder = fileFormatOption.getDefaultStringBounder(titledDiagram.getSkinParam());
-		result = DiagramChromeFactory12026.create(result, titledDiagram, titledDiagram.getSkinParam(), stringBounder,
-				getWarnings());
+		result = DiagramChromeFactory12026.create(result, titledDiagram, titledDiagram.getSkinParam(), getWarnings());
 		return result;
 	}
 

@@ -120,8 +120,7 @@ public class NewpagedDiagram extends UgDiagram {
 	public TextBlock getTextBlock12026(int num, FileFormatOption fileFormatOption) throws Exception {
 		final TitledDiagram titledDiagram = (TitledDiagram) diagrams.get(num);
 		TextBlock result = titledDiagram.getTextBlock12026(num, fileFormatOption);
-		final StringBounder stringBounder = fileFormatOption.getDefaultStringBounder(titledDiagram.getSkinParam());
-		result = DiagramChromeFactory12026.create(result, titledDiagram, titledDiagram.getSkinParam(), stringBounder,
+		result = DiagramChromeFactory12026.create(result, titledDiagram, titledDiagram.getSkinParam(),
 				titledDiagram.getWarnings());
 
 		return result;
