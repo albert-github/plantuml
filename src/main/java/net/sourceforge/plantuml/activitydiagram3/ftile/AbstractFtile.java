@@ -68,6 +68,15 @@ public abstract class AbstractFtile implements Ftile {
 		return skinParam;
 	}
 
+	@Override
+	public String toString() {
+		final String s = super.toString();
+		final int x = s.lastIndexOf('.');
+		if (x != -1)
+			return s.substring(x + 1);
+		return s;
+	}
+
 	final public HColorSet getIHtmlColorSet() {
 		return skinParam.getIHtmlColorSet();
 	}

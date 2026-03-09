@@ -60,7 +60,7 @@ public class FtileAssemblySimple implements Ftile {
 
 	@Override
 	public String toString() {
-		return "FtileAssemblySimple " + tile1 + " && " + tile2;
+		return "FtileAssemblySimple " + tile1 + " &and& " + tile2;
 	}
 
 	public FtileAssemblySimple(Ftile tile1, Ftile tile2) {

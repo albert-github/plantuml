@@ -62,7 +62,7 @@ public abstract class FtileDecorate implements Ftile {
 
 	@Override
 	public String toString() {
-		return "" + getClass() + " " + ftile;
+		return "" + getClass().getSimpleName() + "{" + ftile + "}";
 	}
 
 	@Override
