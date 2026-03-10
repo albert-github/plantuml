@@ -30,43 +30,35 @@
  *
  *
  * Original Author:  Arnaud Roques
+ * 
  *
  */
-package net.sourceforge.plantuml.eggs;
+package net.sourceforge.plantuml.klimt.drawing;
 
-import net.atmp.PixelImage;
-import net.sourceforge.plantuml.UgSimpleDiagram;
-import net.sourceforge.plantuml.core.DiagramDescription;
-import net.sourceforge.plantuml.core.UmlSource;
-import net.sourceforge.plantuml.klimt.AffineTransformType;
-import net.sourceforge.plantuml.klimt.drawing.UGraphic;
-import net.sourceforge.plantuml.klimt.font.StringBounder;
-import net.sourceforge.plantuml.klimt.geom.XDimension2D;
+import net.sourceforge.plantuml.klimt.UChange;
+import net.sourceforge.plantuml.klimt.UShape;
+import net.sourceforge.plantuml.klimt.shape.UDrawable;
 import net.sourceforge.plantuml.klimt.shape.UImage;
-import net.sourceforge.plantuml.preproc.PreprocessingArtifact;
-import net.sourceforge.plantuml.version.PSystemVersion;
 
-public class PSystemCharlie extends UgSimpleDiagram {
+public class UGraphicDispatchDrawable extends UGraphicDelegator {
 
-	private final UImage image;
-
-	PSystemCharlie(UmlSource source, PreprocessingArtifact preprocessing) {
-		super(source, preprocessing);
-		this.image = new UImage(new PixelImage(PSystemVersion.getCharlieImage(), AffineTransformType.TYPE_BILINEAR));
+	public UGraphicDispatchDrawable(UGraphic ug) {
+		super(ug);
 	}
 
-	public DiagramDescription getDescription() {
-		return new DiagramDescription("(Je Suis Charlie)");
+	public void draw(UShape shape) {
+		if (shape instanceof UDrawable && !(shape instanceof UImage)) {
+			// UImage implements TextBlock/UDrawable but must be drawn by the low-level driver
+			final UDrawable drawable = (UDrawable) shape;
+			drawable.drawU(this);
+		} else {
+			getUg().draw(shape);
+		}
+
 	}
 
-	@Override
-	public XDimension2D calculateDimension(StringBounder stringBounder) {
-		return image.calculateDimension(stringBounder);
-	}
-
-	@Override
-	public void drawU(UGraphic ug) {
-		ug.draw(image);
+	public UGraphic apply(UChange change) {
+		return new UGraphicDispatchDrawable(getUg().apply(change));
 	}
 
 }
