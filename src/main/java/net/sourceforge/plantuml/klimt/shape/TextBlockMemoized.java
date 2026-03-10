@@ -33,53 +33,40 @@
  * 
  *
  */
-package net.sourceforge.plantuml.klimt.creole.atom;
+package net.sourceforge.plantuml.klimt.shape;
 
-import java.util.List;
-
-import net.sourceforge.plantuml.klimt.UTranslate;
-import net.sourceforge.plantuml.klimt.drawing.UGraphic;
 import net.sourceforge.plantuml.klimt.font.StringBounder;
 import net.sourceforge.plantuml.klimt.geom.XDimension2D;
 
-public class AtomHorizontalTexts extends AbstractAtom implements Atom {
-	private final List<Atom> all;
+/**
+ * Abstract base class for TextBlock implementations where
+ * calculateDimension() is expensive. The result is memoized and
+ * automatically invalidated when the StringBounder type changes.
+ * <p>
+ * Subclasses must implement {@link #calculateDimensionSlow(StringBounder)}
+ * with the real computation. Callers use the standard
+ * {@link #calculateDimension(StringBounder)} which is final and cached.
+ */
+public abstract class TextBlockMemoized implements TextBlock {
 
-	public AtomHorizontalTexts(List<Atom> texts) {
-		this.all = texts;
-	}
+	private XDimension2D cachedDimension;
+	private Class<? extends StringBounder> lastCaller;
 
 	@Override
-	public XDimension2D calculateDimensionSlow(StringBounder stringBounder) {
-		double width = 0;
-		double height = 0;
-		for (Atom text : all) {
-			final XDimension2D dim = text.calculateDimension(stringBounder);
-			height = Math.max(height, dim.getHeight());
-			width += dim.getWidth();
+	public final XDimension2D calculateDimension(StringBounder stringBounder) {
+		final Class<? extends StringBounder> currentCaller = stringBounder.getClass();
+		if (cachedDimension == null || lastCaller != currentCaller) {
+			cachedDimension = calculateDimensionSlow(stringBounder);
+			lastCaller = currentCaller;
 		}
-		return new XDimension2D(width, height);
+		return cachedDimension;
 	}
 
-	public double getStartingAltitude(StringBounder stringBounder) {
-		if (all.size() == 0)
-			return 0;
+	protected abstract XDimension2D calculateDimensionSlow(StringBounder stringBounder);
 
-		return all.get(0).getStartingAltitude(stringBounder);
-	}
-
-	public void drawU(UGraphic ug) {
-
-		final StringBounder stringBounder = ug.getStringBounder();
-		final double startingAltitude = getStartingAltitude(stringBounder);
-
-		double x = 0;
-		for (Atom text : all) {
-			final XDimension2D dim = text.calculateDimension(stringBounder);
-			final double localStartingAltitude = text.getStartingAltitude(stringBounder);
-			text.drawU(ug.apply(new UTranslate(x, startingAltitude - localStartingAltitude)));
-			x += dim.getWidth();
-		}
+	protected void invalidateDimensionCache() {
+		cachedDimension = null;
+		lastCaller = null;
 	}
 
 }
