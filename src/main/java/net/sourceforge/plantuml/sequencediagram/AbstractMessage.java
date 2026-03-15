@@ -52,6 +52,7 @@ import net.sourceforge.plantuml.style.StyleSignature;
 import net.sourceforge.plantuml.style.StyleSignatureBasic;
 import net.sourceforge.plantuml.style.WithStyle;
 import net.sourceforge.plantuml.url.Url;
+import net.sourceforge.plantuml.warning.Warning;
 
 public abstract class AbstractMessage extends AbstractEvent implements EventWithDeactivate, WithStyle, EventWithNote {
 
@@ -113,8 +114,7 @@ public abstract class AbstractMessage extends AbstractEvent implements EventWith
 
 	public boolean isParallelWith(AbstractMessage message) {
 		boolean hasParallelBrother = parallelBrother != null;
-		return (this == message)
-				|| (hasParallelBrother && parallelBrother == message)
+		return (this == message) || (hasParallelBrother && parallelBrother == message)
 				|| (hasParallelBrother && parallelBrother.isParallelWith(message));
 	}
 
@@ -213,13 +213,14 @@ public abstract class AbstractMessage extends AbstractEvent implements EventWith
 	}
 
 	@Override
-	public final void addNote(Note note) {
+	public final Warning addNote(Note note) {
 		if (note.getPosition() != NotePosition.LEFT && note.getPosition() != NotePosition.RIGHT
 				&& note.getPosition() != NotePosition.BOTTOM && note.getPosition() != NotePosition.TOP)
-			throw new IllegalArgumentException();
+			return new Warning("This position is ignored: " + note.getPosition());
 
 		note = note.withPosition(overrideNotePosition(note.getPosition()));
 		this.noteOnMessages.add(note);
+		return null;
 	}
 
 	protected NotePosition overrideNotePosition(NotePosition notePosition) {
@@ -287,11 +288,9 @@ public abstract class AbstractMessage extends AbstractEvent implements EventWith
 	public abstract Participant getParticipant1();
 
 	public abstract Participant getParticipant2();
-	
+
 	public StyleBuilder getStyleBuilder() {
 		return styleBuilder;
 	}
-
-
 
 }
