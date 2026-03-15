@@ -52,11 +52,13 @@ import net.sourceforge.plantuml.style.StyleSignature;
 import net.sourceforge.plantuml.style.StyleSignatureBasic;
 import net.sourceforge.plantuml.style.WithStyle;
 import net.sourceforge.plantuml.url.Url;
+import net.sourceforge.plantuml.utils.LineLocation;
 import net.sourceforge.plantuml.warning.Warning;
 
 public abstract class AbstractMessage extends AbstractEvent implements EventWithDeactivate, WithStyle, EventWithNote {
 
 	private Stereotype stereotype;
+	private LineLocation location;
 
 	public void getStereotype(Stereotype stereotype) {
 		this.stereotype = stereotype;
@@ -88,8 +90,9 @@ public abstract class AbstractMessage extends AbstractEvent implements EventWith
 	private List<Note> noteOnMessages = new ArrayList<>();
 
 	public AbstractMessage(StyleBuilder styleBuilder, Display label, ArrowConfiguration arrowConfiguration,
-			String messageNumber) {
+			String messageNumber, LineLocation location) {
 		this.styleBuilder = styleBuilder;
+		this.location = location;
 		this.url = null;
 		this.label = label;
 		this.arrowConfiguration = arrowConfiguration;
@@ -291,6 +294,10 @@ public abstract class AbstractMessage extends AbstractEvent implements EventWith
 
 	public StyleBuilder getStyleBuilder() {
 		return styleBuilder;
+	}
+
+	public LineLocation getLineLocation() {
+		return location;
 	}
 
 }
