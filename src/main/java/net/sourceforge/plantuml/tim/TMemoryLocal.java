@@ -58,23 +58,23 @@ public class TMemoryLocal extends ExecutionContexts implements TMemory {
 	}
 
 	public void dumpDebug(String message) {
-		Log.error("[MemLocal] Start of memory_dump " + message);
+		Log.info(() -> "[MemLocal] Start of memory_dump " + message);
 		memoryGlobal.dumpMemoryInternal();
 		final TreeMap<String, TValue> over = new TreeMap<String, TValue>(overridenVariables01);
-		Log.error("[MemLocal] Number of overriden variable(s) : " + over.size());
+		Log.info(() -> "[MemLocal] Number of overriden variable(s) : " + over.size());
 		for (Entry<String, TValue> ent : over.entrySet()) {
 			final String name = ent.getKey();
 			final TValue value = ent.getValue();
-			Log.error("[MemLocal] " + name + " = " + value);
+			Log.info(() -> "[MemLocal] " + name + " = " + value);
 		}
 		final TreeMap<String, TValue> local = new TreeMap<String, TValue>(localVariables01);
-		Log.error("[MemLocal] Number of local variable(s) : " + local.size());
+		Log.info(() -> "[MemLocal] Number of local variable(s) : " + local.size());
 		for (Entry<String, TValue> ent : local.entrySet()) {
 			final String name = ent.getKey();
 			final TValue value = ent.getValue();
-			Log.error("[MemLocal] " + name + " = " + value);
+			Log.info(() -> "[MemLocal] " + name + " = " + value);
 		}
-		Log.error("[MemGlobal] End of memory_dump");
+		Log.info(() -> "[MemGlobal] End of memory_dump");
 	}
 
 	@Override
