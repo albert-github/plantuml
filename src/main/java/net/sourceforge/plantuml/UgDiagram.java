@@ -47,6 +47,7 @@ import net.sourceforge.plantuml.core.UmlSource;
 import net.sourceforge.plantuml.crash.CrashReportHandler;
 import net.sourceforge.plantuml.crash.GraphvizCrash;
 import net.sourceforge.plantuml.error.PSystemError;
+import net.sourceforge.plantuml.error.PSystemUnsupported;
 import net.sourceforge.plantuml.klimt.color.ColorMapper;
 import net.sourceforge.plantuml.klimt.color.HColor;
 import net.sourceforge.plantuml.klimt.shape.TextBlock;
@@ -147,6 +148,8 @@ public abstract class UgDiagram extends AbstractDiagram {
 	}
 
 	private int computeStatus(TextBlock textBlock) {
+		if (this instanceof PSystemUnsupported)
+			return FileImageData.ERROR;
 		if (this instanceof PSystemError)
 			return FileImageData.ERROR;
 		if (textBlock instanceof GraphvizCrash)

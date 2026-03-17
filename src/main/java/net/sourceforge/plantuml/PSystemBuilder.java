@@ -207,7 +207,7 @@ public class PSystemBuilder {
 
 		Diagram result = null;
 		try {
-			final Collection<DiagramType> types = DiagramType.getTypesFromArobaseStart(source.get(0).getString());
+			final Collection<DiagramType> types = DiagramType.findStartTypes(source.get(0).getString());
 			final UmlSource umlSource = UmlSource.createWithRaw(source, types.contains(DiagramType.SEQUENCE),
 					rawSource);
 
@@ -265,7 +265,7 @@ public class PSystemBuilder {
 	}
 
 	private boolean isOk(Diagram ps) {
-		if (ps == null || ps instanceof PSystemError)
+		if (ps == null || ps instanceof PSystemError || ps instanceof PSystemUnsupported)
 			return false;
 
 		return true;

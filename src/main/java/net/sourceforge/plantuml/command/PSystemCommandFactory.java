@@ -78,7 +78,7 @@ public abstract class PSystemCommandFactory extends PSystemAbstractFactory {
 
 		IteratorCounter2 it = source.iterator2();
 		final StringLocated startLine = it.next();
-		if (StartUtils.isArobaseStartDiagram(startLine.getString()) == false)
+		if (StartUtils.isStartDirective(startLine.getString()) == false)
 			throw new UnsupportedOperationException();
 
 		if (source.isEmpty()) {
@@ -94,7 +94,7 @@ public abstract class PSystemCommandFactory extends PSystemAbstractFactory {
 		for (ParserPass pass : requiredPass) {
 			sys.startingPass(pass);
 			while (it.hasNext()) {
-				if (StartUtils.isArobaseEndDiagram(it.peek().getString())) {
+				if (StartUtils.isEndDirective(it.peek().getString())) {
 					it = source.iterator2();
 					it.next();
 					// For next pass

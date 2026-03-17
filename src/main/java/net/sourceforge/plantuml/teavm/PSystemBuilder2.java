@@ -180,7 +180,7 @@ public class PSystemBuilder2 {
 	}
 
 	private boolean isOk(Diagram ps) {
-		if (ps == null || ps instanceof PSystemError)
+		if (ps == null || ps instanceof PSystemError || ps instanceof PSystemUnsupported)
 			return false;
 
 		return true;

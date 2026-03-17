@@ -65,7 +65,7 @@ public class DiagramExtractor implements ReadLine {
 		StringLocated s = null;
 		try {
 			while ((s = raw.readLine()) != null) {
-				if (StartUtils.isArobaseStartDiagram(s.getString()) && checkUid(uid, s)) {
+				if (StartUtils.isStartDirective(s.getString()) && checkUid(uid, s)) {
 					if (bloc == 0)
 						return;
 					bloc--;
@@ -93,7 +93,7 @@ public class DiagramExtractor implements ReadLine {
 			return null;
 
 		final StringLocated result = raw.readLine();
-		if (result != null && StartUtils.isArobaseEndDiagram(result.getString())) {
+		if (result != null && StartUtils.isEndDirective(result.getString())) {
 			finished = true;
 			return null;
 		}

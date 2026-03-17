@@ -144,7 +144,7 @@ final public class UmlSource {
 	 * @return the type of the diagram.
 	 */
 	public Collection<DiagramType> getDiagramTypes() {
-		return DiagramType.getTypesFromArobaseStart(source.get(0).getString());
+		return DiagramType.findStartTypes(source.get(0).getString());
 	}
 
 	/**
@@ -227,9 +227,9 @@ final public class UmlSource {
 		for (StringLocated sl : source) {
 			final String line = sl.getString();
 
-			if (StartUtils.isArobaseStartDiagram(line))
+			if (StartUtils.isStartDirective(line))
 				continue;
-			if (StartUtils.isArobaseEndDiagram(line))
+			if (StartUtils.isEndDirective(line))
 				continue;
 			if (COMMENT_LINE.matcher(line).matches())
 				continue;
