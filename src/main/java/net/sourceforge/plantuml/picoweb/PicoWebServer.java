@@ -100,6 +100,7 @@ public class PicoWebServer implements Runnable {
 		final InetAddress bindAddress1 = bindAddress == null ? null : InetAddress.getByName(bindAddress);
 		final ServerSocket serverConnect = new ServerSocket(port, 50, bindAddress1);
 		System.err.println("webPort=" + serverConnect.getLocalPort());
+		System.err.println("webAddress=" + (bindAddress == null ? "0.0.0.0" : bindAddress));
 		serverLoop(serverConnect);
 	}
 
