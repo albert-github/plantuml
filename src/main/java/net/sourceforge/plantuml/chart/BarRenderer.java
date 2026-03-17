@@ -157,8 +157,11 @@ public class BarRenderer {
 				barHeight = zeroY - valueY;
 			}
 
-			final URectangle rect = URectangle.build(barWidth, barHeight);
-			ug.apply(lineColor).apply(stroke).apply(color.bg()).apply(UTranslate.dx(x).compose(UTranslate.dy(y))).draw(rect);
+			if (barHeight > 0) {
+				final URectangle rect = URectangle.build(barWidth, barHeight);
+				ug.apply(lineColor).apply(stroke).apply(color.bg()).apply(UTranslate.dx(x).compose(UTranslate.dy(y)))
+						.draw(rect);
+			}			
 
 			// Draw label if enabled
 			if (series.isShowLabels()) {
