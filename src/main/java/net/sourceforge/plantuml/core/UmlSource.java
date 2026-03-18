@@ -97,7 +97,7 @@ final public class UmlSource {
 	}
 
 	public static UmlSource create(List<StringLocated> source, boolean checkEndingBackslash) {
-		return createWithRaw(source, checkEndingBackslash, emptyArrayList());
+		return createWithRaw(source, checkEndingBackslash, new ArrayList<>());
 	}
 
 	/**
@@ -110,13 +110,9 @@ final public class UmlSource {
 	 */
 	public static UmlSource createWithRaw(List<StringLocated> source, boolean checkEndingBackslash,
 			List<StringLocated> rawSource) {
-		final UmlSource result = new UmlSource(emptyArrayList(), rawSource);
+		final UmlSource result = new UmlSource(new ArrayList<>(), rawSource);
 		result.loadInternal(source, checkEndingBackslash);
 		return result;
-	}
-
-	private static ArrayList<StringLocated> emptyArrayList() {
-		return new ArrayList<>();
 	}
 
 	private void loadInternal(List<StringLocated> source, boolean checkEndingBackslash) {
@@ -194,14 +190,6 @@ final public class UmlSource {
 
 	public long seed() {
 		return StringUtils.seed(getPlainString("\n"));
-	}
-
-	private String getLine(LineLocation n) {
-		for (StringLocated s : source)
-			if (s.getLocation().compareTo(n) == 0)
-				return s.getString();
-
-		return null;
 	}
 
 	/**
