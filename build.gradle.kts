@@ -209,6 +209,40 @@ tasks.test {
 	useJUnitPlatform()
 	testLogging.showStandardStreams = true
 	jvmArgs("-ea")
+
+	val skippedTests = mutableListOf<String>()
+
+	addTestListener(object : TestListener {
+		override fun beforeSuite(suite: TestDescriptor) {}
+		override fun afterSuite(suite: TestDescriptor, result: TestResult) {
+			if (suite.parent == null) {
+				val passed = result.successfulTestCount
+				val failed = result.failedTestCount
+				val skipped = result.skippedTestCount
+				val total = result.testCount
+				println("\n===========================================")
+				println(" TEST SUMMARY")
+				println("===========================================")
+				println(" Total:    $total")
+				println(" Passed:   $passed")
+				println(" Failed:   $failed")
+				println(" Skipped:  $skipped")
+				println(" Result:   ${result.resultType}")
+				println("===========================================")
+				if (skippedTests.isNotEmpty()) {
+					println(" Skipped tests:")
+					for (name in skippedTests)
+						println("   - $name")
+					println("===========================================")
+				}
+			}
+		}
+		override fun beforeTest(testDescriptor: TestDescriptor) {}
+		override fun afterTest(testDescriptor: TestDescriptor, result: TestResult) {
+			if (result.resultType == TestResult.ResultType.SKIPPED)
+				skippedTests.add("${testDescriptor.className}.${testDescriptor.name}")
+		}
+	})
 }
 
 tasks.register<Test>("runIntermediateTest") {

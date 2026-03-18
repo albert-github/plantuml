@@ -32,6 +32,8 @@ import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.api.parallel.Isolated;
+import org.junit.jupiter.api.parallel.ResourceAccessMode;
+import org.junit.jupiter.api.parallel.ResourceLock;
 import org.junitpioneer.jupiter.StdErr;
 import org.junitpioneer.jupiter.StdIo;
 
@@ -40,6 +42,7 @@ import net.sourceforge.plantuml.json.Json;
 import net.sourceforge.plantuml.json.JsonObject;
 import net.sourceforge.plantuml.log.Logme;
 
+@ResourceLock(value = "java.lang.System.err", mode = ResourceAccessMode.READ_WRITE)
 @DisabledOnOs(OS.WINDOWS)
 @Execution(ExecutionMode.SAME_THREAD)
 @Isolated
