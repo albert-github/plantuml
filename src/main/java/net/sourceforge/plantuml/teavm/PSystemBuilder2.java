@@ -120,8 +120,11 @@ public class PSystemBuilder2 {
 	public Diagram createDiagram(String[] split) {
 		BrowserLog.consoleLog(PSystemBuilder2.class, "createDiagram start");
 		final List<StringLocated> rawSource = new ArrayList<>();
-		for (String s : clean(split))
-			rawSource.add(new StringLocated(s, new LineLocationImpl("textarea", null)));
+		LineLocationImpl location = new LineLocationImpl("textarea", null);
+		for (String s : clean(split)) {
+			location = location.oneLineRead();
+			rawSource.add(new StringLocated(s, location));
+		}
 
 		final PathSystem pathSystem = PathSystem.fetch();
 		final Defines defines = Defines.createEmpty();
@@ -147,6 +150,10 @@ public class PSystemBuilder2 {
 
 	public Diagram createDiagramFromPreprocessed(List<StringLocated> data, PreprocessingArtifact preprocessing) {
 		final UmlSource source = UmlSource.create(data, false);
+
+		if (source.getTotalLineCount() < 10)
+			lastFactory = null;
+
 		final Collection<DiagramType> diagramTypes = source.getDiagramTypes();
 
 		final List<PSystemError> errors = new ArrayList<>();
