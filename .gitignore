@@ -40,3 +40,5 @@ build/
 
 # other
 tmp
+src/test/resources/vega/vega.json
+src/test/resources/vega/vega-summary.txt

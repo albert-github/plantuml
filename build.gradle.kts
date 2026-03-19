@@ -210,6 +210,14 @@ tasks.test {
 	testLogging.showStandardStreams = true
 	jvmArgs("-ea")
 
+	doLast {
+		val vegaSummary = file("src/test/resources/vega/vega-summary.txt")
+		if (vegaSummary.exists()) {
+			println("")
+			println(vegaSummary.readText().trim())
+		}
+	}
+
 	val skippedTests = mutableListOf<String>()
 
 	addTestListener(object : TestListener {
