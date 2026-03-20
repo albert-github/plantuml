@@ -81,5 +81,11 @@ public class ProtectedCommand<S extends Diagram> implements Command<S> {
 	public boolean isEligibleFor(ParserPass pass) {
 		return cmd.isEligibleFor(pass);
 	}
+	
+	@Override
+	public final boolean isCommandForbidden(BlocLines lines) {
+		return cmd.isCommandForbidden(lines);
+	}
+
 
 }

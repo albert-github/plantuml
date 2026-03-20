@@ -46,5 +46,10 @@ public interface Command<D extends Diagram> {
 	CommandControl isValid(BlocLines lines);
 
 	boolean isEligibleFor(ParserPass pass);	
+	
+	default boolean isCommandForbidden(BlocLines lines) {
+		return false;
+	}
+
 
 }
