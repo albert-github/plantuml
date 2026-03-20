@@ -138,40 +138,46 @@ class VegaTest {
 		final boolean allowFailure = "true".equals(data.getYamlString("allow-failure"));
 		final String relativePath = VEGA_RESOURCES.relativize(path).toString();
 		final long startTime = System.currentTimeMillis();
+		final String[] diagramClass = { null };
 
 		try {
-			doRunSingleFile(path, data);
-			recordResult(relativePath, "pass", System.currentTimeMillis() - startTime, null);
+			diagramClass[0] = doRunSingleFile(path, data);
+			recordResult(relativePath, "pass", System.currentTimeMillis() - startTime, null, diagramClass[0]);
 		} catch (TestAbortedException e) {
-			recordResult(relativePath, "skipped", System.currentTimeMillis() - startTime, e.getMessage());
+			recordResult(relativePath, "skipped", System.currentTimeMillis() - startTime, e.getMessage(), diagramClass[0]);
 			throw e;
 		} catch (AssertionError | RuntimeException e) {
 			if (allowFailure) {
-				recordResult(relativePath, "skipped", System.currentTimeMillis() - startTime, e.getMessage());
+				recordResult(relativePath, "skipped", System.currentTimeMillis() - startTime, e.getMessage(), diagramClass[0]);
 				assumeTrue(false, "Known failure (allow-failure: true): " + path + " - " + e.getMessage());
 			} else {
-				recordResult(relativePath, "fail", System.currentTimeMillis() - startTime, e.getMessage());
+				recordResult(relativePath, "fail", System.currentTimeMillis() - startTime, e.getMessage(), diagramClass[0]);
 				throw e;
 			}
 		}
 	}
 
-	private static synchronized void recordResult(String path, String status, long durationMs, String message) {
+	private static synchronized void recordResult(String path, String status, long durationMs, String message,
+			String diagramClass) {
 		final JsonObject entry = new JsonObject()
 				.add("file", path)
 				.add("status", status)
 				.add("duration_ms", durationMs);
+		if (diagramClass != null)
+			entry.add("diagram_class", diagramClass);
 		if (message != null)
 			entry.add("message", message);
 		results.add(entry);
 	}
 
-	private void doRunSingleFile(Path path, VegaTestData data) throws IOException {
+	private String doRunSingleFile(Path path, VegaTestData data) throws IOException {
 		assertNotNull(data.getYaml(), "YAML header in " + path);
 		assertFalse(data.getPumlSource().isEmpty(), "PlantUML source in " + path);
 
 		final String source = data.getPumlSourceAsString();
 		final SourceStringReader ssr = new SourceStringReader(source, UTF_8);
+		final Diagram diagram = ssr.getBlocks().get(0).getDiagram();
+		final String diagramClass = diagram.getClass().getSimpleName();
 
 		// Check expectations on the parsed diagram
 		checkErrorExpectations(path, data, ssr);
@@ -181,7 +187,7 @@ class VegaTest {
 		// Render in each requested output format (if any)
 		final List<FileFormat> fileFormats = data.getFileFormats();
 		if (fileFormats.isEmpty())
-			return;
+			return diagramClass;
 
 		final int nbImages = ssr.getBlocks().get(0).getDiagram().getNbImages();
 		final List<Path> generatedFiles = new ArrayList<>();
@@ -211,6 +217,7 @@ class VegaTest {
 		if (generatedFiles.isEmpty() == false) {
 			assumeTrue(false, "Expected files created: " + generatedFiles + " - please review and re-run");
 		}
+		return diagramClass;
 	}
 
 	// ----------------------------------------------------------
