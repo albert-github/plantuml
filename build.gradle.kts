@@ -209,6 +209,7 @@ tasks.test {
 	useJUnitPlatform()
 	testLogging.showStandardStreams = true
 	jvmArgs("-ea")
+	maxHeapSize = "1g"
 
 	doLast {
 		val vegaSummary = file("src/test/resources/vega/vega-summary.txt")

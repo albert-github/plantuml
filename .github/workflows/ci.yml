@@ -160,7 +160,24 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
 
-      # Compile / Test / Package are separate steps so the reason for any failure is more obvious in GitHub UI
+      - name: Diagnostic - list vega .puml files
+        run: |
+          echo "=== Vega .puml files ==="
+          find src/test/resources/vega -name '*.puml' | sort | head -50
+          echo "..."
+          echo "Total .puml: $(find src/test/resources/vega -name '*.puml' | wc -l)"
+          echo ""
+          echo "=== Vega subdirectories ==="
+          find src/test/resources/vega -type d | sort
+          echo ""
+          echo "=== VegaTest.java exists? ==="
+          ls -la src/test/java/test/vega/VegaTest.java || echo 'NOT FOUND'
+          echo ""
+          echo "=== Test classes (all *Test.java) ==="
+          find src/test/java -name '*Test.java' | wc -l
+          echo "=== Test classes on disk ==="
+          find src/test/java -name '*Test.java' | sort
+
       - name: Compile
         if: needs.workflow_config.outputs.do_test_linux == 'true'
         run: gradle -q compileJava --no-daemon
@@ -223,6 +240,20 @@ jobs:
           if [ "$skipped" -gt 0 ]; then
             echo "::warning::$skipped test(s) were skipped"
           fi
+          # Vega test summary
+          VEGA_SUMMARY="src/test/resources/vega/vega-summary.txt"
+          if [ -f "$VEGA_SUMMARY" ]; then
+            echo "::group::Vega Test Results"
+            cat "$VEGA_SUMMARY"
+            echo "::endgroup::"
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "## Vega Test Results" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat "$VEGA_SUMMARY" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          else
+            echo "::warning::vega-summary.txt not found — Vega tests may not have run"
+          fi
 
       - name: Upload test reports
         uses: actions/upload-artifact@v7
@@ -231,6 +262,15 @@ jobs:
           # Using github.run_number here to reduce confusion when downloading & comparing from several builds
           name: ${{ github.run_number }}-${{ matrix.os }}-java-${{ matrix.java_version }}-test-reports
           path: build/reports/tests/
+
+      - name: Upload Vega test results
+        uses: actions/upload-artifact@v7
+        if: needs.workflow_config.outputs.do_test_linux == 'true' && always()
+        with:
+          name: vega-results
+          path: src/test/resources/vega/vega.json
+          if-no-files-found: warn
+          retention-days: 30
 
 
   build_artifacts:

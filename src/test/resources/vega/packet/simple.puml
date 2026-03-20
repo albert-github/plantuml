@@ -1,7 +1,7 @@
-----
+---
 output: svg, debug
 expected-description: Packet Diagram
-----
+---
 @startpacketdiag
 packetdiag {
    0-7: Source Port

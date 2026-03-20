@@ -3,8 +3,8 @@ package test.vega;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.ByteArrayOutputStream;
@@ -36,7 +36,6 @@ import net.sourceforge.plantuml.TitledDiagram;
 import net.sourceforge.plantuml.core.Diagram;
 import net.sourceforge.plantuml.core.DiagramDescription;
 import net.sourceforge.plantuml.error.PSystemError;
-import net.sourceforge.plantuml.json.Json;
 import net.sourceforge.plantuml.json.JsonArray;
 import net.sourceforge.plantuml.json.JsonObject;
 import net.sourceforge.plantuml.json.WriterConfig;
@@ -45,7 +44,7 @@ import net.sourceforge.plantuml.yaml.parser.YamlParser;
 
 class VegaTest {
 
-	private static final String YAML_DELIMITER = "----";
+	private static final String YAML_DELIMITER = "---";
 
 	private static final Path VEGA_RESOURCES = Paths.get("src", "test", "resources", "vega");
 

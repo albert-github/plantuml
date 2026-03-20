@@ -1,4 +1,4 @@
-----
+---
 output: debug
 expected-description: (2 participants)
 expected-image-count: 2
@@ -8,7 +8,7 @@ expected-debug-1:
 expected-debug-2:
   contains: hello2
   not-contains: hello1
-----
+---
 @startuml
 Alice -> Bob : hello1
 newpage
