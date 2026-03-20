@@ -1,0 +1,164 @@
+name: CI (branch)
+
+on:
+  push:
+    branches-ignore: [ master ]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+
+  jdk8:
+    name: Build & Run with Ant (Java 8)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up JDK 8 (Temurin)
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '8'
+
+      - name: Ensure Ant present
+        run: |
+          if ! command -v ant >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y ant
+          fi
+          ant -version
+
+      - name: Build with Ant
+        run: ant -noinput
+
+      - name: Check PlantUML version (expect exit code 16)
+        run: |
+          set +e
+          java -jar plantuml.jar -version
+          CODE=$?
+          echo "Exit code: $CODE"
+          if [ $CODE -ne 16 ]; then
+            echo "::error::Unexpected exit code (expected 16, got $CODE)"
+            exit 1
+          fi
+
+      - name: Run sample diagram test (ASCII)
+        run: |
+          echo "Alice -> Bob : it works!" | java -jar plantuml.jar -pipe -ttxt
+
+  test_linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v6
+
+      - name: Set up java
+        uses: actions/setup-java@v5
+        with:
+          java-version: 21
+          distribution: temurin
+          cache: gradle
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+
+      - name: Diagnostic - list vega .puml files
+        run: |
+          echo "=== Vega .puml files ==="
+          find src/test/resources/vega -name '*.puml' | sort | head -50
+          echo "..."
+          echo "Total .puml: $(find src/test/resources/vega -name '*.puml' | wc -l)"
+          echo ""
+          echo "=== Vega subdirectories ==="
+          find src/test/resources/vega -type d | sort
+          echo ""
+          echo "=== VegaTest.java exists? ==="
+          ls -la src/test/java/test/vega/VegaTest.java || echo 'NOT FOUND'
+          echo ""
+          echo "=== Test classes (all *Test.java) ==="
+          find src/test/java -name '*Test.java' | wc -l
+          echo "=== Test classes on disk ==="
+          find src/test/java -name '*Test.java' | sort
+
+      - name: Compile
+        run: ./gradlew -q compileJava --no-daemon
+
+      - name: Test
+        run: ./gradlew test --no-daemon -i
+
+      - name: Test Summary
+        if: always()
+        run: |
+          echo "::group::Test Results"
+          passed=0; failed=0; skipped=0; errors=0
+          for f in build/test-results/test/TEST-*.xml; do
+            [ -f "$f" ] || continue
+            t=$(grep -o 'tests="[0-9]*"'    "$f" | head -1 | grep -o '[0-9]*')
+            s=$(grep -o 'skipped="[0-9]*"'  "$f" | head -1 | grep -o '[0-9]*')
+            fl=$(grep -o 'failures="[0-9]*"' "$f" | head -1 | grep -o '[0-9]*')
+            e=$(grep -o 'errors="[0-9]*"'   "$f" | head -1 | grep -o '[0-9]*')
+            passed=$((passed + ${t:-0} - ${s:-0} - ${fl:-0} - ${e:-0}))
+            failed=$((failed + ${fl:-0}))
+            skipped=$((skipped + ${s:-0}))
+            errors=$((errors + ${e:-0}))
+          done
+          total=$((passed + failed + skipped + errors))
+          echo "==========================================="
+          echo " Tests run:    $total"
+          echo " Passed:       $passed"
+          echo " Skipped:      $skipped"
+          echo " Failed:       $failed"
+          echo " Errors:       $errors"
+          echo "==========================================="
+          echo "::endgroup::"
+          # GitHub Job Summary
+          echo "## Test Results"                                >> $GITHUB_STEP_SUMMARY
+          echo "| Metric   | Count |"                          >> $GITHUB_STEP_SUMMARY
+          echo "|----------|------:|"                          >> $GITHUB_STEP_SUMMARY
+          echo "| Total    | $total |"                         >> $GITHUB_STEP_SUMMARY
+          echo "| :white_check_mark: Passed  | $passed |"      >> $GITHUB_STEP_SUMMARY
+          echo "| :fast_forward: Skipped | $skipped |"         >> $GITHUB_STEP_SUMMARY
+          echo "| :x: Failed  | $failed |"                     >> $GITHUB_STEP_SUMMARY
+          echo "| :boom: Errors  | $errors |"                  >> $GITHUB_STEP_SUMMARY
+          if [ "$failed" -gt 0 ] || [ "$errors" -gt 0 ]; then
+            echo "::error::There are test failures or errors"
+          fi
+          if [ "$skipped" -gt 0 ]; then
+            echo "::warning::$skipped test(s) were skipped"
+          fi
+          # Vega test summary
+          VEGA_SUMMARY="src/test/resources/vega/vega-summary.txt"
+          if [ -f "$VEGA_SUMMARY" ]; then
+            echo "::group::Vega Test Results"
+            cat "$VEGA_SUMMARY"
+            echo "::endgroup::"
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "## Vega Test Results" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat "$VEGA_SUMMARY" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          else
+            echo "::warning::vega-summary.txt not found — Vega tests may not have run"
+          fi
+
+      - name: Upload test reports
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: ${{ github.run_number }}-test-reports
+          path: build/reports/tests/
+
+      - name: Upload Vega test results
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: vega-results
+          path: src/test/resources/vega/vega.json
+          if-no-files-found: warn
+          retention-days: 30
