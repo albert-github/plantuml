@@ -65,6 +65,7 @@ import net.sourceforge.plantuml.security.SURL;
 import net.sourceforge.plantuml.security.SecurityProfile;
 import net.sourceforge.plantuml.security.SecurityUtils;
 import net.sourceforge.plantuml.teavm.TeaVM;
+import net.sourceforge.plantuml.teavm.browser.BrowserLog;
 import net.sourceforge.plantuml.url.Url;
 import net.sourceforge.plantuml.utils.Base64Coder;
 
@@ -101,8 +102,14 @@ public class AtomImg extends AbstractAtom implements Atom {
 	}
 
 	public static Atom create(String src, ImgValign valign, int vspace, double scale, Url url) {
-		if (TeaVM.isTeaVM())
-			throw new UnsupportedOperationException("TEA3424");
+		BrowserLog.consoleLog(AtomImg.class, "create wip10");
+		if (TeaVM.isTeaVM()) {
+			BrowserLog.consoleLog(AtomImg.class, "create wip20 TeaVM fallback");
+			final UFont font = UFontFactory.monospaced(14);
+			final FontConfiguration fc = FontConfiguration.blackBlueTrue(font);
+			BrowserLog.consoleLog(AtomImg.class, "create wip30 returning [img]");
+			return AtomTextUtils.createLegacy("[img]", fc);
+		}
 
 		final UFont font = UFontFactory.monospaced(14);
 		final FontConfiguration fc = FontConfiguration.blackBlueTrue(font);
