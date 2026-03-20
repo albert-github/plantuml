@@ -89,6 +89,13 @@ class VegaTest {
 		sb.append(String.format(" Failed:   %d%n", failed));
 		sb.append(String.format(" Skipped:  %d%n", skipped));
 		sb.append("===========================================");
+		if (failed > 0) {
+			sb.append("\n Failed tests:");
+			for (final JsonObject r : results)
+				if ("fail".equals(r.getString("status", "")))
+					sb.append("\n   - " + r.getString("file", ""));
+			sb.append("\n===========================================");
+		}
 		if (skipped > 0) {
 			sb.append("\n Skipped tests:");
 			for (final JsonObject r : results)
@@ -387,7 +394,16 @@ class VegaTest {
 		}
 
 		final String expectedOutput = normalizeLineEndings(new String(Files.readAllBytes(expectedFile), UTF_8));
-		assertEquals(expectedOutput, actualOutput, "XMI output mismatch for " + pumlPath);
+		assertEquals(cleanXmi(expectedOutput), cleanXmi(actualOutput), "XMI output mismatch for " + pumlPath);
+	}
+
+	/**
+	 * Strips the {@code <XMI.documentation>} block from XMI output so that
+	 * version-dependent content (like {@code <XMI.exporterVersion>}) does
+	 * not cause spurious comparison failures.
+	 */
+	private static String cleanXmi(String xmi) {
+		return xmi.replaceAll("(?s)<XMI\\.documentation>.*?</XMI\\.documentation>", "");
 	}
 
 	/**
