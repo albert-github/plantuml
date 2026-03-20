@@ -212,6 +212,8 @@ class VegaTest {
 					checkSvgOutput(path, baos, suffix, generatedFiles);
 				} else if (fileFormat == FileFormat.SCXML) {
 					checkScxmlOutput(path, baos, suffix, generatedFiles);
+				} else if (fileFormat.name().startsWith("XMI")) {
+					checkXmiOutput(path, baos, suffix, generatedFiles);
 				}
 			}
 		}
@@ -367,6 +369,25 @@ class VegaTest {
 
 		final String expectedOutput = normalizeLineEndings(new String(Files.readAllBytes(expectedFile), UTF_8));
 		assertEquals(expectedOutput, actualOutput, "SCXML output mismatch for " + pumlPath);
+	}
+
+	// ----------------------------------------------------------
+	// XMI output: compare with .xmi reference file
+	// ----------------------------------------------------------
+
+	private void checkXmiOutput(Path pumlPath, ByteArrayOutputStream baos, String suffix,
+			List<Path> generatedFiles) throws IOException {
+		final String actualOutput = normalizeLineEndings(new String(baos.toByteArray(), UTF_8));
+		final Path expectedFile = getExpectedFile(pumlPath, suffix, ".xmi");
+
+		if (Files.exists(expectedFile) == false) {
+			Files.write(expectedFile, actualOutput.getBytes(UTF_8));
+			generatedFiles.add(expectedFile);
+			return;
+		}
+
+		final String expectedOutput = normalizeLineEndings(new String(Files.readAllBytes(expectedFile), UTF_8));
+		assertEquals(expectedOutput, actualOutput, "XMI output mismatch for " + pumlPath);
 	}
 
 	/**
