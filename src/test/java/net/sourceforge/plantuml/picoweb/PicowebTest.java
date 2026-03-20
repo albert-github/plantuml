@@ -50,7 +50,7 @@ class PicowebTest {
 
 	private int port;
 	private HttpClient http;
-
+	private ServerSocket serverSocket;
 	private ExecutorService executor;
 
 	@BeforeEach
@@ -58,7 +58,7 @@ class PicowebTest {
 		GraphvizRuntimeEnvironment.getInstance().setDotExecutable("this_exe_do_not_exist");
 
 		PicoWebServer.enableStop = true;
-		final ServerSocket serverSocket = new ServerSocket(0, 0, InetAddress.getByName("localhost"));
+		serverSocket = new ServerSocket(0, 0, InetAddress.getByName("localhost"));
 		port = serverSocket.getLocalPort();
 
 		executor = Executors.newSingleThreadExecutor();
@@ -81,8 +81,9 @@ class PicowebTest {
 	void stopServer() throws Exception {
 		GraphvizRuntimeEnvironment.getInstance().setDotExecutable(null);
 
-		http_get("/stopserver");
+		serverSocket.close();
 		executor.shutdownNow();
+		executor.awaitTermination(5, java.util.concurrent.TimeUnit.SECONDS);
 	}
 
 	@Test
