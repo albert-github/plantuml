@@ -9,8 +9,10 @@ import org.teavm.jso.dom.xml.Element;
 
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
+import net.sourceforge.plantuml.Scale;
 import net.sourceforge.plantuml.TitledDiagram;
 import net.sourceforge.plantuml.UgDiagram;
+import net.sourceforge.plantuml.core.AbstractDiagram;
 import net.sourceforge.plantuml.core.Diagram;
 import net.sourceforge.plantuml.core.DiagramChromeFactory12026;
 import net.sourceforge.plantuml.klimt.color.ColorMapper;
@@ -19,6 +21,7 @@ import net.sourceforge.plantuml.klimt.color.HColors;
 import net.sourceforge.plantuml.klimt.drawing.UGraphic;
 import net.sourceforge.plantuml.klimt.drawing.hand.UGraphicHandwritten;
 import net.sourceforge.plantuml.klimt.font.StringBounder;
+import net.sourceforge.plantuml.klimt.geom.XDimension2D;
 import net.sourceforge.plantuml.klimt.shape.TextBlock;
 import net.sourceforge.plantuml.teavm.PSystemBuilder2;
 import net.sourceforge.plantuml.teavm.StringBounderTeaVM;
@@ -333,7 +336,7 @@ public class PlantUMLBrowser {
 			BrowserLog.reset();
 			BrowserLog.consoleLog(PlantUMLBrowser.class, "doRender");
 
-			SvgGraphicsTeaVM svg = new SvgGraphicsTeaVM(900, 900);
+			SvgGraphicsTeaVM svg = new SvgGraphicsTeaVM();
 			UGraphic ug = UGraphicTeaVM.build(BACK, COLOR_MAPPER, STRING_BOUNDER, svg);
 
 			BrowserLog.consoleLog(PlantUMLBrowser.class, "doRender wip10");
@@ -345,6 +348,8 @@ public class PlantUMLBrowser {
 			final FileFormatOption fileFormat = new FileFormatOption(FileFormat.SVG);
 			if (diagram instanceof UgDiagram) {
 				BrowserLog.consoleLog(PlantUMLBrowser.class, "doRender new10");
+				final Scale scale = ((AbstractDiagram) diagram).getScale();
+				BrowserLog.consoleLog(PlantUMLBrowser.class, "scale = " + scale);
 				TextBlock tb = ((UgDiagram) diagram).getTextBlock12026(0, fileFormat);
 				final UgDiagram ugDiagram = (UgDiagram) diagram;
 
@@ -356,7 +361,15 @@ public class PlantUMLBrowser {
 					ug = new UGraphicHandwritten(ug);
 
 				tb.drawU(ug);
-				BrowserLog.consoleLog(PlantUMLBrowser.class, "doRender new20");
+
+				// Apply scale to the SVG dimensions.
+				// The viewBox keeps logical (unscaled) coordinates, while
+				// width/height are set to scaled values so the browser
+				// renders the diagram at the desired display size.
+				final XDimension2D dim = tb.calculateDimension(STRING_BOUNDER);
+				final double scaleFactor = scale == null ? 1.0 : scale.getScale(dim.getWidth(), dim.getHeight());
+				svg.updateSvgSize(dim.getWidth(), dim.getHeight(), scaleFactor);
+				BrowserLog.consoleLog(PlantUMLBrowser.class, "doRender new20 scaleFactor=" + scaleFactor);
 			} else {
 				BrowserLog.consoleLog(PlantUMLBrowser.class, "doRender ERROR");
 			}

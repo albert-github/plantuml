@@ -58,16 +58,22 @@ public class SvgGraphicsTeaVM {
 	private double strokeWidth = 1.0;
 	private double[] strokeDasharray = null;
 
-	public SvgGraphicsTeaVM(int width, int height) {
+	/**
+	 * Creates a new SVG graphics context for TeaVM rendering.
+	 *
+	 * <p>
+	 * The SVG root element is created without explicit {@code width},
+	 * {@code height}, or {@code viewBox} attributes. These are set later by
+	 * {@link #updateSvgSize(double, double, double)} once the actual diagram
+	 * dimensions and scale factor are known.
+	 */
+	public SvgGraphicsTeaVM() {
 		this.document = HTMLDocument.current();
 
 		// Create SVG root element
 		this.svgRoot = createSvgElement("svg");
 		svgRoot.setAttribute("xmlns", SVG_NS);
 		svgRoot.setAttribute("version", "1.1");
-		svgRoot.setAttribute("width", String.valueOf(width));
-		svgRoot.setAttribute("height", String.valueOf(height));
-		svgRoot.setAttribute("viewBox", "0 0 " + width + " " + height);
 
 		// Create defs for gradients, filters, etc.
 		this.defs = createSvgElement("defs");
@@ -83,6 +89,28 @@ public class SvgGraphicsTeaVM {
 
 	public Element getSvgRoot() {
 		return svgRoot;
+	}
+
+	/**
+	 * Updates the SVG root element dimensions to match the actual diagram
+	 * content, applying a scale factor.
+	 *
+	 * <p>
+	 * The {@code viewBox} is set to the logical (unscaled) dimensions, while
+	 * {@code width} and {@code height} are set to the scaled dimensions. This
+	 * lets the browser render the SVG at the desired display size while
+	 * preserving the internal coordinate system.
+	 *
+	 * @param width  the logical width of the diagram content
+	 * @param height the logical height of the diagram content
+	 * @param scale  the scale factor (1.0 = no scaling)
+	 */
+	public void updateSvgSize(double width, double height, double scale) {
+		final int w = (int) Math.ceil(width);
+		final int h = (int) Math.ceil(height);
+		svgRoot.setAttribute("viewBox", "0 0 " + w + " " + h);
+		svgRoot.setAttribute("width", format(w * scale));
+		svgRoot.setAttribute("height", format(h * scale));
 	}
 
 	public void setFillColor(String color) {
