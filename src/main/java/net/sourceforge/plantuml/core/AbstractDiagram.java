@@ -39,6 +39,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -69,12 +71,18 @@ public abstract class AbstractDiagram implements Diagram {
 	private Scale scale;
 	private int splitPagesHorizontal = 1;
 	private int splitPagesVertical = 1;
+	private final Map<String, String> md5map;
 
 	private final PreprocessingArtifact preprocessing;
 
 	public AbstractDiagram(UmlSource source, PreprocessingArtifact preprocessing) {
 		this.source = Objects.requireNonNull(source);
 		this.preprocessing = preprocessing;
+		this.md5map = source.getMd5map();
+	}
+
+	public Map<String, String> getMd5map() {
+		return md5map;
 	}
 
 	public PathSystem getPathSystem() {

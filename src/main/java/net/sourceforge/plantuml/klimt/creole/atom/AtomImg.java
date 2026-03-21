@@ -42,6 +42,7 @@ import java.io.IOException;
 import net.atmp.PixelImage;
 import net.sourceforge.plantuml.FileSystem;
 import net.sourceforge.plantuml.FileUtils;
+import net.sourceforge.plantuml.core.UmlSource;
 import net.sourceforge.plantuml.flashcode.FlashCodeFactory;
 import net.sourceforge.plantuml.klimt.AffineTransformType;
 import net.sourceforge.plantuml.klimt.awt.PortableImage;
@@ -64,8 +65,8 @@ import net.sourceforge.plantuml.security.SImageIO;
 import net.sourceforge.plantuml.security.SURL;
 import net.sourceforge.plantuml.security.SecurityProfile;
 import net.sourceforge.plantuml.security.SecurityUtils;
+import net.sourceforge.plantuml.style.ISkinSimple;
 import net.sourceforge.plantuml.teavm.TeaVM;
-import net.sourceforge.plantuml.teavm.browser.BrowserLog;
 import net.sourceforge.plantuml.url.Url;
 import net.sourceforge.plantuml.utils.Base64Coder;
 
@@ -101,18 +102,36 @@ public class AtomImg extends AbstractAtom implements Atom {
 		}
 	}
 
-	public static Atom create(String src, ImgValign valign, int vspace, double scale, Url url) {
-		BrowserLog.consoleLog(AtomImg.class, "create wip10");
-		if (TeaVM.isTeaVM()) {
-			BrowserLog.consoleLog(AtomImg.class, "create wip20 TeaVM fallback");
-			final UFont font = UFontFactory.monospaced(14);
-			final FontConfiguration fc = FontConfiguration.blackBlueTrue(font);
-			BrowserLog.consoleLog(AtomImg.class, "create wip30 returning [img]");
-			return AtomTextUtils.createLegacy("[img]", fc);
-		}
-
+	public static Atom create(ISkinSimple skinParam, String src, ImgValign valign, int vspace, double scale, Url url) {
 		final UFont font = UFontFactory.monospaced(14);
 		final FontConfiguration fc = FontConfiguration.blackBlueTrue(font);
+
+		if (src.startsWith(UmlSource.BASE64_TAG_REPLACEMENT)) {
+			final String md5 = src.substring(UmlSource.BASE64_TAG_REPLACEMENT.length());
+			final String base64 = skinParam.getFromMd5(md5);
+			if (base64 == null)
+				return AtomTextUtils.createLegacy("[md5:" + md5 + "]", fc);
+
+			try {
+				final byte[] bytes = Base64Coder.decode(base64);
+				return buildRasterFromData(DATA_IMAGE_PNG_BASE64 + base64, fc, bytes, scale, url);
+			} catch (Exception e) {
+				return AtomTextUtils.createLegacy("ERROR " + e.toString(), fc);
+			}
+		}
+
+		if (src.startsWith(DATA_IMAGE_PNG_BASE64)) {
+			final String data = src.substring(DATA_IMAGE_PNG_BASE64.length(), src.length());
+			try {
+				final byte bytes[] = Base64Coder.decode(data);
+				return buildRasterFromData(src, fc, bytes, scale, url);
+			} catch (Exception e) {
+				return AtomTextUtils.createLegacy("ERROR " + e.toString(), fc);
+			}
+		}
+
+		if (TeaVM.isTeaVM())
+			return AtomTextUtils.createLegacy("[img TBD42102]", fc);
 
 		if (src.startsWith(DATA_IMAGE_PNG_SPM)) {
 			final String data = src.substring(DATA_IMAGE_PNG_SPM.length(), src.length());
@@ -129,16 +148,6 @@ public class AtomImg extends AbstractAtom implements Atom {
 				return AtomTextUtils.createLegacy("ERROR " + e.toString(), fc);
 			}
 
-		}
-
-		if (src.startsWith(DATA_IMAGE_PNG_BASE64)) {
-			final String data = src.substring(DATA_IMAGE_PNG_BASE64.length(), src.length());
-			try {
-				final byte bytes[] = Base64Coder.decode(data);
-				return buildRasterFromData(src, fc, bytes, scale, url);
-			} catch (Exception e) {
-				return AtomTextUtils.createLegacy("ERROR " + e.toString(), fc);
-			}
 		}
 
 		if (src.startsWith(DATA_IMAGE_SVG_BASE64)) {

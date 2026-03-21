@@ -118,6 +118,7 @@ public class SkinParam implements ISkinParam {
 	private final Pragma pragma;
 	private final PathSystem pathSystem;
 	private final ConfigurationStore<OptionKey> option;
+	final private Map<String, String> md5map;
 
 	private static final Pattern DIGITS = Pattern.compile("\\d+");
 	private static final Pattern DIGITS_DOT = Pattern.compile("[\\d.]+");
@@ -135,11 +136,13 @@ public class SkinParam implements ISkinParam {
 		return s != null && INT_OR_DECIMAL.matcher(s).matches();
 	}
 
-	private SkinParam(PathSystem pathSystem, DiagramType type, Pragma pragma, ConfigurationStore<OptionKey> option) {
+	private SkinParam(PathSystem pathSystem, DiagramType type, Pragma pragma, ConfigurationStore<OptionKey> option,
+			Map<String, String> md5map) {
 		this.type = type;
 		this.pragma = pragma;
 		this.option = option;
 		this.pathSystem = pathSystem;
+		this.md5map = md5map;
 	}
 
 	@Override
@@ -240,9 +243,9 @@ public class SkinParam implements ISkinParam {
 		paramsPendingForStyleMigration.clear();
 	}
 
-	public static SkinParam create(PathSystem pathSystem, DiagramType type, Pragma pragma,
+	public static SkinParam create(Map<String, String> md5map, PathSystem pathSystem, DiagramType type, Pragma pragma,
 			ConfigurationStore<OptionKey> option) {
-		return new SkinParam(pathSystem, type, pragma, option);
+		return new SkinParam(pathSystem, type, pragma, option, md5map);
 	}
 
 	private final Map<String, List<String>> cacheCleanForKey = new HashMap<String, List<String>>();
@@ -1277,6 +1280,11 @@ public class SkinParam implements ISkinParam {
 	@Override
 	public PathSystem getPathSystem() {
 		return pathSystem;
+	}
+
+	@Override
+	public String getFromMd5(String md5) {
+		return md5map.get(md5);
 	}
 
 }

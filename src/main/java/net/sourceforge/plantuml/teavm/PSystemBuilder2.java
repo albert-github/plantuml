@@ -155,6 +155,8 @@ public class PSystemBuilder2 {
 			lastFactory = null;
 
 		final Collection<DiagramType> diagramTypes = source.getDiagramTypes();
+		
+		source.patchBase64();
 
 		final List<PSystemError> errors = new ArrayList<>();
 

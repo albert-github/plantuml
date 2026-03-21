@@ -211,6 +211,8 @@ public class PSystemBuilder {
 			final UmlSource umlSource = UmlSource.createWithRaw(source, types.contains(DiagramType.SEQUENCE),
 					rawSource);
 
+			umlSource.patchBase64();
+
 			for (StringLocated s : source) {
 				if (s.getPreprocessorError() != null) {
 					// Dead code : should not append
