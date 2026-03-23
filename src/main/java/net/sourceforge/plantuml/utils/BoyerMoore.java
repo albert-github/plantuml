@@ -39,6 +39,7 @@ public class BoyerMoore {
 
 	private final String pattern;
 	private final int[] shift;
+	private final int defaultShift;
 
 	public BoyerMoore(String pattern) {
 		if (pattern == null || pattern.isEmpty())
@@ -46,6 +47,7 @@ public class BoyerMoore {
 
 		this.pattern = pattern;
 		this.shift = buildShiftTable(pattern);
+		this.defaultShift = pattern.length();
 	}
 
 	private static int[] buildShiftTable(String pattern) {
@@ -56,8 +58,12 @@ public class BoyerMoore {
 		for (int i = 0; i < ALPHABET_SIZE; i++)
 			table[i] = pattern.length();
 
-		for (int i = 0; i < last; i++)
-			table[pattern.charAt(i) & 0xFF] = last - i;
+		for (int i = 0; i < last; i++) {
+			final char c = pattern.charAt(i);
+			if (c >= 256)
+				throw new IllegalArgumentException("pattern=" + pattern);
+			table[c] = last - i;
+		}
 
 		return table;
 	}
@@ -89,7 +95,8 @@ public class BoyerMoore {
 			if (j < 0)
 				return i;
 
-			i += shift[text.charAt(i + patLen - 1) & 0xFF];
+			final char c = text.charAt(i + patLen - 1);
+			i += (c < 256) ? shift[c] : defaultShift;
 		}
 
 		return -1;

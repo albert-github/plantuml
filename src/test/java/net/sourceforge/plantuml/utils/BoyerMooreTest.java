@@ -136,4 +136,23 @@ class BoyerMooreTest {
 		assertEquals(8, bm.searchIn("café et tag ici", 5));
 	}
 
+	@Test
+	void testUnicodePatternThrows() {
+		assertThrows(IllegalArgumentException.class, () -> new BoyerMoore("őabc"));
+		assertThrows(IllegalArgumentException.class, () -> new BoyerMoore("abc世z"));
+	}
+
+	@Test
+	void testSearchInUnicodeText() {
+		final BoyerMoore bm = new BoyerMoore("find");
+		assertEquals(4, bm.searchIn("世界你好find"));
+		assertEquals(-1, bm.searchIn("世界你好"));
+	}
+
+	@Test
+	void testSearchInTextWithMixedUnicode() {
+		final BoyerMoore bm = new BoyerMoore("img");
+		assertEquals(6, bm.searchIn("éèő世界Ximg"));
+	}
+
 }
