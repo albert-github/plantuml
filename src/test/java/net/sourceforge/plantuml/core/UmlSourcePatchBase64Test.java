@@ -80,8 +80,10 @@ class UmlSourcePatchBase64Test {
 
 	@Test
 	void unclosedTagIsIgnored() {
+		final String md5 = SignatureUtils.getMD5Hex("ABCDEF");
 		final String input = "text <img data:image/png;base64,ABCDEF no closing bracket";
-		assertSame(input, patch(input));
+		final String expected = "text <img data:image/png;md5," + md5 + " no closing bracket";
+		assertEquals(expected, patch(input));
 	}
 
 	@Test

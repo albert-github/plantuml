@@ -49,6 +49,7 @@ import net.sourceforge.plantuml.klimt.creole.atom.AtomImg;
 import net.sourceforge.plantuml.nio.PathSystem;
 import net.sourceforge.plantuml.regex.Matcher2;
 import net.sourceforge.plantuml.regex.Pattern2;
+import net.sourceforge.plantuml.teavm.browser.BrowserLog;
 import net.sourceforge.plantuml.text.StringLocated;
 import net.sourceforge.plantuml.utils.BoyerMoore;
 import net.sourceforge.plantuml.utils.SignatureUtils;
@@ -301,16 +302,13 @@ final public class UmlSource {
 				break;
 
 			final int dataStart = start + BASE64_TAG_START.length();
-			final int endTag = line.indexOf('>', dataStart);
-			if (endTag == -1)
-				break;
 
 			if (sb == null)
 				sb = new StringBuilder();
 
 			// Scan forward to find the end of legitimate base64 characters
 			int base64End = dataStart;
-			while (base64End < endTag && isBase64Char(line.charAt(base64End)))
+			while (base64End < line.length() && isBase64Char(line.charAt(base64End)))
 				base64End++;
 
 			final String base64Data = line.substring(dataStart, base64End);
@@ -320,8 +318,7 @@ final public class UmlSource {
 			sb.append(line, from, start);
 			sb.append(BASE64_TAG_REPLACEMENT);
 			sb.append(md5);
-			sb.append(line, base64End, endTag);
-			from = endTag;
+			from = base64End;
 		}
 		if (sb == null)
 			return line;
