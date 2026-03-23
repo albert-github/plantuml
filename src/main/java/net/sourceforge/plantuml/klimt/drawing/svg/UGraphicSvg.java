@@ -60,7 +60,6 @@ import net.sourceforge.plantuml.klimt.shape.UText;
 import net.sourceforge.plantuml.url.Url;
 
 public class UGraphicSvg extends AbstractUGraphic<SvgGraphics> implements ClipContainer {
-	// ::remove file when __HAXE__
 
 	private final boolean textAsPath;
 	private /* final */ SvgOption option;

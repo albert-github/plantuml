@@ -43,27 +43,27 @@ class SvgCleaner {
 	static String clean(String svgXml) {
 		final Document document = parseXml(svgXml);
 		removeProcessingInstructions(document);
-		removeElementsByXPath(document,
-				"/svg:svg/@style",
-				"//svg:script/text()",
-				"//svg:style/text()",
-				"//@x",
-				"//@y",
-				"//@x1",
-				"//@x2",
-				"//@y1",
-				"//@y2",
-				"//@cx",
-				"//@cy",
-				"//@rx",
-				"//@ry",
-				"//@width",
-				"//@height",
-				"//@textLength",
-				"//@d",
-				"//@points",
-				"//@viewBox"
-		);
+//		removeElementsByXPath(document,
+//				"/svg:svg/@style",
+//				"//svg:script/text()",
+//				"//svg:style/text()",
+//				"//@x",
+//				"//@y",
+//				"//@x1",
+//				"//@x2",
+//				"//@y1",
+//				"//@y2",
+//				"//@cx",
+//				"//@cy",
+//				"//@rx",
+//				"//@ry",
+//				"//@width",
+//				"//@height",
+//				"//@textLength",
+//				"//@d",
+//				"//@points",
+//				"//@viewBox"
+//		);
 		return toNormalisedString(document);
 	}
 

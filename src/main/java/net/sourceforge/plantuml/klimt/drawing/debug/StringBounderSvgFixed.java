@@ -34,28 +34,43 @@
  */
 package net.sourceforge.plantuml.klimt.drawing.debug;
 
-import java.util.Random;
+import java.util.Locale;
 
-import net.sourceforge.plantuml.StringUtils;
+import net.sourceforge.plantuml.FileFormat;
+import net.sourceforge.plantuml.klimt.font.StringBounder;
 import net.sourceforge.plantuml.klimt.font.StringBounderRaw;
 import net.sourceforge.plantuml.klimt.font.UFont;
+import net.sourceforge.plantuml.klimt.font.UFontFactory;
 import net.sourceforge.plantuml.klimt.geom.XDimension2D;
 
-public class StringBounderDebug extends StringBounderRaw {
+public class StringBounderSvgFixed extends StringBounderRaw {
 
-	public StringBounderDebug() {
+	private static final double[] WIDTH = { 3.3, 3.3, 4.3, 6.7, 6.7, 10.7, 8.0, 2.3, 4.0, 4.0, 4.7, 7.0, 3.3, 4.0, 3.3,
+			3.3, 6.7, 6.7, 6.7, 6.7, 6.7, 6.7, 6.7, 6.7, 6.7, 6.7, 3.3, 3.3, 7.0, 7.0, 7.0, 6.7, 12.2, 8.0, 8.0, 8.7,
+			8.7, 8.0, 7.3, 9.3, 8.7, 3.3, 6.0, 8.0, 6.7, 10.0, 8.7, 9.3, 8.0, 9.3, 8.7, 8.0, 7.3, 8.7, 8.0, 11.3, 8.0,
+			8.0, 7.3, 3.3, 3.3, 3.3, 5.6, 6.7, 4.0, 6.7, 6.7, 6.0, 6.7, 6.7, 3.3, 6.7, 6.7, 2.7, 2.7, 6.0, 2.7, 10.0,
+			6.7, 6.7, 6.7, 6.7, 4.0, 6.0, 3.3, 6.7, 6.0, 8.7, 6.0, 6.0, 6.0, 4.0, 3.1, 4.0, 7.0, 6.0, };
+
+	public StringBounderSvgFixed() {
 		super(null);
 	}
 
 	@Override
 	protected XDimension2D calculateDimensionInternal(UFont font, String text) {
-		final Random rnd = new Random(StringUtils.seed(text));
-		// We want a random factor between 80% et 130%
-		final double factor = 0.8 + 0.5 * rnd.nextDouble();
 		final double size = font.getSize2D();
+		final double factor = size / 12.0;
 		final double height = size;
-		final double width = size * text.length() * factor;
-		return new XDimension2D(width, height);
+		double width = 0;
+		for (int i = 0; i < text.length(); i++)
+			width += getCharWidth(font, text.charAt(i));
+
+		return new XDimension2D(width * factor, height);
+	}
+
+	private double getCharWidth(UFont font, char c) {
+		if (c >= 32 && c <= 127)
+			return WIDTH[c - 32];
+		return 13;
 	}
 
 	@Override
@@ -67,6 +82,23 @@ public class StringBounderDebug extends StringBounderRaw {
 	@Override
 	public boolean matchesProperty(String propertyName) {
 		return false;
+	}
+
+	public static void main(String[] args) {
+
+		final StringBuilder result = new StringBuilder("private static final double[] WIDTH = {");
+
+		final StringBounder stringBounder = FileFormat.PNG.getDefaultStringBounder();
+		final UFont font = UFontFactory.sansSerif(12);
+		for (int a = 32; a < 128; a++) {
+			final String s = "" + ((char) a);
+			final double w = stringBounder.calculateDimension(font, s).getWidth();
+			result.append(String.format(Locale.US, "%3.1f", w));
+			result.append(", ");
+		}
+		result.append("};");
+
+		System.err.println(result);
 	}
 
 }

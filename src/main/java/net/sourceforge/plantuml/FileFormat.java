@@ -51,6 +51,7 @@ import net.sourceforge.plantuml.braille.UGraphicBraille;
 import net.sourceforge.plantuml.cli.GlobalConfig;
 import net.sourceforge.plantuml.cli.GlobalConfigKey;
 import net.sourceforge.plantuml.klimt.drawing.debug.StringBounderDebug;
+import net.sourceforge.plantuml.klimt.drawing.debug.StringBounderSvgFixed;
 import net.sourceforge.plantuml.klimt.drawing.svg.SvgGraphics;
 import net.sourceforge.plantuml.klimt.font.StringBounder;
 import net.sourceforge.plantuml.klimt.font.StringBounderRaw;
@@ -98,6 +99,7 @@ public enum FileFormat {
 	PNG("png", "image/png"), //
 	PNG_EMPTY("png-empty", "image/png"), //
 	RAW("raw", "image/raw"), //
+	SVG_FIXED("svg", "image/svg+xml"), //
 	SVG("svg", "image/svg+xml"); //
 
 	private final String mimeType;
@@ -142,6 +144,9 @@ public enum FileFormat {
 			if (this == BRAILLE_PNG)
 				return ".braille.png";
 
+			if (this == SVG_FIXED)
+				return ".svg";
+
 			if (this == EPS_TEXT)
 				return EPS.getFileSuffix();
 		}
@@ -182,6 +187,9 @@ public enum FileFormat {
 		if (this == SVG)
 			return getSvgStringBounder(charSizeHack);
 
+		if (this == SVG_FIXED)
+			return new StringBounderSvgFixed();
+		
 		return getNormalStringBounder();
 	}
 

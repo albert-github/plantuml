@@ -67,10 +67,7 @@ class VegaTest {
 		final int passed = (int) results.stream().filter(r -> "pass".equals(r.getString("status", ""))).count();
 		final int failed = (int) results.stream().filter(r -> "fail".equals(r.getString("status", ""))).count();
 		final int skipped = (int) results.stream().filter(r -> "skipped".equals(r.getString("status", ""))).count();
-		report.add("summary", new JsonObject()
-				.add("total", results.size())
-				.add("passed", passed)
-				.add("failed", failed)
+		report.add("summary", new JsonObject().add("total", results.size()).add("passed", passed).add("failed", failed)
 				.add("skipped", skipped));
 
 		final Path jsonFile = VEGA_RESOURCES.resolve("vega.json");
@@ -151,14 +148,17 @@ class VegaTest {
 			diagramClass[0] = doRunSingleFile(path, data);
 			recordResult(relativePath, "pass", System.currentTimeMillis() - startTime, null, diagramClass[0]);
 		} catch (TestAbortedException e) {
-			recordResult(relativePath, "skipped", System.currentTimeMillis() - startTime, e.getMessage(), diagramClass[0]);
+			recordResult(relativePath, "skipped", System.currentTimeMillis() - startTime, e.getMessage(),
+					diagramClass[0]);
 			throw e;
 		} catch (AssertionError | RuntimeException e) {
 			if (allowFailure) {
-				recordResult(relativePath, "skipped", System.currentTimeMillis() - startTime, e.getMessage(), diagramClass[0]);
+				recordResult(relativePath, "skipped", System.currentTimeMillis() - startTime, e.getMessage(),
+						diagramClass[0]);
 				assumeTrue(false, "Known failure (allow-failure: true): " + path + " - " + e.getMessage());
 			} else {
-				recordResult(relativePath, "fail", System.currentTimeMillis() - startTime, e.getMessage(), diagramClass[0]);
+				recordResult(relativePath, "fail", System.currentTimeMillis() - startTime, e.getMessage(),
+						diagramClass[0]);
 				throw e;
 			}
 		}
@@ -166,10 +166,8 @@ class VegaTest {
 
 	private static synchronized void recordResult(String path, String status, long durationMs, String message,
 			String diagramClass) {
-		final JsonObject entry = new JsonObject()
-				.add("file", path)
-				.add("status", status)
-				.add("duration_ms", durationMs);
+		final JsonObject entry = new JsonObject().add("file", path).add("status", status).add("duration_ms",
+				durationMs);
 		if (diagramClass != null)
 			entry.add("diagram_class", diagramClass);
 		if (message != null)
@@ -215,7 +213,7 @@ class VegaTest {
 
 				if (fileFormat == FileFormat.DEBUG) {
 					checkDebugOutput(path, data, baos, suffix, nbImages, imageIndex, generatedFiles);
-				} else if (fileFormat == FileFormat.SVG) {
+				} else if (fileFormat == FileFormat.SVG_FIXED) {
 					checkSvgOutput(path, baos, suffix, generatedFiles);
 				} else if (fileFormat == FileFormat.SCXML) {
 					checkScxmlOutput(path, baos, suffix, generatedFiles);
@@ -319,9 +317,9 @@ class VegaTest {
 	}
 
 	/**
-	 * Checks {@code expected-debug} (single image) or
-	 * {@code expected-debug-N} (multi-image) sub-keys {@code contains}
-	 * and {@code not-contains} against the actual DEBUG output.
+	 * Checks {@code expected-debug} (single image) or {@code expected-debug-N}
+	 * (multi-image) sub-keys {@code contains} and {@code not-contains} against the
+	 * actual DEBUG output.
 	 */
 	private void checkDebugContains(Path pumlPath, VegaTestData data, String actualOutput, int nbImages,
 			int imageIndex) {
@@ -330,12 +328,10 @@ class VegaTest {
 		final String label = pumlPath + " [image " + (imageIndex + 1) + "]";
 
 		for (final String needle : data.getYamlSubList(yamlKey, "contains"))
-			assertTrue(actualOutput.contains(needle),
-					"DEBUG output should contain '" + needle + "' for " + label);
+			assertTrue(actualOutput.contains(needle), "DEBUG output should contain '" + needle + "' for " + label);
 
 		for (final String needle : data.getYamlSubList(yamlKey, "not-contains"))
-			assertFalse(actualOutput.contains(needle),
-					"DEBUG output should not contain '" + needle + "' for " + label);
+			assertFalse(actualOutput.contains(needle), "DEBUG output should not contain '" + needle + "' for " + label);
 	}
 
 	// ----------------------------------------------------------
@@ -363,8 +359,8 @@ class VegaTest {
 	// SCXML output: compare with .scxml reference file
 	// ----------------------------------------------------------
 
-	private void checkScxmlOutput(Path pumlPath, ByteArrayOutputStream baos, String suffix,
-			List<Path> generatedFiles) throws IOException {
+	private void checkScxmlOutput(Path pumlPath, ByteArrayOutputStream baos, String suffix, List<Path> generatedFiles)
+			throws IOException {
 		final String actualOutput = normalizeLineEndings(new String(baos.toByteArray(), UTF_8));
 		final Path expectedFile = getExpectedFile(pumlPath, suffix, ".scxml");
 
@@ -382,8 +378,8 @@ class VegaTest {
 	// XMI output: compare with .xmi reference file
 	// ----------------------------------------------------------
 
-	private void checkXmiOutput(Path pumlPath, ByteArrayOutputStream baos, String suffix,
-			List<Path> generatedFiles) throws IOException {
+	private void checkXmiOutput(Path pumlPath, ByteArrayOutputStream baos, String suffix, List<Path> generatedFiles)
+			throws IOException {
 		final String actualOutput = normalizeLineEndings(new String(baos.toByteArray(), UTF_8));
 		final Path expectedFile = getExpectedFile(pumlPath, suffix, ".xmi");
 
@@ -399,8 +395,8 @@ class VegaTest {
 
 	/**
 	 * Strips the {@code <XMI.documentation>} block from XMI output so that
-	 * version-dependent content (like {@code <XMI.exporterVersion>}) does
-	 * not cause spurious comparison failures.
+	 * version-dependent content (like {@code <XMI.exporterVersion>}) does not cause
+	 * spurious comparison failures.
 	 */
 	private static String cleanXmi(String xmi) {
 		return xmi.replaceAll("(?s)<XMI\\.documentation>.*?</XMI\\.documentation>", "");

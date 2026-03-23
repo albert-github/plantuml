@@ -77,15 +77,19 @@ public class VegaTestData {
 	}
 
 	/**
-	 * Returns the values for a YAML key that may be either a scalar
-	 * or a list.  A scalar value is returned as a single-element list.
-	 * If the key is absent, an empty list is returned.
+	 * Returns the values for a YAML key that may be either a scalar or a list. A
+	 * scalar value is returned as a single-element list. If the key is absent, an
+	 * empty list is returned.
 	 *
-	 * <p>This supports both syntaxes in the YAML header:
+	 * <p>
+	 * This supports both syntaxes in the YAML header:
+	 * 
 	 * <pre>
 	 * key: one
 	 * </pre>
+	 * 
 	 * and
+	 * 
 	 * <pre>
 	 * key:
 	 *   - Alice
@@ -101,8 +105,8 @@ public class VegaTestData {
 	}
 
 	/**
-	 * Returns the values for a sub-key inside a YAML map entry.
-	 * For example, with:
+	 * Returns the values for a sub-key inside a YAML map entry. For example, with:
+	 * 
 	 * <pre>
 	 * expected-debug:
 	 *   contains:
@@ -110,8 +114,9 @@ public class VegaTestData {
 	 *     - Bob
 	 *   not-contains: ERROR
 	 * </pre>
-	 * calling {@code getYamlSubList("expected-debug", "contains")}
-	 * returns {@code ["Alice", "Bob"]}.
+	 * 
+	 * calling {@code getYamlSubList("expected-debug", "contains")} returns
+	 * {@code ["Alice", "Bob"]}.
 	 */
 	public List<String> getYamlSubList(String key, String subKey) {
 		if (yaml.getType() != MonomorphType.MAP)
@@ -146,13 +151,11 @@ public class VegaTestData {
 	}
 
 	/**
-	 * Returns all {@link FileFormat}s specified by the {@code output}
-	 * key in the YAML header.  The value can be a single format
-	 * (e.g. {@code svg}) or a comma-separated list
-	 * (e.g. {@code svg, debug}).
+	 * Returns all {@link FileFormat}s specified by the {@code output} key in the
+	 * YAML header. The value can be a single format (e.g. {@code svg}) or a
+	 * comma-separated list (e.g. {@code svg, debug}).
 	 *
-	 * @return a non-empty list, or an empty list if {@code output}
-	 *         is absent.
+	 * @return a non-empty list, or an empty list if {@code output} is absent.
 	 */
 	public List<FileFormat> getFileFormats() {
 		final String value = getYamlString("output");
@@ -162,7 +165,9 @@ public class VegaTestData {
 		final List<FileFormat> result = new ArrayList<>();
 		for (final String token : value.split(",")) {
 			final String trimmed = token.trim().toUpperCase();
-			if (trimmed.length() > 0)
+			if (trimmed.equals("SVG"))
+				result.add(FileFormat.SVG_FIXED);
+			else
 				result.add(FileFormat.valueOf(trimmed));
 		}
 		return result;
