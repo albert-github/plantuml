@@ -377,8 +377,9 @@ public class PlantUMLBrowser {
 			return;
 
 		try {
+			final SvgGraphicsTeaVM svg = buildSvg(lines);
 			removeAllChildren(out);
-			appendSvgElement(out, buildSvg(lines).getSvgRoot());
+			appendSvgElement(out, svg.getSvgRoot());
 		} catch (Exception e) {
 			out.setTextContent(String.valueOf(e));
 		}
