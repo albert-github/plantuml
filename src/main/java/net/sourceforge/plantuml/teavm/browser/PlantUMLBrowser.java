@@ -139,8 +139,6 @@ public class PlantUMLBrowser {
 	// =========================================================================
 
 	private static final StringBounder STRING_BOUNDER = new StringBounderTeaVM();
-	private static final ColorMapper COLOR_MAPPER = ColorMapper.TEAVM;
-	private static final HColor BACK = HColors.WHITE;
 
 	// =========================================================================
 	// Worker thread synchronization
@@ -159,14 +157,26 @@ public class PlantUMLBrowser {
 	 */
 	private static volatile String[] pendingLines;
 
-	/** The DOM element ID where the SVG should be inserted, or null for renderToString requests. */
+	/**
+	 * The DOM element ID where the SVG should be inserted, or null for
+	 * renderToString requests.
+	 */
 	private static volatile String pendingElementId;
 
-	/** Success callback for renderToString requests, or null for render-to-div requests. */
+	/**
+	 * Success callback for renderToString requests, or null for render-to-div
+	 * requests.
+	 */
 	private static volatile StringCallback pendingOnSuccess;
 
-	/** Error callback for renderToString requests, or null for render-to-div requests. */
+	/**
+	 * Error callback for renderToString requests, or null for render-to-div
+	 * requests.
+	 */
 	private static volatile StringCallback pendingOnError;
+
+	/** Whether the pending request should use dark mode rendering. */
+	private static volatile boolean pendingDarkMode;
 
 	// =========================================================================
 	// Initialization
@@ -190,9 +200,11 @@ public class PlantUMLBrowser {
 
 		// Expose the API on window.plantuml so it doesn't pollute the global namespace.
 		// JavaScript callers must invoke window.plantumlLoad() once (TeaVM entry point,
-		// renamed via entryPointName in build.gradle.kts) to start the worker thread and populate:
-		//   window.plantuml.render(lines, elementId)                    — render SVG into a DOM element
-		//   window.plantuml.renderToString(lines, onSuccess, onError)   — return SVG as a string
+		// renamed via entryPointName in build.gradle.kts) to start the worker thread
+		// and populate:
+		// window.plantuml.render(lines, elementId) — render SVG into a DOM element
+		// window.plantuml.renderToString(lines, onSuccess, onError) — return SVG as a
+		// string
 		registerNamespace(PlantUMLBrowser::requestRender, PlantUMLBrowser::requestRenderToString);
 
 		BrowserLog.jsStatusDuration();
@@ -203,39 +215,58 @@ public class PlantUMLBrowser {
 	// =========================================================================
 
 	/**
-	 * Creates the {@code window.plantuml} namespace and registers all API methods on it:
+	 * Creates the {@code window.plantuml} namespace and registers all API methods
+	 * on it:
 	 * <ul>
-	 * <li>{@code window.plantuml.render(lines, elementId)} — render SVG into a DOM element</li>
-	 * <li>{@code window.plantuml.renderToString(lines, callback)} — call {@code callback(svgString)}</li>
+	 * <li>{@code window.plantuml.render(lines, elementId)} — render SVG into a DOM
+	 * element</li>
+	 * <li>{@code window.plantuml.renderToString(lines, callback)} — call
+	 * {@code callback(svgString)}</li>
 	 * </ul>
 	 *
-	 * {@code window.plantuml.loadWorker} is set to a no-op after this call completes,
-	 * so callers that do {@code window.plantuml.loadWorker()} to initialize will still work
-	 * (the worker is already running by the time this method is called from {@code main}).
+	 * {@code window.plantuml.loadWorker} is set to a no-op after this call
+	 * completes, so callers that do {@code window.plantuml.loadWorker()} to
+	 * initialize will still work (the worker is already running by the time this
+	 * method is called from {@code main}).
 	 */
-	@JSBody(params = { "renderCb", "renderToStringCb" }, script =
-		"var ns = window.plantuml = window.plantuml || {};" +
-		"ns.render = renderCb;" +
-		"ns.renderToString = renderToStringCb;")
+	@JSBody(params = { "renderCb", "renderToStringCb" }, script = "var ns = window.plantuml = window.plantuml || {};"
+			+ "ns.render = renderCb;" + "ns.renderToString = renderToStringCb;")
 	private static native void registerNamespace(RenderCallback renderCb, RenderToStringCallback renderToStringCb);
 
-	/** Callback for {@code window.plantuml.render(lines, elementId)}. */
+	/** Callback for {@code window.plantuml.render(lines, elementId, options)}. */
 	@JSFunctor
 	public interface RenderCallback extends JSObject {
-		void call(String[] lines, String elementId);
+		void call(String[] lines, String elementId, JSObject options);
 	}
 
-	/** Callback for {@code window.plantuml.renderToString(lines, onSuccess, onError)}. */
+	/**
+	 * Callback for
+	 * {@code window.plantuml.renderToString(lines, onSuccess, onError, options)}.
+	 */
 	@JSFunctor
 	public interface RenderToStringCallback extends JSObject {
-		void call(String[] lines, StringCallback onSuccess, StringCallback onError);
+		void call(String[] lines, StringCallback onSuccess, StringCallback onError, JSObject options);
 	}
 
-	/** Single-string JS callback, used for both success (SVG) and error (message). */
+	/**
+	 * Single-string JS callback, used for both success (SVG) and error (message).
+	 */
 	@JSFunctor
 	public interface StringCallback extends JSObject {
 		void call(String value);
 	}
+
+	// =========================================================================
+	// Options extraction (called from JavaScript)
+	// =========================================================================
+
+	/**
+	 * Extracts the {@code dark} boolean property from a JavaScript options
+	 * object. Returns {@code false} if the object is null/undefined or if the
+	 * property is absent.
+	 */
+	@JSBody(params = "opts", script = "return (opts && opts.dark === true);")
+	private static native boolean isDark(JSObject opts);
 
 	// =========================================================================
 	// Request handling (called from JavaScript)
@@ -260,23 +291,27 @@ public class PlantUMLBrowser {
 	 * @param lines     the PlantUML source code, split into lines by the JavaScript
 	 *                  caller
 	 * @param elementId the ID of the HTML element where the SVG should be rendered
+	 * @param options   optional JS object with rendering options (e.g. {dark: true})
 	 */
-	private static void requestRender(String[] lines, String elementId) {
+	private static void requestRender(String[] lines, String elementId, JSObject options) {
 		synchronized (LOCK) {
 			pendingLines = lines;
 			pendingElementId = elementId;
 			pendingOnSuccess = null;
 			pendingOnError = null;
+			pendingDarkMode = isDark(options);
 			LOCK.notify();
 		}
 	}
 
-	private static void requestRenderToString(String[] lines, StringCallback onSuccess, StringCallback onError) {
+	private static void requestRenderToString(String[] lines, StringCallback onSuccess, StringCallback onError,
+			JSObject options) {
 		synchronized (LOCK) {
 			pendingLines = lines;
 			pendingElementId = null;
 			pendingOnSuccess = onSuccess;
 			pendingOnError = onError;
+			pendingDarkMode = isDark(options);
 			LOCK.notify();
 		}
 	}
@@ -308,6 +343,7 @@ public class PlantUMLBrowser {
 			String elementId;
 			StringCallback onSuccess;
 			StringCallback onError;
+			boolean darkMode;
 
 			synchronized (LOCK) {
 				while (pendingLines == null) {
@@ -323,18 +359,20 @@ public class PlantUMLBrowser {
 				elementId = pendingElementId;
 				onSuccess = pendingOnSuccess;
 				onError = pendingOnError;
+				darkMode = pendingDarkMode;
 				pendingLines = null;
 				pendingElementId = null;
 				pendingOnSuccess = null;
 				pendingOnError = null;
+				pendingDarkMode = false;
 			}
 
 			// Perform rendering OUTSIDE the synchronized block so new requests
 			// can be queued while we're rendering.
 			if (onSuccess != null)
-				doRenderToString(lines, onSuccess, onError);
+				doRenderToString(lines, onSuccess, onError, darkMode);
 			else
-				doRender(lines, elementId);
+				doRender(lines, elementId, darkMode);
 		}
 	}
 
@@ -343,9 +381,12 @@ public class PlantUMLBrowser {
 	// =========================================================================
 
 	/** Parses and renders PlantUML source lines to an SVG graphics context. */
-	private static SvgGraphicsTeaVM buildSvg(String[] lines) throws Exception {
+	private static SvgGraphicsTeaVM buildSvg(String[] lines, boolean darkMode) throws Exception {
 		final SvgGraphicsTeaVM svg = new SvgGraphicsTeaVM();
-		UGraphic ug = UGraphicTeaVM.build(BACK, COLOR_MAPPER, STRING_BOUNDER, svg);
+		final ColorMapper colorMapper = darkMode ? ColorMapper.TEAVM_DARK : ColorMapper.TEAVM_LIGHT;
+		final HColor back = darkMode ? HColors.BLACK : HColors.WHITE;
+
+		UGraphic ug = UGraphicTeaVM.build(back, colorMapper, STRING_BOUNDER, svg);
 		final Diagram diagram = PSystemBuilder2.getInstance().createDiagram(lines);
 		final FileFormatOption fileFormat = new FileFormatOption(FileFormat.SVG);
 
@@ -371,14 +412,14 @@ public class PlantUMLBrowser {
 		return svg;
 	}
 
-	private static void doRender(String[] lines, String elementId) {
+	private static void doRender(String[] lines, String elementId, boolean darkMode) {
 		final HTMLElement out = HTMLDocument.current().getElementById(elementId);
 		if (out == null)
 			return;
 
 		try {
 			BrowserLog.reset();
-			final SvgGraphicsTeaVM svg = buildSvg(lines);
+			final SvgGraphicsTeaVM svg = buildSvg(lines, darkMode);
 			removeAllChildren(out);
 			appendSvgElement(out, svg.getSvgRoot());
 		} catch (Exception e) {
@@ -387,9 +428,10 @@ public class PlantUMLBrowser {
 		BrowserLog.jsStatusDuration();
 	}
 
-	private static void doRenderToString(String[] lines, StringCallback onSuccess, StringCallback onError) {
+	private static void doRenderToString(String[] lines, StringCallback onSuccess, StringCallback onError,
+			boolean darkMode) {
 		try {
-			onSuccess.call(serializeSvg(buildSvg(lines).getSvgRoot()));
+			onSuccess.call(serializeSvg(buildSvg(lines, darkMode).getSvgRoot()));
 		} catch (Exception e) {
 			onError.call(String.valueOf(e));
 		}
