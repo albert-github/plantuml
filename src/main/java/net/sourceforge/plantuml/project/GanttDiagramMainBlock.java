@@ -130,7 +130,7 @@ public class GanttDiagramMainBlock extends TextBlockMemoized {
 			Logme.error(e);
 
 			final ReportLog report = new ReportLog();
-			report.anErrorHasOccured(e, diagram.getFlashData());
+			report.anErrorHasOccurred(e, diagram.getFlashData());
 
 			report.addProperties();
 			report.addEmptyLine();

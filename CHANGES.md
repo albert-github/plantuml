@@ -909,7 +909,7 @@
 - [Bug Report: automatic text color will crash if participant body includes icon](https://forum.plantuml.net/13879/report-automatic-text-color-will-crash-participant-includes)
 - [Crash when using @startnwdiag](https://forum.plantuml.net/13837/crash-when-using-%40startnwdiag?show=13841#c13841)
 - [Missing arrowheads in sequence diagram](https://forum.plantuml.net/13843/missing-arrowheads-in-sequence-diagram?show=13846#c13846)
-- [An error has occured : java.lang.UnsupportedOperationException](https://forum.plantuml.net/13848/error-has-occured-java-lang-unsupportedoperationexception?show=13849)
+- [An error has occurred : java.lang.UnsupportedOperationException](https://forum.plantuml.net/13848/error-has-occured-java-lang-unsupportedoperationexception?show=13849)
 - [message to itself on left side?](https://forum.plantuml.net/1361/message-to-itself-on-left-side?show=13828#a13828)
 - [[Activity] Layout issue or java error, on end merge, with more than 2 fork](https://forum.plantuml.net/13731/activity-layout-issue-java-error-end-merge-with-more-than-fork)
 - [Getting UnsupportedOperation when adding stop and/or end to case](https://forum.plantuml.net/13824/getting-unsupportedoperation-when-adding-stop-and-end-case)
@@ -1901,7 +1901,7 @@ have been renamed to generateImage
 
 - [Different colors on if and elseif](https://forum.plantuml.net/4916/different-colors-on-if-and-elseif)
 - [Activity beta --- Any way to put a text on arrow going to elseif node](https://forum.plantuml.net/4819/activity-beta-any-way-to-put-text-on-arrow-going-to-elseif-node)
-- [An error has occured while creating diagram with ports and separators](https://forum.plantuml.net/4909/error-occured-whilst-creating-diagram-with-ports-separators)
+- [An error has occurred while creating diagram with ports and separators](https://forum.plantuml.net/4909/error-occured-whilst-creating-diagram-with-ports-separators)
 - [Lifelines broken for txt seq diagrams when create is used](https://forum.plantuml.net/4826/lifelines-broken-for-txt-seq-diagrams-when-create-is-used)
 - [Skinparam LegendBorderThickness is missing](https://forum.plantuml.net/4941/skinparam-legendborderthickness-is-missing)
 - [Skinparam NoteBorderThickness seems not to work](https://forum.plantuml.net/4939/skinparam-noteborderthickness-seems-not-to-work)
@@ -2039,7 +2039,7 @@ have been renamed to generateImage
 - [How do I add link notes in sub states](https://forum.plantuml.net/3964/how-do-i-add-link-notes-in-sub-states)
 - [How to set font color inside controling elements in activity2 diagrams](https://forum.plantuml.net/3166/font-color-inside-controling-elements-activity2-diagrams)
 - [json content tooltip on sequence diagram](https://forum.plantuml.net/3945/json-content-tooltip-on-sequence-diagram)
-- [An error has occured java.lang.NullPointerException](https://forum.plantuml.net/3941/an-error-has-occured-java-lang-nullpointerexception)
+- [An error has occurred java.lang.NullPointerException](https://forum.plantuml.net/3941/an-error-has-occured-java-lang-nullpointerexception)
 
 ## V8032
 

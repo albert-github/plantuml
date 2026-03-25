@@ -366,7 +366,7 @@ public abstract class TitledDiagram extends UgDiagram implements Annotated, With
 //			Logme.error(e);
 //			final CrashReportHandler report = new CrashReportHandler(e.getCause(), getMetadata(), getFlashData());
 //
-//			report.anErrorHasOccured(e.getCause(), getFlashData());
+//			report.anErrorHasOccurred(e.getCause(), getFlashData());
 //			report.add("PlantUML (" + Version.versionString() + ") cannot parse result from dot/GraphViz.");
 //			if (e.getCause() instanceof EmptySvgException)
 //				report.add("Because dot/GraphViz returns an empty string.");
@@ -388,7 +388,7 @@ public abstract class TitledDiagram extends UgDiagram implements Annotated, With
 //		} catch (Throwable e) {
 //			Logme.error(e);
 //			final CrashReportHandler report = new CrashReportHandler(e, getMetadata(), getFlashData());
-//			report.anErrorHasOccured(e, getFlashData());
+//			report.anErrorHasOccurred(e, getFlashData());
 //			report.addProperties();
 //			report.addEmptyLine();
 //			report.youShouldSendThisDiagram();

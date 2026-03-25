@@ -94,7 +94,7 @@ public abstract class UgDiagram extends AbstractDiagram {
 		} catch (Throwable e) {
 			Logme.error(e);
 			final CrashReportHandler report = new CrashReportHandler(e, getMetadata(), getFlashData());
-			report.anErrorHasOccured(e, getFlashData());
+			report.anErrorHasOccurred(e, getFlashData());
 			report.addProperties();
 			report.addEmptyLine();
 			report.youShouldSendThisDiagram();

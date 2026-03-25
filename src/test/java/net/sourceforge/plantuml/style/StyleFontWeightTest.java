@@ -186,8 +186,7 @@ class StyleFontWeightTest {
 
 		assertThat(svg)
 				.as("Diagram should render without error")
-				.doesNotContain("An error has occurred")
-				.doesNotContain("An error has occured");
+				.doesNotContain("An error has occurred");
 
 		assertThat(svg)
 				.as("font-weight='900' must appear in SVG output")
