@@ -51,24 +51,24 @@ public class DiagramExtractor implements ReadLine {
 	private boolean finished = false;
 
 	public DiagramExtractor(ReadLine raw, String suf) {
-		int bloc = 0;
+		int block = 0;
 		String uid = null;
 		if (suf != null && DIGITS.matcher(suf).matches())
-			bloc = Integer.parseInt(suf);
+			block = Integer.parseInt(suf);
 		else
 			uid = suf;
 
-		if (bloc < 0)
-			bloc = 0;
+		if (block < 0)
+			block = 0;
 
 		this.raw = raw;
 		StringLocated s = null;
 		try {
 			while ((s = raw.readLine()) != null) {
 				if (StartUtils.isStartDirective(s.getString()) && checkUid(uid, s)) {
-					if (bloc == 0)
+					if (block == 0)
 						return;
-					bloc--;
+					block--;
 				}
 			}
 		} catch (IOException e) {

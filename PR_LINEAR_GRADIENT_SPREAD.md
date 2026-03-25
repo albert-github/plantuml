@@ -31,7 +31,7 @@ This PR expands SVG sprite rendering to preserve multi-stop linear gradients and
 - Design note: gradient stop offsets are normalised to a strictly increasing sequence (ties are nudged by a tiny epsilon) to satisfy Java2D `LinearGradientPaint` requirements while preserving SVG semantics of non-decreasing offsets.
 
 ## Why non-parser packages changed
-- G2D rendering paths were updated so PNG output matches SVG behaviour. The SVG sprite parser produces an `HColorLinearGradient`, and the G2D drivers (via [src/main/java/net/sourceforge/plantuml/klimt/drawing/g2d/DriverRectangleG2d.java](src/main/java/net/sourceforge/plantuml/klimt/drawing/g2d/DriverRectangleG2d.java)) must translate this into `LinearGradientPaint` with the correct cycle method; otherwise spreadMethod would be silently ignored in PNG.
+- G2D rendering paths were updated so PNG output matches SVG behavior. The SVG sprite parser produces an `HColorLinearGradient`, and the G2D drivers (via [src/main/java/net/sourceforge/plantuml/klimt/drawing/g2d/DriverRectangleG2d.java](src/main/java/net/sourceforge/plantuml/klimt/drawing/g2d/DriverRectangleG2d.java)) must translate this into `LinearGradientPaint` with the correct cycle method; otherwise spreadMethod would be silently ignored in PNG.
 - [src/main/java/net/sourceforge/plantuml/klimt/color/HColors.java](src/main/java/net/sourceforge/plantuml/klimt/color/HColors.java) was extended to handle the new `HColorLinearGradient` in `noGradient()` so callers that intentionally strip gradients continue to behave consistently when the new gradient type appears.
 - [src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverPathSvg.java](src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverPathSvg.java) avoids flattening gradients when stroke and fill are the same, which previously dropped multi-stop data in SVG output.
 
@@ -46,5 +46,5 @@ if (back instanceof HColorGradient || back instanceof HColorLinearGradient) {
 ```
 
 ## Regression risk scope
-- Changes are limited to rendering of linear gradients in SVG sprites and to generic gradient flattening behaviour for the new gradient type.
+- Changes are limited to rendering of linear gradients in SVG sprites and to generic gradient flattening behavior for the new gradient type.
 - Non-gradient rendering paths are unchanged; tests focus on the sprite pipeline but a regression test for standard gradients has been added.

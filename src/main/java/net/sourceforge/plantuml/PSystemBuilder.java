@@ -172,7 +172,7 @@ public class PSystemBuilder {
 		factories.add(new PSystemEggFactory());
 		factories.add(new PSystemAppleTwoFactory());
 		factories.add(new PSystemRIPFactory());
-		if (SecurityUtils.getSecurityProfile() == SecurityProfile.UNSECURE)
+		if (SecurityUtils.getSecurityProfile() == SecurityProfile.INSECURE)
 			factories.add(new PSystemPathFactory());
 
 		factories.add(new PSystemCharlieFactory());

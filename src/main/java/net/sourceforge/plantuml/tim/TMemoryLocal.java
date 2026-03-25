@@ -89,7 +89,7 @@ public class TMemoryLocal extends ExecutionContexts implements TMemory {
 			if (this.overridenVariables00 != null)
 				this.overridenVariables00.add(varname);
 
-			Log.info(() -> "[MemLocal/overrriden] Setting " + varname);
+			Log.info(() -> "[MemLocal/overridden] Setting " + varname);
 		} else if (memoryGlobal.getVariable(varname) != null) {
 			memoryGlobal.putVariable(varname, value, scope, location);
 		} else {

@@ -215,9 +215,9 @@ public class SkinParam implements ISkinParam {
 		for (String key2 : cleanForKey(key)) {
 			params.put(key2, StringUtils.trin(value));
 			applyPendingStyleMigration();
-			final FromSkinparamToStyle convertor = new FromSkinparamToStyle(key2);
-			convertor.convertNow(value, getCurrentStyleBuilder());
-			muteStyle(convertor.getStyles());
+			final FromSkinparamToStyle converter = new FromSkinparamToStyle(key2);
+			converter.convertNow(value, getCurrentStyleBuilder());
+			muteStyle(converter.getStyles());
 		}
 		if ("style".equalsIgnoreCase(key) && "strictuml".equalsIgnoreCase(value)) {
 			final InputStream internalIs = StyleLoader.class.getResourceAsStream("/skin/strictuml.skin");
@@ -236,9 +236,9 @@ public class SkinParam implements ISkinParam {
 
 	public void applyPendingStyleMigration() {
 		for (Entry<String, String> ent : paramsPendingForStyleMigration.entrySet()) {
-			final FromSkinparamToStyle convertor = new FromSkinparamToStyle(ent.getKey());
-			convertor.convertNow(ent.getValue(), getCurrentStyleBuilder());
-			muteStyle(convertor.getStyles());
+			final FromSkinparamToStyle converter = new FromSkinparamToStyle(ent.getKey());
+			converter.convertNow(ent.getValue(), getCurrentStyleBuilder());
+			muteStyle(converter.getStyles());
 		}
 		paramsPendingForStyleMigration.clear();
 	}

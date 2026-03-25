@@ -45,18 +45,18 @@ import net.sourceforge.plantuml.log.Logme;
 import net.sourceforge.plantuml.security.SFile;
 import net.sourceforge.plantuml.utils.MTRandom;
 
-public class DedicationCrypted implements Dedication {
+public class DedicationEncrypted implements Dedication {
 
 	private final String argon2;
 	private final BigInteger pq;
-	private final byte crypted[];
+	private final byte encrypted[];
 	private final int tinyHash;
 	private String solution;
 
 	private long next = 0L;
 
-	public DedicationCrypted(byte crypted[], int tinyHash, String argon2, BigInteger pq) {
-		this.crypted = crypted;
+	public DedicationEncrypted(byte encrypted[], int tinyHash, String argon2, BigInteger pq) {
+		this.encrypted = encrypted;
 		this.pq = pq;
 		this.argon2 = argon2;
 		this.tinyHash = tinyHash;
@@ -87,7 +87,7 @@ public class DedicationCrypted implements Dedication {
 			final BlumBlumShub rndBBS = new BlumBlumShub(pq, hash1);
 			final MTRandom rndMT = new MTRandom(hash2);
 
-			byte[] current = crypted.clone();
+			byte[] current = encrypted.clone();
 			Noise.shuffle(current, rndMT);
 			Noise.xor(current, rndBBS);
 			Noise.xor(current, line.getBytes(UTF_8));

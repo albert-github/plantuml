@@ -16,7 +16,7 @@ import net.sourceforge.plantuml.klimt.color.HColorSimple;
 import net.sourceforge.plantuml.klimt.awt.XColor;
 
 /**
- * Unit tests for SvgSaxParser focusing on public drawU behaviour.
+ * Unit tests for SvgSaxParser focusing on public drawU behavior.
  * - Verifies that drawing the parser will invoke underlying UGraphic draw operations.
  * - Verifies gray-level range computation for simple SVG with known fills.
  *

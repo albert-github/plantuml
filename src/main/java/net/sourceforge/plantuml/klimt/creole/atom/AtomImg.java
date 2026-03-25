@@ -170,7 +170,7 @@ public class AtomImg extends AbstractAtom implements Atom {
 			}
 			final SFile f = FileSystem.getInstance().getFile(src);
 			if (f.exists() == false) {
-				if (SecurityUtils.getSecurityProfile() == SecurityProfile.UNSECURE)
+				if (SecurityUtils.getSecurityProfile() == SecurityProfile.INSECURE)
 					return AtomTextUtils.createLegacy("(File not found: " + f.getPrintablePath() + ")", fc);
 
 				return AtomTextUtils.createLegacy("(Cannot decode)", fc);
@@ -184,7 +184,7 @@ public class AtomImg extends AbstractAtom implements Atom {
 			}
 			final PortableImage read = f.readRasterImageFromFile();
 			if (read == null) {
-				if (SecurityUtils.getSecurityProfile() == SecurityProfile.UNSECURE)
+				if (SecurityUtils.getSecurityProfile() == SecurityProfile.INSECURE)
 					return AtomTextUtils.createLegacy("(Cannot decode: " + f.getPrintablePath() + ")", fc);
 
 				return AtomTextUtils.createLegacy("(Cannot decode)", fc);
@@ -192,7 +192,7 @@ public class AtomImg extends AbstractAtom implements Atom {
 			return new AtomImg(f.readRasterImageFromFile(), scale, url, src);
 		} catch (IOException e) {
 			Logme.error(e);
-			if (SecurityUtils.getSecurityProfile() == SecurityProfile.UNSECURE)
+			if (SecurityUtils.getSecurityProfile() == SecurityProfile.INSECURE)
 				return AtomTextUtils.createLegacy("ERROR " + e.toString(), fc);
 
 			return AtomTextUtils.createLegacy("ERROR", fc);

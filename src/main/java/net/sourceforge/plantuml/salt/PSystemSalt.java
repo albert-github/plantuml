@@ -159,13 +159,13 @@ public class PSystemSalt extends TitledDiagram {
 				this.setScale(new ScaleSimple(scale));
 				// System.err.println("skipping " + s);
 			} else if (s.startsWith("sprite $")) {
-				BlocLines bloc = BlocLines.singleString(s);
+				BlocLines block = BlocLines.singleString(s);
 				do {
 					s = it.next();
-					bloc = bloc.addString(s);
+					block = block.addString(s);
 				} while (s.equals("}") == false);
 				try {
-					final CommandExecutionResult cmdResult = cmd.execute(this, bloc, ParserPass.ONE);
+					final CommandExecutionResult cmdResult = cmd.execute(this, block, ParserPass.ONE);
 				} catch (NoSuchColorException e) {
 				}
 			} else {
