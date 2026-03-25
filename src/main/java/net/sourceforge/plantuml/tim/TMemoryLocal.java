@@ -61,7 +61,7 @@ public class TMemoryLocal extends ExecutionContexts implements TMemory {
 		Log.info(() -> "[MemLocal] Start of memory_dump " + message);
 		memoryGlobal.dumpMemoryInternal();
 		final TreeMap<String, TValue> over = new TreeMap<String, TValue>(overridenVariables01);
-		Log.info(() -> "[MemLocal] Number of overriden variable(s) : " + over.size());
+		Log.info(() -> "[MemLocal] Number of overridden variable(s) : " + over.size());
 		for (Entry<String, TValue> ent : over.entrySet()) {
 			final String name = ent.getKey();
 			final TValue value = ent.getValue();

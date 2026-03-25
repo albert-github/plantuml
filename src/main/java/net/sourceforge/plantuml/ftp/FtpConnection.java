@@ -52,7 +52,7 @@ import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.core.DiagramDescription;
 
-public class FtpConnexion {
+public class FtpConnection {
 	
 
 	private final String user;
@@ -62,7 +62,7 @@ public class FtpConnexion {
 
 	private FileFormat fileFormat;
 
-	public FtpConnexion(String user, FileFormat defaultfileFormat) {
+	public FtpConnection(String user, FileFormat defaultfileFormat) {
 		this.user = user;
 		this.fileFormat = defaultfileFormat;
 	}

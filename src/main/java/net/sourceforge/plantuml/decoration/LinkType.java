@@ -277,7 +277,7 @@ public class LinkType {
 		if (has(LinkDecor.COMPOSITION))
 			return "composition";
 		
-		if (has(LinkDecor.AGREGATION))
+		if (has(LinkDecor.AGGREGATION))
 			return "aggregation";
 		
 		if (has(LinkDecor.EXTENDS))
