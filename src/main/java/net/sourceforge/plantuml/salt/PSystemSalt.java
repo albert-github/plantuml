@@ -104,6 +104,10 @@ public class PSystemSalt extends TitledDiagram {
 		data.addAll(StringLocated.expandsNewline(s));
 	}
 
+	public int size() {
+		return data.size();
+	}
+
 	@Override
 	public TextBlock getTextBlock12026(int num, FileFormatOption fileFormatOption) {
 		final Element salt = createElement(manageSprite());
@@ -217,16 +221,6 @@ public class PSystemSalt extends TitledDiagram {
 		cpxFactory.addFactory(new ElementFactoryImage(source, dictionary));
 		cpxFactory.addFactory(new ElementFactoryRetrieveFromDictonnary(source, dictionary));
 		cpxFactory.addFactory(new ElementFactoryText(source, dictionary));
-	}
-
-	private boolean iamSalt;
-
-	public void setIamSalt(boolean iamSalt) {
-		this.iamSalt = true;
-	}
-
-	public final boolean isIamSalt() {
-		return iamSalt;
 	}
 
 	@Override

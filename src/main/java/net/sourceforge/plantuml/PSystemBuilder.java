@@ -249,6 +249,13 @@ public class PSystemBuilder {
 
 					return PSystemErrorUtils.buildV2(umlSource, error, Collections.<String>emptyList(), source,
 							preprocessing);
+				} else if (secondLine.trim().equals("nwdiag {")) {
+					final ErrorUml error = new ErrorUml(ErrorUmlType.EXECUTION_ERROR,
+							"This looks like a network diagram. Please use @startnwdiag instead of @startuml.", 100,
+							source.get(1).getLocation(), DiagramType.SEQUENCE);
+
+					return PSystemErrorUtils.buildV2(umlSource, error, Collections.<String>emptyList(), source,
+							preprocessing);
 				}
 			}
 			final List<PSystemError> errors = new ArrayList<>();
