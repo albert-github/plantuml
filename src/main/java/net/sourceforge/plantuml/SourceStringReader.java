@@ -194,7 +194,7 @@ public class SourceStringReader {
 				// return system.getDescription().getDescription() + BackSlash.BS_N +
 				// imageData.getCMapData("plantuml");
 				// }
-				return system.getDescription();
+				return system.getDescription().withImageData(imageData);
 			}
 			numImage -= nbInSystem;
 		}

@@ -35,6 +35,7 @@ import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.TitledDiagram;
 import net.sourceforge.plantuml.core.Diagram;
 import net.sourceforge.plantuml.core.DiagramDescription;
+import net.sourceforge.plantuml.core.ImageData;
 import net.sourceforge.plantuml.error.PSystemError;
 import net.sourceforge.plantuml.json.JsonArray;
 import net.sourceforge.plantuml.json.JsonObject;
@@ -197,6 +198,8 @@ class VegaTest {
 		final int nbImages = ssr.getBlocks().get(0).getDiagram().getNbImages();
 		final List<Path> generatedFiles = new ArrayList<>();
 
+		final String expectedException = data.getYamlString("expected-exception");
+
 		for (final FileFormat fileFormat : fileFormats) {
 			for (int imageIndex = 0; imageIndex < nbImages; imageIndex++) {
 				final SourceStringReader ssrForFormat = new SourceStringReader(source, UTF_8);
@@ -209,25 +212,43 @@ class VegaTest {
 				assertFalse(baos.size() == 0,
 						"Empty output for " + path + " [" + fileFormat + " image " + (imageIndex + 1) + "]");
 
-				final String suffix = nbImages == 1 ? "" : "-" + (imageIndex + 1);
+				if (fileFormat != FileFormat.PREPROC) {
+					final ImageData imageData = description.getImageData();
+					assertNotNull(imageData);
+					final int status = imageData.getStatus();
+					if (status != 0) {
+						assertNotNull(expectedException, "Rendering failed with status " + status
+								+ " but no expected-exception declared in " + path);
+						final String exception = imageData.getRootCause().getClass().getSimpleName();
+						assertEquals(expectedException, exception, "Exception mismatch for " + path + " [" + fileFormat
+								+ " image " + (imageIndex + 1) + "]");
+					} else if (expectedException != null) {
+						throw new AssertionError(
+								"Expected exception " + expectedException + " but rendering succeeded for " + path);
+					}
+				}
 
-				if (fileFormat == FileFormat.DEBUG) {
-					checkDebugOutput(path, data, baos, suffix, nbImages, imageIndex, generatedFiles);
-				} else if (fileFormat == FileFormat.SVG_FIXED) {
-					checkSvgOutput(path, baos, suffix, generatedFiles);
-				} else if (fileFormat == FileFormat.SCXML) {
-					checkScxmlOutput(path, baos, suffix, generatedFiles);
-				} else if (fileFormat == FileFormat.GRAPHML) {
-					checkGraphmlOutput(path, baos, suffix, generatedFiles);
-				} else if (fileFormat.name().startsWith("XMI")) {
-					checkXmiOutput(path, baos, suffix, generatedFiles);
-				} else if (fileFormat == FileFormat.PREPROC) {
-					checkPreprocOutput(path, baos, suffix, generatedFiles);
+				if (expectedException == null) {
+					final String suffix = nbImages == 1 ? "" : "-" + (imageIndex + 1);
+
+					if (fileFormat == FileFormat.DEBUG)
+						checkDebugOutput(path, data, baos, suffix, nbImages, imageIndex, generatedFiles);
+					else if (fileFormat == FileFormat.SVG_FIXED)
+						checkSvgOutput(path, baos, suffix, generatedFiles);
+					else if (fileFormat == FileFormat.SCXML)
+						checkScxmlOutput(path, baos, suffix, generatedFiles);
+					else if (fileFormat == FileFormat.GRAPHML)
+						checkGraphmlOutput(path, baos, suffix, generatedFiles);
+					else if (fileFormat.name().startsWith("XMI"))
+						checkXmiOutput(path, baos, suffix, generatedFiles);
+					else if (fileFormat == FileFormat.PREPROC)
+						checkPreprocOutput(path, baos, suffix, generatedFiles);
+
 				}
 			}
 		}
 
-		if (generatedFiles.isEmpty() == false) {
+		if (expectedException != null && generatedFiles.isEmpty() == false) {
 			assumeTrue(false, "Expected files created: " + generatedFiles + " - please review and re-run");
 		}
 		return diagramClass;
@@ -342,8 +363,8 @@ class VegaTest {
 	// PREPROC output: compare with .preproc reference file
 	// ----------------------------------------------------------
 
-	private void checkPreprocOutput(Path pumlPath, ByteArrayOutputStream baos, String suffix,
-			List<Path> generatedFiles) throws IOException {
+	private void checkPreprocOutput(Path pumlPath, ByteArrayOutputStream baos, String suffix, List<Path> generatedFiles)
+			throws IOException {
 		final String actualOutput = normalizeLineEndings(new String(baos.toByteArray(), UTF_8));
 		final Path expectedFile = getExpectedFile(pumlPath, suffix, ".preproc");
 
