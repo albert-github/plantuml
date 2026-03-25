@@ -103,6 +103,7 @@ import net.sourceforge.plantuml.stats.StatsUtilsIncrement;
 import net.sourceforge.plantuml.sudoku.PSystemSudokuFactory;
 import net.sourceforge.plantuml.text.StringLocated;
 import net.sourceforge.plantuml.timingdiagram.TimingDiagramFactory;
+import net.sourceforge.plantuml.utils.LineLocation;
 import net.sourceforge.plantuml.utils.Log;
 import net.sourceforge.plantuml.version.PSystemLicenseFactory;
 import net.sourceforge.plantuml.version.PSystemVersionFactory;
@@ -229,6 +230,27 @@ public class PSystemBuilder {
 			if (diagramTypes.contains(DiagramType.UNKNOWN))
 				return new PSystemUnsupported(umlSource, preprocessing);
 
+			// Detect misuse of @startuml for DOT or DITAA diagrams and
+			// return a helpful error
+			if (diagramTypes.contains(DiagramType.SEQUENCE) && source.size() > 1) {
+				final String secondLine = source.get(1).getString();
+				if (PSystemDotFactory.isGraphvizDotHeader(secondLine)) {
+					final ErrorUml error = new ErrorUml(ErrorUmlType.EXECUTION_ERROR,
+							"This looks like a DOT diagram. Please use @startdot instead of @startuml.", 100,
+							source.get(1).getLocation(), DiagramType.SEQUENCE);
+
+					return PSystemErrorUtils.buildV2(umlSource, error, Collections.<String>emptyList(), source,
+							preprocessing);
+
+				} else if (secondLine.trim().equals("ditaa")) {
+					final ErrorUml error = new ErrorUml(ErrorUmlType.EXECUTION_ERROR,
+							"This looks like a DITAA diagram. Please use @startditaa instead of @startuml.", 100,
+							source.get(1).getLocation(), DiagramType.SEQUENCE);
+
+					return PSystemErrorUtils.buildV2(umlSource, error, Collections.<String>emptyList(), source,
+							preprocessing);
+				}
+			}
 			final List<PSystemError> errors = new ArrayList<>();
 			for (PSystemFactory systemFactory : factories) {
 				if (!diagramTypes.contains(systemFactory.getDiagramType()))
