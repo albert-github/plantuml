@@ -126,14 +126,14 @@ public class SvgGraphicsTeaVM {
 	}
 
 	/**
-	 * Updates the SVG root element dimensions to match the actual diagram
-	 * content, applying a scale factor.
+	 * Updates the SVG root element dimensions to match the actual diagram content,
+	 * applying a scale factor.
 	 *
 	 * <p>
 	 * The {@code viewBox} is set to the logical (unscaled) dimensions, while
-	 * {@code width} and {@code height} are set to the scaled dimensions. This
-	 * lets the browser render the SVG at the desired display size while
-	 * preserving the internal coordinate system.
+	 * {@code width} and {@code height} are set to the scaled dimensions. This lets
+	 * the browser render the SVG at the desired display size while preserving the
+	 * internal coordinate system.
 	 *
 	 * @param width  the logical width of the diagram content
 	 * @param height the logical height of the diagram content
@@ -240,6 +240,11 @@ public class SvgGraphicsTeaVM {
 
 	public void drawText(String text, double x, double y, String fontFamily, int fontSize, String fontWeight,
 			String fontStyle, String textDecoration, String backColor) {
+		drawText(text, x, y, fontFamily, fontSize, fontWeight, fontStyle, textDecoration, backColor, 0);
+	}
+
+	public void drawText(String text, double x, double y, String fontFamily, int fontSize, String fontWeight,
+			String fontStyle, String textDecoration, String backColor, int orientation) {
 		// Draw background rectangle if backColor is specified
 		if (backColor != null) {
 			double[] metrics = measureTextCanvas(text, fontFamily, fontSize,
@@ -264,15 +269,15 @@ public class SvgGraphicsTeaVM {
 		// Preserve whitespace (multiple spaces, tabs, etc.)
 		textElem.setAttribute("xml:space", "preserve");
 		textElem.setAttribute("style", "white-space: pre");
-		if (fontWeight != null) {
+		if (fontWeight != null)
 			textElem.setAttribute("font-weight", fontWeight);
-		}
-		if (fontStyle != null) {
+
+		if (fontStyle != null)
 			textElem.setAttribute("font-style", fontStyle);
-		}
-		if (textDecoration != null) {
+
+		if (textDecoration != null)
 			textElem.setAttribute("text-decoration", textDecoration);
-		}
+
 		if (fontFamily != null) {
 			textElem.setAttribute("font-family", fontFamily);
 
@@ -282,6 +287,12 @@ public class SvgGraphicsTeaVM {
 			// fontFamily.equalsIgnoreCase("courier"))
 			// text = text.replace(' ', (char) 160);
 		}
+
+		if (orientation == 90)
+			textElem.setAttribute("transform", "rotate(-90 " + format(x) + " " + format(y) + ")");
+		else if (orientation == 270)
+			textElem.setAttribute("transform", "rotate(90 " + format(x) + " " + format(y) + ")");
+
 		textElem.setTextContent(text);
 		currentGroup().appendChild(textElem);
 	}
