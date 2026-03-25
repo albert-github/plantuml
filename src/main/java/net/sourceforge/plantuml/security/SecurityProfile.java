@@ -57,7 +57,6 @@ import net.sourceforge.plantuml.teavm.TeaVM;
  * 
  */
 public enum SecurityProfile {
-	// ::remove folder when __HAXE__
 
 	/**
 	 * Running in SANDBOX mode is completely secure. No local file can be read
