@@ -38,11 +38,15 @@ package net.sourceforge.plantuml.teavm;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import net.sourceforge.plantuml.DefinitionsContainer;
+import net.sourceforge.plantuml.ErrorUml;
+import net.sourceforge.plantuml.ErrorUmlType;
 import net.sourceforge.plantuml.activitydiagram.ActivityDiagramFactory;
 import net.sourceforge.plantuml.activitydiagram3.ActivityDiagramFactory3;
+import net.sourceforge.plantuml.annotation.DuplicateCode;
 import net.sourceforge.plantuml.api.PSystemFactory;
 import net.sourceforge.plantuml.chart.ChartDiagramFactory;
 import net.sourceforge.plantuml.classdiagram.ClassDiagramFactory;
@@ -50,6 +54,7 @@ import net.sourceforge.plantuml.core.Diagram;
 import net.sourceforge.plantuml.core.DiagramType;
 import net.sourceforge.plantuml.core.UmlSource;
 import net.sourceforge.plantuml.descdiagram.DescriptionDiagramFactory;
+import net.sourceforge.plantuml.directdot.PSystemDotFactory;
 import net.sourceforge.plantuml.ebnf.PSystemEbnfFactory;
 import net.sourceforge.plantuml.error.PSystemError;
 import net.sourceforge.plantuml.error.PSystemErrorPreprocessor;
@@ -148,20 +153,34 @@ public class PSystemBuilder2 {
 		return createDiagramFromPreprocessed(tmp, preprocessing);
 	}
 
-	public Diagram createDiagramFromPreprocessed(List<StringLocated> data, PreprocessingArtifact preprocessing) {
-		final UmlSource source = UmlSource.create(data, false);
+	@DuplicateCode(reference = "PSystemBuilder")
+	public Diagram createDiagramFromPreprocessed(List<StringLocated> source, PreprocessingArtifact preprocessing) {
+		final UmlSource umlSource = UmlSource.create(source, false);
 
-		if (source.getTotalLineCount() < 10)
+		if (umlSource.getTotalLineCount() < 10)
 			lastFactory = null;
 
-		final Collection<DiagramType> diagramTypes = source.getDiagramTypes();
-		
-		source.patchBase64();
+		umlSource.patchBase64();
 
+		final Collection<DiagramType> diagramTypes = umlSource.getDiagramTypes();
+		if (diagramTypes.contains(DiagramType.UNKNOWN))
+			return new PSystemUnsupported(umlSource, preprocessing);
+
+		if (diagramTypes.contains(DiagramType.SEQUENCE) && source.size() > 1) {
+			final String secondLine = source.get(1).getString();
+			if (secondLine.trim().equals("nwdiag {")) {
+				final ErrorUml error = new ErrorUml(ErrorUmlType.EXECUTION_ERROR,
+						"This looks like a network diagram. Please use @startnwdiag instead of @startuml.", 100,
+						source.get(1).getLocation(), DiagramType.SEQUENCE);
+
+				return PSystemErrorUtils.buildV2(umlSource, error, Collections.<String>emptyList(), source,
+						preprocessing);
+			}
+		}
 		final List<PSystemError> errors = new ArrayList<>();
 
 		if (lastFactory != null && diagramTypes.contains(lastFactory.getDiagramType())) {
-			final Diagram sys = lastFactory.createSystem(null, source, null, preprocessing);
+			final Diagram sys = lastFactory.createSystem(null, umlSource, null, preprocessing);
 			if (isOk(sys))
 				return sys;
 		}
@@ -173,7 +192,7 @@ public class PSystemBuilder2 {
 				continue;
 			BrowserLog.consoleLog(PSystemBuilder2.class, "trying " + f.getClass());
 
-			final Diagram sys = f.createSystem(null, source, null, preprocessing);
+			final Diagram sys = f.createSystem(null, umlSource, null, preprocessing);
 			if (isOk(sys)) {
 				BrowserLog.consoleLog(PSystemBuilder2.class, "ok!");
 				this.lastFactory = f;
@@ -183,7 +202,7 @@ public class PSystemBuilder2 {
 		}
 
 		if (errors.size() == 0)
-			return new PSystemUnsupported(source, preprocessing);
+			return new PSystemUnsupported(umlSource, preprocessing);
 
 		return PSystemErrorUtils.merge(errors);
 	}

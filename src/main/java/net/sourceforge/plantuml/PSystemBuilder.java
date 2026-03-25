@@ -42,6 +42,7 @@ import java.util.List;
 
 import net.sourceforge.plantuml.activitydiagram.ActivityDiagramFactory;
 import net.sourceforge.plantuml.activitydiagram3.ActivityDiagramFactory3;
+import net.sourceforge.plantuml.annotation.DuplicateCode;
 import net.sourceforge.plantuml.api.PSystemFactory;
 import net.sourceforge.plantuml.board.BoardDiagramFactory;
 import net.sourceforge.plantuml.bpm.BpmDiagramFactory;
@@ -103,7 +104,6 @@ import net.sourceforge.plantuml.stats.StatsUtilsIncrement;
 import net.sourceforge.plantuml.sudoku.PSystemSudokuFactory;
 import net.sourceforge.plantuml.text.StringLocated;
 import net.sourceforge.plantuml.timingdiagram.TimingDiagramFactory;
-import net.sourceforge.plantuml.utils.LineLocation;
 import net.sourceforge.plantuml.utils.Log;
 import net.sourceforge.plantuml.version.PSystemLicenseFactory;
 import net.sourceforge.plantuml.version.PSystemVersionFactory;
@@ -201,6 +201,7 @@ public class PSystemBuilder {
 		return singleton;
 	}
 
+	@DuplicateCode(reference = "PSystemBuilder2")
 	final public Diagram createPSystem(PathSystem pathSystem, List<StringLocated> source, List<StringLocated> rawSource,
 			Previous previous, PreprocessingArtifact preprocessing) {
 
@@ -214,17 +215,17 @@ public class PSystemBuilder {
 
 			umlSource.patchBase64();
 
-			for (StringLocated s : source) {
-				if (s.getPreprocessorError() != null) {
-					// Dead code : should not append
-					assert false;
-					Log.error("Preprocessor Error: " + s.getPreprocessorError());
-					final ErrorUml err = new ErrorUml(ErrorUmlType.SYNTAX_ERROR, s.getPreprocessorError(), 0,
-							s.getLocation(), null);
-					return PSystemErrorUtils.buildV2(umlSource, err, Collections.<String>emptyList(), source,
-							preprocessing);
-				}
-			}
+//			for (StringLocated s : source) {
+//				if (s.getPreprocessorError() != null) {
+//					// Dead code : should not append
+//					assert false;
+//					Log.error("Preprocessor Error: " + s.getPreprocessorError());
+//					final ErrorUml err = new ErrorUml(ErrorUmlType.SYNTAX_ERROR, s.getPreprocessorError(), 0,
+//							s.getLocation(), null);
+//					return PSystemErrorUtils.buildV2(umlSource, err, Collections.<String>emptyList(), source,
+//							preprocessing);
+//				}
+//			}
 
 			final Collection<DiagramType> diagramTypes = umlSource.getDiagramTypes();
 			if (diagramTypes.contains(DiagramType.UNKNOWN))
