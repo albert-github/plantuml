@@ -109,6 +109,9 @@ tasks.withType<Jar>().configureEach {
         exclude("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA") // Avoid conflict on signature
     }
 
+    // Exclude TeaVM resources (JS stdlib, HTML demo pages) from the Java JAR
+    exclude("teavm/**")
+
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
