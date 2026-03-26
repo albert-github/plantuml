@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import net.sourceforge.plantuml.activitydiagram3.ftile.vertical.FtileBoxOld;
 import net.sourceforge.plantuml.klimt.UTranslate;
 import net.sourceforge.plantuml.klimt.color.HColor;
 import net.sourceforge.plantuml.klimt.drawing.AbstractCommonUGraphic;
@@ -47,6 +48,7 @@ import net.sourceforge.plantuml.klimt.font.StringBounder;
 import net.sourceforge.plantuml.klimt.geom.XDimension2D;
 import net.sourceforge.plantuml.klimt.geom.XPoint2D;
 import net.sourceforge.plantuml.klimt.shape.TextBlock;
+import net.sourceforge.plantuml.mindmap.IdeaShape;
 import net.sourceforge.plantuml.style.ISkinParam;
 import net.sourceforge.plantuml.style.PName;
 import net.sourceforge.plantuml.style.Style;
@@ -62,6 +64,7 @@ class ITFComposed extends WBSTextBlock implements ITF {
 	final private double delta1x = 10;
 	final private double marginBottom;// = 15;
 	private final WElement idea;
+	private boolean autoWidthApplied;
 
 	private ITFComposed(ISkinParam skinParam, WElement idea, List<ITF> left, List<ITF> right) {
 		super(skinParam, idea.getStyleBuilder(), idea.getLevel(), idea.getStereotype());
@@ -70,7 +73,38 @@ class ITFComposed extends WBSTextBlock implements ITF {
 		this.right = right;
 		this.main = buildMain(idea);
 		final Style style = idea.getStyle();
-		this.marginBottom = style.getMargin().getBottom();
+		this.marginBottom = idea.getShape() == IdeaShape.PSEUDO ? 0 : style.getMargin().getBottom();
+	}
+
+	@Override
+	public double getMainBoxWidth(StringBounder stringBounder) {
+		return main.calculateDimension(stringBounder).getWidth();
+	}
+
+	@Override
+	public void setForcedMinWidth(double width) {
+		if (main instanceof FtileBoxOld)
+			((FtileBoxOld) main).setMinimumWidth(width);
+	}
+
+	// Called from both calculateDimensionSlow() and drawU() because either
+	// may be invoked first. The flag ensures it runs only once.
+	private void applyAutoWidth(StringBounder stringBounder) {
+		if (autoWidthApplied)
+			return;
+		autoWidthApplied = true;
+		final boolean autoWidth = idea.getStyle().value(PName.AutoWidth).asBoolean();
+		if (autoWidth == false)
+			return;
+		final List<ITF> all = new ArrayList<>();
+		all.addAll(left);
+		all.addAll(right);
+		double maxWidth = 0;
+		for (ITF child : all)
+			maxWidth = Math.max(maxWidth, child.getMainBoxWidth(stringBounder));
+		for (ITF child : all)
+			child.setForcedMinWidth(maxWidth);
+		invalidateDimensionCache();
 	}
 
 	public static ITF build2(ISkinParam skinParam, WElement idea) {
@@ -123,6 +157,7 @@ class ITFComposed extends WBSTextBlock implements ITF {
 
 	@Override
 	public final XDimension2D calculateDimensionSlow(StringBounder stringBounder) {
+		applyAutoWidth(stringBounder);
 		final XDimension2D mainDim = main.calculateDimension(stringBounder);
 		final double mainWidth = mainDim.getWidth();
 		final double height = mainDim.getHeight() + Math.max(getCollHeight(stringBounder, left, marginBottom),
@@ -133,6 +168,7 @@ class ITFComposed extends WBSTextBlock implements ITF {
 	}
 
 	public void drawU(final UGraphic ug) {
+		applyAutoWidth(ug.getStringBounder());
 		final StringBounder stringBounder = ug.getStringBounder();
 
 		final XDimension2D mainDim = main.calculateDimension(stringBounder);
