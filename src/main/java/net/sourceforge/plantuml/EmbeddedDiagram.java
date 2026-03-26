@@ -37,6 +37,7 @@ package net.sourceforge.plantuml;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -44,6 +45,7 @@ import java.util.List;
 
 import net.atmp.PixelImage;
 import net.sourceforge.plantuml.core.Diagram;
+import net.sourceforge.plantuml.core.ImageData;
 import net.sourceforge.plantuml.klimt.AffineTransformType;
 import net.sourceforge.plantuml.klimt.UShape;
 import net.sourceforge.plantuml.klimt.awt.PortableImage;
@@ -59,6 +61,7 @@ import net.sourceforge.plantuml.klimt.shape.TextBlock;
 import net.sourceforge.plantuml.klimt.shape.TextBlockMemoized;
 import net.sourceforge.plantuml.klimt.shape.UImage;
 import net.sourceforge.plantuml.klimt.shape.UImageSvg;
+import net.sourceforge.plantuml.klimt.shape.UImageTikz;
 import net.sourceforge.plantuml.log.Logme;
 import net.sourceforge.plantuml.nio.PathSystem;
 import net.sourceforge.plantuml.preproc.Defines;
@@ -76,6 +79,7 @@ public class EmbeddedDiagram extends TextBlockMemoized implements Line, Atom {
 
 	private PortableImage image;
 	private String svg;
+	private UImageTikz imageTikz;
 	private TextBlock textBlock;
 
 	private final Diagram diagram;
@@ -128,6 +132,10 @@ public class EmbeddedDiagram extends TextBlockMemoized implements Line, Atom {
 					final UImageSvg svg = new UImageSvg(imageSvg, 1);
 					return new XDimension2D(svg.getWidth(), svg.getHeight());
 				}
+				if (stringBounder.matchesProperty("TIKZ")) {
+					final UImageTikz tikz = getImageTikz();
+					return new XDimension2D(tikz.getWidth(), tikz.getHeight());
+				}
 				final PortableImage im = getImage();
 				return new XDimension2D(im.getWidth(), im.getHeight());
 			} else {
@@ -165,6 +173,10 @@ public class EmbeddedDiagram extends TextBlockMemoized implements Line, Atom {
 					ug.draw(svg);
 					return;
 				}
+				if (ug.matchesProperty("TIKZ")) {
+					ug.draw(getImageTikz());
+					return;
+				}
 				final PortableImage im = getImage();
 				final UShape image = new UImage(new PixelImage(im, AffineTransformType.TYPE_BILINEAR));
 				ug.draw(image);
@@ -198,6 +210,22 @@ public class EmbeddedDiagram extends TextBlockMemoized implements Line, Atom {
 			return new String(os.toByteArray());
 		}
 		throw new UnsupportedOperationException("TEAVM4586");
+	}
+
+	private UImageTikz getImageTikz() throws IOException, InterruptedException {
+		if (imageTikz == null)
+			imageTikz = getImageTikzSlow();
+
+		return imageTikz;
+	}
+
+	private UImageTikz getImageTikzSlow() throws IOException, InterruptedException {
+		final ByteArrayOutputStream os = new ByteArrayOutputStream();
+		final ImageData imageData = diagram.exportDiagram(os, 0,
+				new FileFormatOption(FileFormat.LATEX_NO_PREAMBLE));
+		os.close();
+		return new UImageTikz(new String(os.toByteArray(), StandardCharsets.UTF_8),
+				imageData.getWidth(), imageData.getHeight());
 	}
 
 	private PortableImage getImage() throws IOException, InterruptedException {

@@ -51,6 +51,7 @@ import net.sourceforge.plantuml.klimt.shape.UCenteredCharacter;
 import net.sourceforge.plantuml.klimt.shape.UEllipse;
 import net.sourceforge.plantuml.klimt.shape.UImage;
 import net.sourceforge.plantuml.klimt.shape.UImageSvg;
+import net.sourceforge.plantuml.klimt.shape.UImageTikz;
 import net.sourceforge.plantuml.klimt.shape.ULine;
 import net.sourceforge.plantuml.klimt.shape.UPolygon;
 import net.sourceforge.plantuml.klimt.shape.URectangle;
@@ -88,6 +89,7 @@ public class UGraphicTikz extends AbstractUGraphic<TikzGraphics> implements Clip
 		registerDriver(UPolygon.class, new DriverPolygonTikz());
 		registerDriver(UEllipse.class, new DriverEllipseTikz());
 		registerDriver(UImage.class, new DriverImageTikz());
+		registerDriver(UImageTikz.class, new DriverImageTikzTikz());
 		ignoreShape(UImageSvg.class);
 		registerDriver(UPath.class, new DriverPathTikz());
 		registerDriver(DotPath.class, new DriverDotPathTikz());
@@ -113,6 +115,9 @@ public class UGraphicTikz extends AbstractUGraphic<TikzGraphics> implements Clip
 	@Override
 	public boolean matchesProperty(String propertyName) {
 		if ("SPECIALTXT".equalsIgnoreCase(propertyName))
+			return true;
+
+		if ("TIKZ".equalsIgnoreCase(propertyName))
 			return true;
 
 		return false;

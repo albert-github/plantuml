@@ -58,6 +58,7 @@ import net.sourceforge.plantuml.klimt.color.HColors;
 import net.sourceforge.plantuml.klimt.drawing.eps.EpsGraphics;
 import net.sourceforge.plantuml.klimt.geom.USegment;
 import net.sourceforge.plantuml.klimt.geom.USegmentType;
+import net.sourceforge.plantuml.klimt.shape.UImageTikz;
 import net.sourceforge.plantuml.skin.Pragma;
 import net.sourceforge.plantuml.skin.PragmaKey;
 import net.sourceforge.plantuml.teavm.TeaVM;
@@ -726,6 +727,15 @@ public class TikzGraphics {
 
 	public void closeLink() {
 		this.pendingUrl = null;
+	}
+
+	public void tikzImage(UImageTikz image, double x, double y) {
+		if (image.hasUrl())
+			this.hasUrl = true;
+
+		cmd.add("\\node[inner sep=0pt,outer sep=0pt,anchor=north west] at " + couple(x, y) + " {%");
+		cmd.add(image.getTikzCode());
+		cmd.add("};");
 	}
 
 }
