@@ -223,6 +223,7 @@ tasks.test {
 		}
 	}
 
+	val failedTests = mutableListOf<String>()
 	val skippedTests = mutableListOf<String>()
 
 	addTestListener(object : TestListener {
@@ -242,6 +243,12 @@ tasks.test {
 				println(" Skipped:  $skipped")
 				println(" Result:   ${result.resultType}")
 				println("===========================================")
+				if (failedTests.isNotEmpty()) {
+					println(" Failed tests:")
+					for (name in failedTests)
+						println("   - $name")
+					println("===========================================")
+				}
 				if (skippedTests.isNotEmpty()) {
 					println(" Skipped tests:")
 					for (name in skippedTests)
@@ -252,8 +259,14 @@ tasks.test {
 		}
 		override fun beforeTest(testDescriptor: TestDescriptor) {}
 		override fun afterTest(testDescriptor: TestDescriptor, result: TestResult) {
+			val label = if (testDescriptor.displayName != testDescriptor.name)
+				"${testDescriptor.className}.${testDescriptor.name} [${testDescriptor.displayName}]"
+			else
+				"${testDescriptor.className}.${testDescriptor.name}"
+			if (result.resultType == TestResult.ResultType.FAILURE)
+				failedTests.add(label)
 			if (result.resultType == TestResult.ResultType.SKIPPED)
-				skippedTests.add("${testDescriptor.className}.${testDescriptor.name}")
+				skippedTests.add(label)
 		}
 	})
 }

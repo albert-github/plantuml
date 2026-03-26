@@ -1,6 +1,6 @@
 ---
 allow-failure: true
-output: latex, svg
+output: svg
 expected-description: activity3
 ---
 @startuml
