@@ -251,9 +251,10 @@ public class TextBlockExporter12026 {
 		case VDX:
 			return new UGraphicVdx(backcolor, colorMapper, stringBounder);
 		case LATEX:
-			return new UGraphicTikz(backcolor, colorMapper, stringBounder, scaleFactor, true, p);
+		case LATEX_FIXED:
 		case LATEX_NO_PREAMBLE:
-			return new UGraphicTikz(backcolor, colorMapper, stringBounder, scaleFactor, false, p);
+			return new UGraphicTikz(backcolor, colorMapper, stringBounder, scaleFactor,
+					fileFormatOption.getFileFormat(), p);
 		case BRAILLE_PNG:
 			return new UGraphicBraille(backcolor, colorMapper, stringBounder);
 		case UTXT:

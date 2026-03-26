@@ -90,6 +90,7 @@ public enum FileFormat {
 	VDX("vdx", "application/vnd.visio.xml"), //
 	LATEX("eps", "application/x-latex"), //
 	LATEX_NO_PREAMBLE("eps-no-preamble", "application/x-latex"), //
+	LATEX_FIXED("eps", "application/x-latex"), //
 	BASE64("base64", "text/plain; charset=x-user-defined"), //
 	BRAILLE_PNG("braille-png", "image/png"), //
 	OBFUSCATE("obfuscate", "text/plain"), //
@@ -138,7 +139,7 @@ public enum FileFormat {
 			if (name().startsWith("XMI"))
 				return ".xmi";
 
-			if (this == LATEX || this == LATEX_NO_PREAMBLE)
+			if (this == LATEX || this == LATEX_NO_PREAMBLE || this == LATEX_FIXED)
 				return ".tex";
 
 			if (this == BRAILLE_PNG)
@@ -187,9 +188,9 @@ public enum FileFormat {
 		if (this == SVG)
 			return getSvgStringBounder(charSizeHack);
 
-		if (this == SVG_FIXED)
+		if (this == SVG_FIXED || this == LATEX_FIXED)
 			return new StringBounderSvgFixed();
-		
+
 		return getNormalStringBounder();
 	}
 

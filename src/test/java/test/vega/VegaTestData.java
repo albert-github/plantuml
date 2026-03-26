@@ -167,6 +167,8 @@ public class VegaTestData {
 			final String trimmed = token.trim().toUpperCase();
 			if (trimmed.equals("SVG"))
 				result.add(FileFormat.SVG_FIXED);
+			else if (trimmed.equals("LATEX"))
+				result.add(FileFormat.LATEX_FIXED);
 			else
 				result.add(FileFormat.valueOf(trimmed));
 		}

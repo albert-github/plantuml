@@ -233,6 +233,8 @@ class VegaTest {
 
 					if (fileFormat == FileFormat.DEBUG)
 						checkDebugOutput(path, data, baos, suffix, nbImages, imageIndex, generatedFiles);
+					else if (fileFormat == FileFormat.LATEX_FIXED)
+						checkLatexOutput(path, baos, suffix, generatedFiles);
 					else if (fileFormat == FileFormat.SVG_FIXED)
 						checkSvgOutput(path, baos, suffix, generatedFiles);
 					else if (fileFormat == FileFormat.SCXML)
@@ -397,6 +399,25 @@ class VegaTest {
 		final String expectedSvg = new String(Files.readAllBytes(expectedFile), UTF_8);
 		assertEquals(SvgCleaner.normalise(expectedSvg), SvgCleaner.normalise(cleanedSvg),
 				"SVG output mismatch for " + pumlPath);
+	}
+
+	// ----------------------------------------------------------
+	// LATEX output: compare with .tex reference file
+	// ----------------------------------------------------------
+
+	private void checkLatexOutput(Path pumlPath, ByteArrayOutputStream baos, String suffix, List<Path> generatedFiles)
+			throws IOException {
+		final String actualOutput = normalizeLineEndings(new String(baos.toByteArray(), UTF_8));
+		final Path expectedFile = getExpectedFile(pumlPath, suffix, ".tex");
+
+		if (Files.exists(expectedFile) == false) {
+			Files.write(expectedFile, actualOutput.getBytes(UTF_8));
+			generatedFiles.add(expectedFile);
+			return;
+		}
+
+		final String expectedOutput = normalizeLineEndings(new String(Files.readAllBytes(expectedFile), UTF_8));
+		assertEquals(expectedOutput, actualOutput, "LATEX output mismatch for " + pumlPath);
 	}
 
 	// ----------------------------------------------------------

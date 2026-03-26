@@ -37,6 +37,7 @@ package net.sourceforge.plantuml.klimt.drawing.tikz;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.klimt.ClipContainer;
 import net.sourceforge.plantuml.klimt.UPath;
 import net.sourceforge.plantuml.klimt.color.ColorMapper;
@@ -61,9 +62,9 @@ import net.sourceforge.plantuml.url.Url;
 public class UGraphicTikz extends AbstractUGraphic<TikzGraphics> implements ClipContainer {
 
 	public UGraphicTikz(HColor defaultBackground, ColorMapper colorMapper, StringBounder stringBounder, double scale,
-			boolean withPreamble, Pragma pragma) {
+			FileFormat format, Pragma pragma) {
 		super(stringBounder);
-		copy(defaultBackground, colorMapper, new TikzGraphics(scale, withPreamble, colorMapper, pragma));
+		copy(defaultBackground, colorMapper, new TikzGraphics(scale, format, colorMapper, pragma));
 		register();
 	}
 
