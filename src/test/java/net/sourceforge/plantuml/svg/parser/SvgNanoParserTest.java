@@ -32,7 +32,7 @@ public class SvgNanoParserTest {
 
     @Test
     public void testDrawUInvokesGraphicDraw() {
-        SvgSaxParser parser = new SvgSaxParser(Arrays.asList(SAMPLE_SVG));
+        SvgSaxParser parser = new SvgSaxParser(SAMPLE_SVG);
         
         // Create a mock UGraphic that returns itself for chained apply(...) calls
         UGraphic ug = mock(UGraphic.class, org.mockito.Mockito.RETURNS_SELF);
@@ -49,7 +49,7 @@ public class SvgNanoParserTest {
 
     @Test
     public void testGetGrayLevelRangeComputesValues() {
-        SvgSaxParser parser = new SvgSaxParser(Arrays.asList(SAMPLE_SVG));
+        SvgSaxParser parser = new SvgSaxParser(SAMPLE_SVG);
 
         // compute range via public getters
         int min = parser.getMinGrayLevel();

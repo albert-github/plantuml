@@ -268,7 +268,7 @@ final public class UmlSource {
 		return pathSystem;
 	}
 
-	private static final String BASE64_TAG_START = AtomImg.DATA_IMAGE_PNG_BASE64;
+	public static final String BASE64_TAG_START = AtomImg.DATA_IMAGE_PNG_BASE64;
 	public static final String BASE64_TAG_REPLACEMENT = "data:image/png;md5,";
 	private static final BoyerMoore BASE64_BM = new BoyerMoore(BASE64_TAG_START);
 
