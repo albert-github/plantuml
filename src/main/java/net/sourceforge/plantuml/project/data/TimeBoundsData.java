@@ -122,7 +122,7 @@ public class TimeBoundsData {
 
 	public double getBarsColumnWidth(TimeHeader timeHeader) {
 		final double xmin = timeHeader.getTimeScale().getPosition(TimePoint.ofStartOfDay(getMinDay()));
-		final double xmax = timeHeader.getTimeScale().getPosition(TimePoint.ofEndOfDayMinusOneSecond(getMaxDay()));
+		final double xmax = timeHeader.getTimeScale().getPosition(TimePoint.ofStartOfDay(getMaxDay()).addDays(1));
 		return xmax - xmin;
 	}
 
