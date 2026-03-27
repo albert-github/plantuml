@@ -44,6 +44,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.klimt.ClipContainer;
 import net.sourceforge.plantuml.klimt.UClip;
 import net.sourceforge.plantuml.klimt.UPath;
@@ -101,7 +102,7 @@ public class UGraphicDebug extends AbstractCommonUGraphic implements ClipContain
 
 	public UGraphicDebug(double scaleFactor, XDimension2D dim, String svgLinkTarget, String hoverPathColorRGB,
 			long seed, String preserveAspectRatio) {
-		super(new StringBounderDebug());
+		super(new StringBounderDebug(FileFormat.DEBUG));
 		basicCopy(HColors.WHITE, ColorMapper.IDENTITY);
 		this.output = new ArrayList<>();
 		this.scaleFactor = scaleFactor;
@@ -166,9 +167,8 @@ public class UGraphicDebug extends AbstractCommonUGraphic implements ClipContain
 			final UText text = (UText) shape;
 			final XDimension2D textDim = getStringBounder().calculateDimension(text.getFontConfiguration().getFont(),
 					text.getText());
-			return clip.isInside(getTranslateX(), getTranslateY()) == false
-					&& clip.isInside(getTranslateX() + textDim.getWidth(),
-							getTranslateY() - textDim.getHeight()) == false;
+			return clip.isInside(getTranslateX(), getTranslateY()) == false && clip
+					.isInside(getTranslateX() + textDim.getWidth(), getTranslateY() - textDim.getHeight()) == false;
 		}
 		if (shape instanceof UPath) {
 			return clip.isInside(getTranslateX(), getTranslateY(), (UPath) shape) == false;

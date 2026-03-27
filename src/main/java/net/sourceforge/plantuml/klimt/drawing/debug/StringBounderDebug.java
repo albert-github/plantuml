@@ -36,6 +36,7 @@ package net.sourceforge.plantuml.klimt.drawing.debug;
 
 import java.util.Random;
 
+import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.klimt.font.StringBounderRaw;
 import net.sourceforge.plantuml.klimt.font.UFont;
@@ -43,8 +44,8 @@ import net.sourceforge.plantuml.klimt.geom.XDimension2D;
 
 public class StringBounderDebug extends StringBounderRaw {
 
-	public StringBounderDebug() {
-		super(null);
+	public StringBounderDebug(FileFormat fileFormat) {
+		super(null, fileFormat);
 	}
 
 	@Override

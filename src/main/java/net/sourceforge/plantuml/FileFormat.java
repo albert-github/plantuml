@@ -51,7 +51,7 @@ import net.sourceforge.plantuml.braille.UGraphicBraille;
 import net.sourceforge.plantuml.cli.GlobalConfig;
 import net.sourceforge.plantuml.cli.GlobalConfigKey;
 import net.sourceforge.plantuml.klimt.drawing.debug.StringBounderDebug;
-import net.sourceforge.plantuml.klimt.drawing.debug.StringBounderSvgFixed;
+import net.sourceforge.plantuml.klimt.drawing.debug.StringBounderFixed;
 import net.sourceforge.plantuml.klimt.drawing.svg.SvgGraphics;
 import net.sourceforge.plantuml.klimt.font.StringBounder;
 import net.sourceforge.plantuml.klimt.font.StringBounderRaw;
@@ -183,13 +183,13 @@ public enum FileFormat {
 			return getBrailleStringBounder();
 
 		if (this == DEBUG)
-			return new StringBounderDebug();
+			return new StringBounderDebug(this);
 
 		if (this == SVG)
 			return getSvgStringBounder(charSizeHack);
 
 		if (this == SVG_FIXED || this == LATEX_FIXED)
-			return new StringBounderSvgFixed();
+			return new StringBounderFixed(this);
 
 		return getNormalStringBounder();
 	}
@@ -247,7 +247,7 @@ public enum FileFormat {
 	}
 
 	private StringBounder getSvgStringBounder(final SvgCharSizeHack charSizeHack) {
-		return new StringBounderRaw(FileFormat.gg.getFontRenderContext()) {
+		return new StringBounderRaw(FileFormat.gg.getFontRenderContext(), this) {
 			public String toString() {
 				return "FileFormat::getSvgStringBounder";
 			}
@@ -265,7 +265,7 @@ public enum FileFormat {
 	}
 
 	private StringBounder getNormalStringBounder() {
-		return new StringBounderRaw(FileFormat.gg.getFontRenderContext()) {
+		return new StringBounderRaw(FileFormat.gg.getFontRenderContext(), this) {
 			public String toString() {
 				return "FileFormat::getNormalStringBounder";
 			}
@@ -282,7 +282,7 @@ public enum FileFormat {
 	}
 
 	private StringBounder getBrailleStringBounder() {
-		return new StringBounderRaw(FileFormat.gg.getFontRenderContext()) {
+		return new StringBounderRaw(FileFormat.gg.getFontRenderContext(), this) {
 			public String toString() {
 				return "FileFormat::getBrailleStringBounder";
 			}
@@ -308,7 +308,7 @@ public enum FileFormat {
 	}
 
 	private StringBounder getTikzStringBounder(final TikzFontDistortion tikzFontDistortion) {
-		return new StringBounderRaw(FileFormat.gg.getFontRenderContext()) {
+		return new StringBounderRaw(FileFormat.gg.getFontRenderContext(), this) {
 
 			private final LatexManager latexManager = new LatexManager(tikzFontDistortion.getTexSystem(),
 					tikzFontDistortion.getTexPreamble());

@@ -128,19 +128,19 @@ public class EmbeddedDiagram extends TextBlockMemoized implements Line, Atom {
 		try {
 			if (!TeaVM.isTeaVM()) {
 				if (stringBounder.matchesProperty("SVG")) {
-					final String imageSvg = getImageSvg();
+					final String imageSvg = getImageSvg(stringBounder.getFileFormat());
 					final UImageSvg svg = new UImageSvg(imageSvg, 1);
 					return new XDimension2D(svg.getWidth(), svg.getHeight());
 				}
 				if (stringBounder.matchesProperty("TIKZ")) {
-					final UImageTikz tikz = getImageTikz();
+					final UImageTikz tikz = getImageTikz(stringBounder.getFileFormat());
 					return new XDimension2D(tikz.getWidth(), tikz.getHeight());
 				}
-				final PortableImage im = getImage();
+				final PortableImage im = getImage(stringBounder.getFileFormat());
 				return new XDimension2D(im.getWidth(), im.getHeight());
 			} else {
 				// ::comment when __MIT__ __EPL__ __BSD__ __ASL__ __LGPL__ __GPLV2__
-				final TextBlock tb = getInternalTextBlock();
+				final TextBlock tb = getInternalTextBlock(stringBounder.getFileFormat());
 				final XDimension2D result = tb.calculateDimension(stringBounder);
 				PSystemBuilder2.getInstance().reset();
 				return result;
@@ -152,12 +152,12 @@ public class EmbeddedDiagram extends TextBlockMemoized implements Line, Atom {
 		return new XDimension2D(42, 42);
 	}
 
-	public TextBlock getInternalTextBlock() throws Exception {
+	public TextBlock getInternalTextBlock(FileFormat fileFormat) throws Exception {
 		// ::comment when __MIT__ __EPL__ __BSD__ __ASL__ __LGPL__ __GPLV2__
 		if (textBlock == null) {
 			PSystemBuilder2.getInstance().reset();
 			final UgDiagram ugDiagram = (UgDiagram) diagram;
-			textBlock = ugDiagram.getTextBlock12026(0, new FileFormatOption(FileFormat.SVG));
+			textBlock = ugDiagram.getTextBlock12026(0, new FileFormatOption(fileFormat));
 		}
 		// ::done
 		return textBlock;
@@ -165,24 +165,25 @@ public class EmbeddedDiagram extends TextBlockMemoized implements Line, Atom {
 
 	public void drawU(UGraphic ug) {
 		try {
+			final StringBounder stringBounder = ug.getStringBounder();
 			if (!TeaVM.isTeaVM()) {
 				final boolean isSvg = ug.matchesProperty("SVG");
 				if (isSvg) {
-					final String imageSvg = getImageSvg();
+					final String imageSvg = getImageSvg(stringBounder.getFileFormat());
 					final UImageSvg svg = new UImageSvg(imageSvg, 1);
 					ug.draw(svg);
 					return;
 				}
 				if (ug.matchesProperty("TIKZ")) {
-					ug.draw(getImageTikz());
+					ug.draw(getImageTikz(stringBounder.getFileFormat()));
 					return;
 				}
-				final PortableImage im = getImage();
+				final PortableImage im = getImage(stringBounder.getFileFormat());
 				final UShape image = new UImage(new PixelImage(im, AffineTransformType.TYPE_BILINEAR));
 				ug.draw(image);
 			} else {
 				// ::comment when __MIT__ __EPL__ __BSD__ __ASL__ __LGPL__ __GPLV2__
-				final TextBlock tb = getInternalTextBlock();
+				final TextBlock tb = getInternalTextBlock(stringBounder.getFileFormat());
 				ug = ug.apply(HColors.transparent().bg());
 				tb.drawU(ug);
 				PSystemBuilder2.getInstance().reset();
@@ -194,52 +195,51 @@ public class EmbeddedDiagram extends TextBlockMemoized implements Line, Atom {
 
 	}
 
-	private String getImageSvg() throws IOException, InterruptedException {
+	private String getImageSvg(FileFormat fileFormat) throws IOException, InterruptedException {
 		if (svg == null)
-			svg = getImageSvgSlow().replaceAll("<\\?plantuml.+?\\?>", "");
+			svg = getImageSvgSlow(fileFormat).replaceAll("<\\?plantuml.+?\\?>", "");
 
 		return svg;
 
 	}
 
-	private String getImageSvgSlow() throws IOException, InterruptedException {
+	private String getImageSvgSlow(FileFormat fileFormat) throws IOException, InterruptedException {
 		if (!TeaVM.isTeaVM()) {
 			final ByteArrayOutputStream os = new ByteArrayOutputStream();
-			diagram.exportDiagram(os, 0, new FileFormatOption(FileFormat.SVG));
+			diagram.exportDiagram(os, 0, new FileFormatOption(fileFormat));
 			os.close();
 			return new String(os.toByteArray());
 		}
 		throw new UnsupportedOperationException("TEAVM4586");
 	}
 
-	private UImageTikz getImageTikz() throws IOException, InterruptedException {
+	private UImageTikz getImageTikz(FileFormat fileFormat) throws IOException, InterruptedException {
 		if (imageTikz == null)
-			imageTikz = getImageTikzSlow();
+			imageTikz = getImageTikzSlow(fileFormat);
 
 		return imageTikz;
 	}
 
-	private UImageTikz getImageTikzSlow() throws IOException, InterruptedException {
+	private UImageTikz getImageTikzSlow(FileFormat fileFormat) throws IOException, InterruptedException {
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		final ImageData imageData = diagram.exportDiagram(os, 0,
-				new FileFormatOption(FileFormat.LATEX_NO_PREAMBLE));
+		final ImageData imageData = diagram.exportDiagram(os, 0, new FileFormatOption(fileFormat));
 		os.close();
-		return new UImageTikz(new String(os.toByteArray(), StandardCharsets.UTF_8),
-				imageData.getWidth(), imageData.getHeight());
+		return new UImageTikz(new String(os.toByteArray(), StandardCharsets.UTF_8), imageData.getWidth(),
+				imageData.getHeight());
 	}
 
-	private PortableImage getImage() throws IOException, InterruptedException {
+	private PortableImage getImage(FileFormat fileFormat) throws IOException, InterruptedException {
 		BrowserLog.consoleLog(getClass(), "=======getImage");
 		if (image == null)
-			image = getImageSlow();
+			image = getImageSlow(fileFormat);
 		return image;
 	}
 
-	private PortableImage getImageSlow() throws IOException, InterruptedException {
+	private PortableImage getImageSlow(FileFormat fileFormat) throws IOException, InterruptedException {
 		BrowserLog.consoleLog(getClass(), "=======getImageSlow");
 		if (!TeaVM.isTeaVM()) {
 			final ByteArrayOutputStream os = new ByteArrayOutputStream();
-			diagram.exportDiagram(os, 0, new FileFormatOption(FileFormat.PNG));
+			diagram.exportDiagram(os, 0, new FileFormatOption(fileFormat));
 			os.close();
 			return SImageIO.read(os.toByteArray());
 		}

@@ -34,6 +34,7 @@
  */
 package net.sourceforge.plantuml.teavm;
 
+import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.klimt.font.StringBounder;
 import net.sourceforge.plantuml.klimt.font.UFont;
 import net.sourceforge.plantuml.klimt.geom.XDimension2D;
@@ -97,5 +98,10 @@ public class StringBounderTeaVM implements StringBounder {
 			return true;
 
 		return false;
+	}
+
+	@Override
+	public FileFormat getFileFormat() {
+		return FileFormat.SVG;
 	}
 }

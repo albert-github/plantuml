@@ -259,7 +259,7 @@ public class TextBlockExporter12026 {
 			return new UGraphicBraille(backcolor, colorMapper, stringBounder);
 		case UTXT:
 		case ATXT:
-			return new UGraphicTxt();
+			return new UGraphicTxt(fileFormatOption.getFileFormat());
 		case DEBUG:
 			return new UGraphicDebug(scaleFactor, dim, getSvgLinkTarget(), getHoverPathColorRGB(), seed,
 					getPreserveAspectRatio());
