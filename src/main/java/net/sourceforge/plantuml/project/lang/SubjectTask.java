@@ -39,6 +39,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.StringTokenizer;
 
+import com.plantuml.ubrex.builder.UBrexConcat;
+import com.plantuml.ubrex.builder.UBrexLeaf;
+import com.plantuml.ubrex.builder.UBrexPart;
+import com.plantuml.ubrex.builder.UBrexUpto;
+
 import net.sourceforge.plantuml.project.Failable;
 import net.sourceforge.plantuml.project.GanttDiagram;
 import net.sourceforge.plantuml.project.core.Task;
@@ -58,6 +63,16 @@ public class SubjectTask implements Subject<GanttDiagram> {
 	public static final String REGEX_TASK_CODE = "\\[([^\\[\\]]+?)\\]";
 
 	private SubjectTask() {
+	}
+	
+	@Override
+	public UBrexPart toUnicodeBracketedExpression() {
+		return UBrexConcat.build( //
+				new UBrexLeaf("["), //
+				new UBrexUpto(//
+						new UBrexLeaf("〴."), //
+						new UBrexLeaf("]") //
+				));
 	}
 
 	public Failable<Task> getMe(GanttDiagram gantt, RegexResult arg) {

@@ -39,6 +39,12 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
 
+import com.plantuml.ubrex.builder.UBrexConcat;
+import com.plantuml.ubrex.builder.UBrexLeaf;
+import com.plantuml.ubrex.builder.UBrexNamed;
+import com.plantuml.ubrex.builder.UBrexOr;
+import com.plantuml.ubrex.builder.UBrexPart;
+
 import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.klimt.color.HColor;
 import net.sourceforge.plantuml.project.Failable;
@@ -147,6 +153,23 @@ public class SubjectDayAsDate implements Subject<GanttDiagram> {
 				new RegexLeaf(1, "EOPERATION", "([-+])"), //
 				new RegexLeaf(1, "ECOUNT", "([\\d]+)") //
 		);
+	}
+
+	private UBrexPart toUbrexB() {
+		return TimeResolution.toUbrexB_YYYY_MM_DD("BYEAR", "BMONTH", "BDAY");
+	}
+
+	private UBrexPart toUbrexE() {
+		return UBrexConcat.build( //
+				new UBrexNamed("ETYPE", new UBrexLeaf("「dDtTeE」")), //
+				new UBrexNamed("EOPERATION", new UBrexLeaf("「-+」")), //
+				new UBrexNamed("ECOUNT", new UBrexLeaf("〇+〴d")) //
+		);
+	}
+
+	@Override
+	public UBrexPart toUnicodeBracketedExpression() {
+		return new UBrexOr(toUbrexB(), toUbrexE());
 	}
 
 }

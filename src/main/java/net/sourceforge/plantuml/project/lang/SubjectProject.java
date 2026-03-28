@@ -39,6 +39,9 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
 
+import com.plantuml.ubrex.builder.UBrexLeaf;
+import com.plantuml.ubrex.builder.UBrexPart;
+
 import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.project.Failable;
 import net.sourceforge.plantuml.project.GanttDiagram;
@@ -52,6 +55,11 @@ public class SubjectProject implements Subject<GanttDiagram> {
 	public static final Subject<GanttDiagram> ME = new SubjectProject();
 
 	private SubjectProject() {
+	}
+
+	@Override
+	public UBrexPart toUnicodeBracketedExpression() {
+		return new UBrexLeaf("project");
 	}
 
 	public IRegex toRegex() {
@@ -76,7 +84,8 @@ public class SubjectProject implements Subject<GanttDiagram> {
 		@Override
 		public CommandExecutionResult execute(GanttDiagram project, Object subject, Object complement) {
 			final LocalDate start = (LocalDate) complement;
-			if (TeaVM.a()) assert project == subject;
+			if (TeaVM.a())
+				assert project == subject;
 			return project.updateStartingPoint(start);
 		}
 

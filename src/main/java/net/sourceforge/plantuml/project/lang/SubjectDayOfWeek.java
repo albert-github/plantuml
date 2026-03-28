@@ -39,6 +39,8 @@ import java.time.DayOfWeek;
 import java.util.Arrays;
 import java.util.Collection;
 
+import com.plantuml.ubrex.builder.UBrexPart;
+
 import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.klimt.color.HColor;
 import net.sourceforge.plantuml.project.Failable;
@@ -57,6 +59,11 @@ public class SubjectDayOfWeek implements Subject<GanttDiagram> {
 
 	public IRegex toRegex() {
 		return new RegexLeaf(1, "SUBJECT", "(" + DayOfWeekUtils.getRegexString() + ")");
+	}
+
+	@Override
+	public UBrexPart toUnicodeBracketedExpression() {
+		return DayOfWeekUtils.getUbrex();
 	}
 
 	public Failable<? extends Object> getMe(GanttDiagram project, RegexResult arg) {
