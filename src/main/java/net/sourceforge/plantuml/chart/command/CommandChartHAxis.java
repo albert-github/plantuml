@@ -45,6 +45,7 @@ import net.sourceforge.plantuml.command.SingleLineCommand2;
 import net.sourceforge.plantuml.regex.IRegex;
 import net.sourceforge.plantuml.regex.RegexConcat;
 import net.sourceforge.plantuml.regex.RegexLeaf;
+import net.sourceforge.plantuml.regex.RegexOptional;
 import net.sourceforge.plantuml.regex.RegexResult;
 import net.sourceforge.plantuml.utils.LineLocation;
 
@@ -56,22 +57,24 @@ public class CommandChartHAxis extends SingleLineCommand2<ChartDiagram> {
 
 	static IRegex getRegexConcat() {
 		return RegexConcat.build(CommandChartHAxis.class.getName(), RegexLeaf.start(), //
-				new RegexLeaf("h-axis"), //
 				RegexLeaf.spaceZeroOrMore(), //
-				new net.sourceforge.plantuml.regex.RegexOptional(new RegexLeaf(1, "TITLE", "\"([^\"]+)\"")), //
+				new RegexLeaf("[hx]-axis"), //
 				RegexLeaf.spaceZeroOrMore(), //
-				new net.sourceforge.plantuml.regex.RegexOptional(new RegexLeaf(2, "RANGE", "(-?[0-9.]+)\\s*-->\\s*(-?[0-9.]+)")), //
+				new RegexOptional(new RegexLeaf(1, "TITLE", "\"([^\"]+)\"")), //
 				RegexLeaf.spaceZeroOrMore(), //
-				new net.sourceforge.plantuml.regex.RegexOptional(new RegexLeaf(1, "DATA", "\\[(.*)\\]")), //
+				new RegexOptional(new RegexLeaf(2, "RANGE", "(-?[0-9.]+)\\s*-?->\\s*(-?[0-9.]+)")), //
 				RegexLeaf.spaceZeroOrMore(), //
-				new net.sourceforge.plantuml.regex.RegexOptional(new net.sourceforge.plantuml.regex.RegexConcat( //
+				new RegexOptional(new RegexLeaf(1, "DATA", "\\[(.*)\\]")), //
+				RegexLeaf.spaceZeroOrMore(), //
+				new RegexOptional(new RegexConcat( //
 						new RegexLeaf("spacing"), //
-						net.sourceforge.plantuml.regex.RegexLeaf.spaceOneOrMore(), //
+						RegexLeaf.spaceOneOrMore(), //
 						new RegexLeaf(1, "SPACING", "([0-9]+)"))), //
 				RegexLeaf.spaceZeroOrMore(), //
-				new net.sourceforge.plantuml.regex.RegexOptional(new RegexLeaf(1, "LABELRIGHT", "(label-right)")), //
+				new RegexOptional(new RegexLeaf(1, "LABELRIGHT", "(label-right)")), //
 				RegexLeaf.spaceZeroOrMore(), //
-				new net.sourceforge.plantuml.regex.RegexOptional(new RegexLeaf(1, "GRID", "(grid)")), //
+				new RegexOptional(new RegexLeaf(1, "GRID", "(grid)")), //
+				RegexLeaf.spaceZeroOrMore(), //
 				RegexLeaf.end());
 	}
 

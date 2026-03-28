@@ -59,11 +59,12 @@ public class CommandChartVAxis extends SingleLineCommand2<ChartDiagram> {
 
 	static IRegex getRegexConcat() {
 		return RegexConcat.build(CommandChartVAxis.class.getName(), RegexLeaf.start(), //
-				new RegexLeaf(1, "AXIS", "(v2?-axis)"), //
+				RegexLeaf.spaceZeroOrMore(), //
+				new RegexLeaf(1, "AXIS", "[vy]2?-axis"), //
 				RegexLeaf.spaceZeroOrMore(), //
 				new RegexOptional(new RegexLeaf(1, "TITLE", "\"([^\"]+)\"")), //
 				RegexLeaf.spaceZeroOrMore(), //
-				new RegexOptional(new RegexLeaf(2, "RANGE", "(-?[0-9.]+)\\s*-->\\s*(-?[0-9.]+)")), //
+				new RegexOptional(new RegexLeaf(2, "RANGE", "(-?[0-9.]+)\\s*-?->\\s*(-?[0-9.]+)")), //
 				RegexLeaf.spaceZeroOrMore(), //
 				new RegexOptional(new RegexLeaf(1, "LABELS", "\\[([^\\]]+)\\]")), //
 				RegexLeaf.spaceZeroOrMore(), //
@@ -80,6 +81,7 @@ public class CommandChartVAxis extends SingleLineCommand2<ChartDiagram> {
 				new RegexOptional(new RegexLeaf(1, "LABELTOP", "(label-top)")), //
 				RegexLeaf.spaceZeroOrMore(), //
 				new RegexOptional(new RegexLeaf(1, "GRID", "(grid)")), //
+				RegexLeaf.spaceZeroOrMore(), //
 				RegexLeaf.end());
 	}
 
@@ -138,14 +140,14 @@ public class CommandChartVAxis extends SingleLineCommand2<ChartDiagram> {
 
 		// Set axis properties
 		final CommandExecutionResult result;
-		if (axisType.startsWith("v2"))
+		if (isSecondaryAxis(axisType))
 			result = diagram.setY2Axis(title, min, max);
 		else
 			result = diagram.setYAxis(title, min, max);
 
 		// Set custom ticks if parsed successfully
 		if (customTicks != null) {
-			if (axisType.startsWith("v2")) {
+			if (isSecondaryAxis(axisType)) {
 				if (diagram.getY2Axis() != null) {
 					diagram.getY2Axis().setCustomTicks(customTicks);
 				}
@@ -156,7 +158,7 @@ public class CommandChartVAxis extends SingleLineCommand2<ChartDiagram> {
 
 		// Set tick spacing if parsed successfully
 		if (tickSpacing != null) {
-			if (axisType.startsWith("v2")) {
+			if (isSecondaryAxis(axisType)) {
 				if (diagram.getY2Axis() != null) {
 					diagram.getY2Axis().setTickSpacing(tickSpacing);
 				}
@@ -167,7 +169,7 @@ public class CommandChartVAxis extends SingleLineCommand2<ChartDiagram> {
 
 		// Set label position if label-top option is present
 		if (labelTopStr != null) {
-			if (axisType.startsWith("v2")) {
+			if (isSecondaryAxis(axisType)) {
 				if (diagram.getY2Axis() != null) {
 					diagram.getY2Axis().setLabelPosition(ChartAxis.LabelPosition.TOP);
 				}
@@ -183,6 +185,10 @@ public class CommandChartVAxis extends SingleLineCommand2<ChartDiagram> {
 		}
 
 		return result;
+	}
+
+	private static boolean isSecondaryAxis(String axisType) {
+		return axisType != null && (axisType.startsWith("v2") || axisType.startsWith("y2"));
 	}
 
 	private List<String> parseLabels(String data) {

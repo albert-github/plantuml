@@ -60,6 +60,7 @@ public class CommandChartLine extends SingleLineCommand2<ChartDiagram> {
 
 	static IRegex getRegexConcat() {
 		return RegexConcat.build(CommandChartLine.class.getName(), RegexLeaf.start(), //
+				RegexLeaf.spaceZeroOrMore(), //
 				new RegexLeaf("line"), //
 				RegexLeaf.spaceZeroOrMore(), //
 				new RegexOptional(new RegexLeaf(1, "STEREO", "(\\<\\<.+?\\>\\>)")), //
@@ -72,11 +73,12 @@ public class CommandChartLine extends SingleLineCommand2<ChartDiagram> {
 				new RegexOptional( //
 						new RegexConcat( //
 								RegexLeaf.spaceOneOrMore(), //
-								new RegexLeaf(1, "V2", "(v2)"))), //
+								new RegexLeaf(1, "V2", "([vy]2)"))), //
 				new RegexOptional( //
 						new RegexConcat( //
 								RegexLeaf.spaceOneOrMore(), //
 								new RegexLeaf(1, "LABELS", "(labels)"))), //
+				RegexLeaf.spaceZeroOrMore(), //
 				RegexLeaf.end());
 	}
 
@@ -119,8 +121,8 @@ public class CommandChartLine extends SingleLineCommand2<ChartDiagram> {
 		}
 
 		// Check if this line should use the secondary v-axis
-		final String v2Str = arg.getLazzy("V2", 0);
-		if (v2Str != null) {
+		final String secondaryAxisStr = arg.getLazzy("V2", 0);
+		if (secondaryAxisStr != null) {
 			series.setUseSecondaryAxis(true);
 		}
 
