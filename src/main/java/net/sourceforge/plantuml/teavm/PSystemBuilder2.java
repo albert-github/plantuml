@@ -69,6 +69,7 @@ import net.sourceforge.plantuml.nwdiag.NwDiagramFactory;
 import net.sourceforge.plantuml.packetdiag.PacketDiagramFactory;
 import net.sourceforge.plantuml.preproc.Defines;
 import net.sourceforge.plantuml.preproc.PreprocessingArtifact;
+import net.sourceforge.plantuml.project.GanttDiagramFactory;
 import net.sourceforge.plantuml.regexdiagram.PSystemRegexFactory;
 import net.sourceforge.plantuml.sequencediagram.SequenceDiagramFactory;
 import net.sourceforge.plantuml.statediagram.StateDiagramFactory;
@@ -98,6 +99,7 @@ public class PSystemBuilder2 {
 		factories.add(new StateDiagramFactory());
 		factories.add(new ActivityDiagramFactory3());
 		factories.add(new PSystemVersionFactory());
+		factories.add(new GanttDiagramFactory());
 		// factories.add(new PSystemDotFactory(DiagramType.UML));
 		factories.add(new MindMapDiagramFactory());
 		factories.add(new WBSDiagramFactory());
