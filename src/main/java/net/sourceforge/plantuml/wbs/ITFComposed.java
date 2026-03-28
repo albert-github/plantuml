@@ -63,12 +63,10 @@ class ITFComposed extends WBSTextBlock implements ITF {
 
 	final private double delta1x = 10;
 	final private double marginBottom;// = 15;
-	private final WElement idea;
 	private boolean autoWidthApplied;
 
 	private ITFComposed(ISkinParam skinParam, WElement idea, List<ITF> left, List<ITF> right) {
-		super(skinParam, idea.getStyleBuilder(), idea.getLevel(), idea.getStereotype());
-		this.idea = idea;
+		super(skinParam, idea);
 		this.left = left;
 		this.right = right;
 		this.main = buildMain(idea);
@@ -93,9 +91,9 @@ class ITFComposed extends WBSTextBlock implements ITF {
 		if (autoWidthApplied)
 			return;
 		autoWidthApplied = true;
-		final boolean autoWidth = idea.getStyle().value(PName.AutoWidth).asBoolean();
-		if (autoWidth == false)
+		if (isAutoWidth() == false)
 			return;
+
 		final List<ITF> all = new ArrayList<>();
 		all.addAll(left);
 		all.addAll(right);
@@ -175,7 +173,7 @@ class ITFComposed extends WBSTextBlock implements ITF {
 
 		if (ug instanceof AbstractCommonUGraphic) {
 			final UTranslate translate = ((AbstractCommonUGraphic) ug).getTranslate();
-			idea.setGeometry(translate, mainDim);
+			getIdea().setGeometry(translate, mainDim);
 		}
 
 		final double wx = getw1(stringBounder) - mainDim.getWidth() / 2;
@@ -188,7 +186,8 @@ class ITFComposed extends WBSTextBlock implements ITF {
 			y += marginBottom;
 			final XDimension2D childDim = child.calculateDimension(stringBounder);
 			lastY1 = y + child.getF2(stringBounder).getY();
-			drawLine(ug.apply(lineColor), x - childDim.getWidth() - delta1x + child.getF2(stringBounder).getX(), lastY1, x, lastY1);
+			drawLine(ug.apply(lineColor), x - childDim.getWidth() - delta1x + child.getF2(stringBounder).getX(), lastY1,
+					x, lastY1);
 			child.drawU(ug.apply(new UTranslate(x - childDim.getWidth() - delta1x, y)));
 			y += childDim.getHeight();
 		}
@@ -208,8 +207,8 @@ class ITFComposed extends WBSTextBlock implements ITF {
 	}
 
 	private HColor getLinkColor() {
-		final Style styleArrow = idea.getStyle().getSignature().withTOBECHANGED(idea.getStereotype())
-				.getMergedStyle(idea.getStyleBuilder());
+		final Style styleArrow = getIdea().getStyle().getSignature().withTOBECHANGED(getIdea().getStereotype())
+				.getMergedStyle(getIdea().getStyleBuilder());
 		return styleArrow.value(PName.LineColor).asColor(skinParam.getIHtmlColorSet());
 	}
 

@@ -6,7 +6,7 @@ expected-description: Work Breakdown Structure
 <style>
 wbsDiagram {
   node {
-    AutoWidth true
+    width auto
   }
 }
 </style>

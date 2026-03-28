@@ -52,15 +52,13 @@ class Fork extends WBSTextBlock {
 
 	private final TextBlock main;
 	private final List<ITF> right = new ArrayList<>();
-	private final WElement idea;
 	private boolean autoWidthApplied;
 
 	public Fork(ISkinParam skinParam, WElement idea) {
-		super(idea.withBackColor(skinParam), idea.getStyleBuilder(), idea.getLevel(), idea.getStereotype());
+		super(idea.withBackColor(skinParam), idea);
 		if (idea.getLevel() != 0)
 			throw new IllegalArgumentException();
 
-		this.idea = idea;
 		this.main = buildMain(idea);
 		for (WElement child : idea.getChildren(Direction.RIGHT))
 			this.right.add(ITFComposed.build2(skinParam, child));
@@ -73,8 +71,8 @@ class Fork extends WBSTextBlock {
 		if (autoWidthApplied)
 			return;
 		autoWidthApplied = true;
-		final boolean autoWidth = idea.getStyle().value(PName.AutoWidth).asBoolean();
-		if (autoWidth == false)
+
+		if (isAutoWidth() == false)
 			return;
 		double maxWidth = 0;
 		for (ITF child : right)
@@ -119,7 +117,8 @@ class Fork extends WBSTextBlock {
 			drawLine(ug, firstX, y1, lastX, y1);
 			posMain = firstX + (lastX - firstX - mainWidth) / 2;
 		} else {
-			if (TeaVM.a()) assert lastX == firstX;
+			if (TeaVM.a())
+				assert lastX == firstX;
 			final XDimension2D fullDim = calculateDimension(stringBounder);
 			posMain = (fullDim.getWidth() - mainWidth) / 2;
 			drawLine(ug, firstX, y1, posMain + mainWidth / 2, y1);
