@@ -35,8 +35,10 @@
  */
 package net.sourceforge.plantuml.project.lang;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import com.plantuml.ubrex.builder.UBrexConcat;
@@ -44,10 +46,12 @@ import com.plantuml.ubrex.builder.UBrexLeaf;
 import com.plantuml.ubrex.builder.UBrexPart;
 import com.plantuml.ubrex.builder.UBrexUpto;
 
+import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.project.Failable;
 import net.sourceforge.plantuml.project.GanttDiagram;
 import net.sourceforge.plantuml.project.core.Task;
 import net.sourceforge.plantuml.project.core.TaskCode;
+import net.sourceforge.plantuml.project.ulang.UbrexSentence;
 import net.sourceforge.plantuml.regex.IRegex;
 import net.sourceforge.plantuml.regex.RegexConcat;
 import net.sourceforge.plantuml.regex.RegexLeaf;
@@ -61,12 +65,34 @@ public class SubjectTask implements Subject<GanttDiagram> {
 
 	public static final Subject<GanttDiagram> ME = new SubjectTask();
 	public static final String REGEX_TASK_CODE = "\\[([^\\[\\]]+?)\\]";
+	public static final String UBREX_TASK_CODE = "[〇+「〤[]」]";
 
 	private SubjectTask() {
 	}
-	
+
 	@Override
-	public UBrexPart toUnicodeBracketedExpression() {
+	public Collection<UbrexSentence<GanttDiagram>> getUSentences() {
+		final List<UbrexSentence<GanttDiagram>> result = new ArrayList<>();
+		result.add(new UbrexSentence<GanttDiagram>(this, Verbs.requires,
+				Words.uzeroOrMore(Words.ON, Words.FOR, Words.THE, Words.AT), new ComplementDuration()) {
+			@Override
+			public CommandExecutionResult execute(GanttDiagram project) {
+				return CommandExecutionResult.error("WIPGANTT " + getClass());
+			}
+		});
+		result.add(
+				new UbrexSentence<GanttDiagram>(this, Verbs.starts, new ComplementBeforeOrAfterOrAtTaskStartOrEnd()) {
+					@Override
+					public CommandExecutionResult execute(GanttDiagram project) {
+						return CommandExecutionResult.error("WIPGANTT " + getClass());
+					}
+				});
+		return result;
+
+	}
+
+	@Override
+	public UBrexPart toUnicodeBracketedExpressionSubject() {
 		return UBrexConcat.build( //
 				new UBrexLeaf("["), //
 				new UBrexUpto(//

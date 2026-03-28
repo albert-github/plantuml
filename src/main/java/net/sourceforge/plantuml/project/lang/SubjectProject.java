@@ -36,8 +36,10 @@
 package net.sourceforge.plantuml.project.lang;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import com.plantuml.ubrex.builder.UBrexLeaf;
 import com.plantuml.ubrex.builder.UBrexPart;
@@ -45,6 +47,7 @@ import com.plantuml.ubrex.builder.UBrexPart;
 import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.project.Failable;
 import net.sourceforge.plantuml.project.GanttDiagram;
+import net.sourceforge.plantuml.project.ulang.UbrexSentence;
 import net.sourceforge.plantuml.regex.IRegex;
 import net.sourceforge.plantuml.regex.RegexLeaf;
 import net.sourceforge.plantuml.regex.RegexResult;
@@ -58,8 +61,22 @@ public class SubjectProject implements Subject<GanttDiagram> {
 	}
 
 	@Override
-	public UBrexPart toUnicodeBracketedExpression() {
+	public UBrexPart toUnicodeBracketedExpressionSubject() {
 		return new UBrexLeaf("project");
+	}
+
+	@Override
+	public Collection<UbrexSentence<GanttDiagram>> getUSentences() {
+		final List<UbrexSentence<GanttDiagram>> result = new ArrayList<>();
+		result.add(new UbrexSentence<GanttDiagram>(this, Verbs.starts,
+				Words.uzeroOrMore(Words.ON, Words.FOR, Words.THE, Words.AT), ComplementDate.onlyAbsolute()) {
+			@Override
+			public CommandExecutionResult execute(GanttDiagram project) {
+				return CommandExecutionResult.error("WIPGANTT " + getClass());
+			}
+		});
+		return result;
+
 	}
 
 	public IRegex toRegex() {
@@ -77,8 +94,8 @@ public class SubjectProject implements Subject<GanttDiagram> {
 	class Starts extends SentenceSimple<GanttDiagram> {
 
 		public Starts() {
-			super(SubjectProject.this, Verbs.starts, Words.zeroOrMore(Words.ON, Words.FOR, Words.THE, Words.AT),
-					ComplementDate.onlyAbsolute());
+			super(SubjectProject.this, Verbs.starts.getRegex(),
+					Words.zeroOrMore(Words.ON, Words.FOR, Words.THE, Words.AT), ComplementDate.onlyAbsolute());
 		}
 
 		@Override

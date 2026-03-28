@@ -38,10 +38,11 @@ package net.sourceforge.plantuml.project.lang;
 import java.time.LocalDate;
 import java.time.Month;
 
+import com.plantuml.ubrex.builder.UBrexOr;
+import com.plantuml.ubrex.builder.UBrexPart;
+
 import net.sourceforge.plantuml.project.time.MonthUtils;
 import net.sourceforge.plantuml.regex.IRegex;
-import net.sourceforge.plantuml.regex.RegexConcat;
-import net.sourceforge.plantuml.regex.RegexLeaf;
 import net.sourceforge.plantuml.regex.RegexOr;
 import net.sourceforge.plantuml.regex.RegexResult;
 
@@ -72,7 +73,15 @@ public class DayPattern {
 	}
 
 	public IRegex toRegex() {
-		return new RegexOr(toRegexA_DD_MONTH_YYYY(), toRegexB_YYYY_MM_DD(), toRegexC_MONTH_DD_YYYY());
+		return new RegexOr(TimeResolution.toRegexA_DD_MONTH_YYYY(yearKeyA, monthKeyA, dayKeyA),
+				TimeResolution.toRegexB_YYYY_MM_DD(yearKeyB, monthKeyB, dayKeyB),
+				TimeResolution.toRegexC_MONTH_DD_YYYY(yearKeyC, monthKeyC, dayKeyC));
+	}
+
+	public UBrexPart toUbrex() {
+		return new UBrexOr(TimeResolution.toUbrexA_DD_MONTH_YYYY(yearKeyA, monthKeyA, dayKeyA),
+				TimeResolution.toUbrexB_YYYY_MM_DD(yearKeyB, monthKeyB, dayKeyB),
+				TimeResolution.toUbrexC_MONTH_DD_YYYY(yearKeyC, monthKeyC, dayKeyC));
 	}
 
 	public LocalDate getDay(RegexResult arg) {
@@ -87,15 +96,6 @@ public class DayPattern {
 		return null;
 	}
 
-	private IRegex toRegexA_DD_MONTH_YYYY() {
-		return new RegexConcat( //
-				new RegexLeaf(1, dayKeyA, "([\\d]{1,2})"), //
-				new RegexLeaf("[\\w, ]*?"), //
-				new RegexLeaf(1, monthKeyA, "(" + MonthUtils.getRegexString() + ")"), //
-				new RegexLeaf("[\\w, ]*?"), //
-				new RegexLeaf(1, yearKeyA, "([\\d]{1,4})"));
-	}
-
 	private LocalDate resultA(RegexResult arg) {
 		final int day = Integer.parseInt(arg.get(dayKeyA, 0));
 		final Month month = MonthUtils.fromString(arg.get(monthKeyA, 0));
@@ -103,29 +103,11 @@ public class DayPattern {
 		return LocalDate.of(year, month, day);
 	}
 
-	private IRegex toRegexB_YYYY_MM_DD() {
-		return new RegexConcat( //
-				new RegexLeaf(1, yearKeyB, "([\\d]{1,4})"), //
-				new RegexLeaf("\\D"), //
-				new RegexLeaf(1, monthKeyB, "([\\d]{1,2})"), //
-				new RegexLeaf("\\D"), //
-				new RegexLeaf(1, dayKeyB, "([\\d]{1,2})"));
-	}
-
 	private LocalDate resultB(RegexResult arg) {
 		final int day = Integer.parseInt(arg.get(dayKeyB, 0));
 		final int month = Integer.parseInt(arg.get(monthKeyB, 0));
 		final int year = Integer.parseInt(arg.get(yearKeyB, 0));
 		return LocalDate.of(year, month, day);
-	}
-
-	private IRegex toRegexC_MONTH_DD_YYYY() {
-		return new RegexConcat( //
-				new RegexLeaf(1, monthKeyC, "(" + MonthUtils.getRegexString() + ")"), //
-				new RegexLeaf("[\\w, ]*?"), //
-				new RegexLeaf(1, dayKeyC, "([\\d]{1,2})"), //
-				new RegexLeaf("[\\w, ]*?"), //
-				new RegexLeaf(1, yearKeyC, "([\\d]{1,4})"));
 	}
 
 	private LocalDate resultC(RegexResult arg) {

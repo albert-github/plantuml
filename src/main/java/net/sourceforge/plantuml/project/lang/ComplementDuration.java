@@ -35,6 +35,11 @@
  */
 package net.sourceforge.plantuml.project.lang;
 
+import com.plantuml.ubrex.builder.UBrexConcat;
+import com.plantuml.ubrex.builder.UBrexLeaf;
+import com.plantuml.ubrex.builder.UBrexOptional;
+import com.plantuml.ubrex.builder.UBrexPart;
+
 import net.sourceforge.plantuml.project.Failable;
 import net.sourceforge.plantuml.project.GanttDiagram;
 import net.sourceforge.plantuml.project.Load;
@@ -51,6 +56,15 @@ public class ComplementDuration implements Something<GanttDiagram> {
 						"(?:[%s]+and[%s]+(\\d+)[%s]+(hour|day|week|month)s?)?" //
 				)); //
 	}
+	
+	@Override
+	public UBrexPart toUnicodeBracketedExpressionComplement() {
+		return UBrexConcat.build( //
+				new UBrexLeaf("〇+〴d 〇+〴s 【hour┇day┇week┇month】〇?s"), //
+				new UBrexOptional(new UBrexLeaf("〇+〴s and 〇+〴s 〇+〴d 〇+〴s 【hour┇day┇week┇month】〇?s")));
+	}
+
+
 
 	@Override
 	public Failable<Load> getMe(GanttDiagram system, RegexResult arg, String suffix) {

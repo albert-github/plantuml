@@ -36,8 +36,10 @@
 package net.sourceforge.plantuml.project.lang;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import com.plantuml.ubrex.builder.UBrexConcat;
 import com.plantuml.ubrex.builder.UBrexLeaf;
@@ -49,6 +51,7 @@ import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.klimt.color.HColor;
 import net.sourceforge.plantuml.project.Failable;
 import net.sourceforge.plantuml.project.GanttDiagram;
+import net.sourceforge.plantuml.project.ulang.UbrexSentence;
 import net.sourceforge.plantuml.regex.IRegex;
 import net.sourceforge.plantuml.regex.RegexConcat;
 import net.sourceforge.plantuml.regex.RegexLeaf;
@@ -60,6 +63,34 @@ public class SubjectDayAsDate implements Subject<GanttDiagram> {
 	public static final Subject<GanttDiagram> ME = new SubjectDayAsDate();
 
 	private SubjectDayAsDate() {
+	}
+
+	@Override
+	public Collection<UbrexSentence<GanttDiagram>> getUSentences() {
+		final List<UbrexSentence<GanttDiagram>> result = new ArrayList<>();
+		result.add(new UbrexSentence<GanttDiagram>(this, Verbs.isOrAre, new ComplementOpen()) {
+			@Override
+			public CommandExecutionResult execute(GanttDiagram project) {
+				return CommandExecutionResult.error("WIPGANTT " + getClass());
+			}
+		});
+
+		result.add(new UbrexSentence<GanttDiagram>(this, Verbs.isOrAre, new ComplementClose()) {
+			@Override
+			public CommandExecutionResult execute(GanttDiagram project) {
+				return CommandExecutionResult.error("WIPGANTT " + getClass());
+			}
+		});
+
+		result.add(new UbrexSentence<GanttDiagram>(this, Verbs.isOrAre, new ComplementInColors2()) {
+			@Override
+			public CommandExecutionResult execute(GanttDiagram project) {
+				return CommandExecutionResult.error("WIPGANTT " + getClass());
+			}
+		});
+
+		return result;
+
 	}
 
 	public Failable<LocalDate> getMe(GanttDiagram project, RegexResult arg) {
@@ -102,7 +133,7 @@ public class SubjectDayAsDate implements Subject<GanttDiagram> {
 	class Close extends SentenceSimple<GanttDiagram> {
 
 		public Close() {
-			super(SubjectDayAsDate.this, Verbs.isOrAre, new ComplementClose());
+			super(SubjectDayAsDate.this, Verbs.isOrAre.getRegex(), new ComplementClose());
 		}
 
 		@Override
@@ -114,7 +145,7 @@ public class SubjectDayAsDate implements Subject<GanttDiagram> {
 
 	class Open extends SentenceSimple<GanttDiagram> {
 		public Open() {
-			super(SubjectDayAsDate.this, Verbs.isOrAre, new ComplementOpen());
+			super(SubjectDayAsDate.this, Verbs.isOrAre.getRegex(), new ComplementOpen());
 		}
 
 		@Override
@@ -127,7 +158,7 @@ public class SubjectDayAsDate implements Subject<GanttDiagram> {
 	class InColor extends SentenceSimple<GanttDiagram> {
 
 		public InColor() {
-			super(SubjectDayAsDate.this, Verbs.isOrAre, new ComplementInColors2());
+			super(SubjectDayAsDate.this, Verbs.isOrAre.getRegex(), new ComplementInColors2());
 		}
 
 		@Override
@@ -168,7 +199,7 @@ public class SubjectDayAsDate implements Subject<GanttDiagram> {
 	}
 
 	@Override
-	public UBrexPart toUnicodeBracketedExpression() {
+	public UBrexPart toUnicodeBracketedExpressionSubject() {
 		return new UBrexOr(toUbrexB(), toUbrexE());
 	}
 

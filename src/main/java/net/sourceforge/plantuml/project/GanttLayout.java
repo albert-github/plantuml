@@ -36,7 +36,6 @@
 package net.sourceforge.plantuml.project;
 
 import net.sourceforge.plantuml.klimt.font.StringBounder;
-import net.sourceforge.plantuml.klimt.geom.XDimension2D;
 import net.sourceforge.plantuml.project.core.Task;
 import net.sourceforge.plantuml.project.data.DisplayConfigData;
 import net.sourceforge.plantuml.project.data.GanttModelData;

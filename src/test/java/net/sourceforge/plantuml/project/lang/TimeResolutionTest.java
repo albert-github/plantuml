@@ -163,4 +163,21 @@ class TimeResolutionTest {
 		assertEquals(regexResult.get("DAY", 0), ubrexMatcher.getCapture("DAY").get(0));
 	}
 
+	@Test
+	void testRegexAndUbrexAgreeOnFormatA1() {
+		final String input = "5 zzdecember 2018";
+		final IRegex regex = TimeResolution.toRegexA_DD_MONTH_YYYY("YEAR", "MONTH", "DAY");
+		final RegexResult regexResult = regex.matcher(input);
+		System.err.println(regexResult);
+
+		final UnicodeBracketedExpression ubrex = TimeResolution.toUbrexA_DD_MONTH_YYYY("YEAR", "MONTH", "DAY");
+		final UMatcher ubrexMatcher = ubrex.match(input);
+		System.err.println(ubrexMatcher);
+
+		assertTrue(ubrexMatcher.startMatch());
+		assertEquals(regexResult.get("YEAR", 0), ubrexMatcher.getCapture("YEAR").get(0));
+		assertEquals(regexResult.get("MONTH", 0), ubrexMatcher.getCapture("MONTH").get(0));
+		assertEquals(regexResult.get("DAY", 0), ubrexMatcher.getCapture("DAY").get(0));
+	}
+
 }

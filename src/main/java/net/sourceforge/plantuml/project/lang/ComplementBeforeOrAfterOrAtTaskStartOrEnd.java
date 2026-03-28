@@ -35,6 +35,11 @@
  */
 package net.sourceforge.plantuml.project.lang;
 
+import com.plantuml.ubrex.builder.UBrexConcat;
+import com.plantuml.ubrex.builder.UBrexLeaf;
+import com.plantuml.ubrex.builder.UBrexOptional;
+import com.plantuml.ubrex.builder.UBrexPart;
+
 import net.sourceforge.plantuml.annotation.DuplicateCode;
 import net.sourceforge.plantuml.project.Failable;
 import net.sourceforge.plantuml.project.GanttDiagram;
@@ -75,6 +80,18 @@ public class ComplementBeforeOrAfterOrAtTaskStartOrEnd extends AbstractComplemen
 				new RegexLeaf(1, "COMPLEMENT_CODE_OTHER" + suffix, SubjectTask.REGEX_TASK_CODE + ".?s"), //
 				RegexLeaf.spaceOneOrMore(), //
 				Words.namedOneOf("COMPLEMENT_START_OR_END" + suffix, Words.START, Words.END));
+	}
+
+	@Override
+	public UBrexPart toUnicodeBracketedExpressionComplement() {
+		return UBrexConcat.build( // not finished
+				new UBrexOptional(Words.uoneOf(Words.AT, Words.WITH, Words.AFTER)),
+				UBrexLeaf.spaceZeroOrMore(), //
+				//
+				new UBrexLeaf(SubjectTask.UBREX_TASK_CODE), //
+				new UBrexLeaf("〴.s"), //
+				UBrexLeaf.spaceOneOrMore(), //
+				Words.uoneOf(Words.START, Words.END));
 	}
 
 	public Failable<TaskInstant> getMe(GanttDiagram system, RegexResult arg, String suffix) {

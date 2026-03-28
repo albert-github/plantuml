@@ -30,15 +30,16 @@
  *
  *
  * Original Author:  Arnaud Roques
- * 
  *
  */
-package net.sourceforge.plantuml.project.lang;
+package com.plantuml.ubrex.builder;
 
-import net.sourceforge.plantuml.regex.IRegex;
+import com.plantuml.ubrex.ChallengeZeroOrMore;
 
-public interface Verb {
+public class UBrexZeroOrMore extends UBrexPart {
 
-	public IRegex toRegex();
+	public UBrexZeroOrMore(UBrexPart origin) {
+		super(new ChallengeZeroOrMore(origin.getChallenge()));
+	}
 
 }

@@ -35,6 +35,11 @@
  */
 package net.sourceforge.plantuml.project.lang;
 
+import com.plantuml.ubrex.builder.UBrexConcat;
+import com.plantuml.ubrex.builder.UBrexLeaf;
+import com.plantuml.ubrex.builder.UBrexOptional;
+import com.plantuml.ubrex.builder.UBrexPart;
+
 import net.sourceforge.plantuml.klimt.color.HColor;
 import net.sourceforge.plantuml.project.Failable;
 import net.sourceforge.plantuml.project.GanttDiagram;
@@ -46,6 +51,16 @@ public class ComplementInColors2 implements Something<GanttDiagram> {
 
 	public IRegex toRegex(String suffix) {
 		return new RegexLeaf(2, "COMPLEMENT" + suffix, "colou?red[%s]+(?:in[%s]+)?(#?\\w+)(?:/(#?\\w+))?");
+	}
+
+	@Override
+	public UBrexPart toUnicodeBracketedExpressionComplement() {
+		return UBrexConcat.build( //
+				new UBrexLeaf("colo〇?ured"), //
+				UBrexLeaf.spaceOneOrMore(), //
+				new UBrexOptional(new UBrexLeaf("in〇+〴s")), //
+				new UBrexLeaf("〇?#〇+〴w"), //
+				new UBrexOptional(new UBrexLeaf("/〇?#〇+〴w")));
 	}
 
 	public Failable<CenterBorderColor> getMe(GanttDiagram diagram, RegexResult arg, String suffix) {

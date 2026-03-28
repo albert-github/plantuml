@@ -35,6 +35,11 @@
  */
 package net.sourceforge.plantuml.project.lang;
 
+import com.plantuml.ubrex.builder.UBrexConcat;
+import com.plantuml.ubrex.builder.UBrexLeaf;
+import com.plantuml.ubrex.builder.UBrexOptional;
+import com.plantuml.ubrex.builder.UBrexPart;
+
 import net.sourceforge.plantuml.project.Failable;
 import net.sourceforge.plantuml.project.GanttDiagram;
 import net.sourceforge.plantuml.regex.IRegex;
@@ -45,6 +50,13 @@ public class ComplementClose implements Something<GanttDiagram> {
 
 	public IRegex toRegex(String suffix) {
 		return new RegexLeaf(2, "CLOSED" + suffix, "(closed?(?: for " + SubjectTask.REGEX_TASK_CODE + ")?)");
+	}
+
+	@Override
+	public UBrexPart toUnicodeBracketedExpressionComplement() {
+		return UBrexConcat.build( //
+				new UBrexLeaf("close〇?d"), //
+				new UBrexOptional(new UBrexLeaf("∙for∙" + SubjectTask.UBREX_TASK_CODE)));
 	}
 
 	public Failable<String> getMe(GanttDiagram project, RegexResult arg, String suffix) {

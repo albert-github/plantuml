@@ -39,6 +39,7 @@ import com.plantuml.ubrex.builder.UBrexConcat;
 import com.plantuml.ubrex.builder.UBrexLeaf;
 import com.plantuml.ubrex.builder.UBrexNamed;
 import com.plantuml.ubrex.builder.UBrexPart;
+import com.plantuml.ubrex.builder.UBrexUpto;
 
 import net.sourceforge.plantuml.project.time.MonthUtils;
 import net.sourceforge.plantuml.regex.IRegex;
@@ -80,8 +81,7 @@ public abstract class TimeResolution {
 		final UBrexPart monthUbrex = (UBrexPart) MonthUtils.getUbrex();
 		return UBrexConcat.build( //
 				new UBrexNamed(day, digits1to2), //
-				new UBrexLeaf("〇+〴LE"), //
-				new UBrexNamed(month, monthUbrex), //
+				new UBrexUpto(new UBrexLeaf("〴D"), new UBrexNamed(month, monthUbrex)), //
 				new UBrexLeaf("〇+〴D"), //
 				new UBrexNamed(year, digits1to4) //
 		);
