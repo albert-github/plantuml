@@ -62,8 +62,8 @@ PlantUML is a component that allows you to create various UML diagrams through s
   - Entity Relationship (ER) diagram
     - [Information Engineering (IE) diagram](http://plantuml.com/ie-diagram)
     - [Entity Relationship (ER) diagram (Chen's notation)](http://plantuml.com/er-diagram)
-  -  [Chart diagram](chart-diagram)
-  -  [Files (files tree) diagram](files-diagram)
+  -  [Chart diagram](http://plantuml.com/chart-diagram)
+  -  [Files (files tree) diagram](http://plantuml.com/files-diagram)
 
 ### 📣 Additional Features
 
