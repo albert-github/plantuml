@@ -45,8 +45,8 @@ PlantUML is a component that allows you to create various UML diagrams through s
   - [State diagram](http://plantuml.com/state-diagram)
   - [Timing diagram](http://plantuml.com/timing-diagram)
 - 📈 Non-UML Diagrams
-  - [JSON data](http://plantuml.com/json)
-  - [YAML data](http://plantuml.com/yaml)
+  - [JSON (JavaScript Object Notation) data](http://plantuml.com/json)
+  - [YAML (YAML Ain't Markup Language) data](http://plantuml.com/yaml)
   - [EBNF (Extended Backus-Naur Form)](http://plantuml.com/ebnf)
   - [Regex (Regular Expression)](http://plantuml.com/regex)
   - [Network diagram (nwdiag)](http://plantuml.com/nwdiag)
@@ -62,6 +62,8 @@ PlantUML is a component that allows you to create various UML diagrams through s
   - Entity Relationship (ER) diagram
     - [Information Engineering (IE) diagram](http://plantuml.com/ie-diagram)
     - [Entity Relationship (ER) diagram (Chen's notation)](http://plantuml.com/er-diagram)
+  -  [Chart diagram](chart-diagram)
+  -  [Files (files tree) diagram](files-diagram)
 
 ### 📣 Additional Features
 
