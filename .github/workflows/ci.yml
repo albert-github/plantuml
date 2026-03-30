@@ -162,23 +162,12 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6.0.1
 
-      - name: Diagnostic - list vega .puml files
+      - name: Diagnostic
         run: |
-          echo "=== Vega .puml files ==="
-          find src/test/resources/vega -name '*.puml' | sort | head -50
-          echo "..."
-          echo "Total .puml: $(find src/test/resources/vega -name '*.puml' | wc -l)"
-          echo ""
-          echo "=== Vega subdirectories ==="
-          find src/test/resources/vega -type d | sort
-          echo ""
-          echo "=== VegaTest.java exists? ==="
-          ls -la src/test/java/test/vega/VegaTest.java || echo 'NOT FOUND'
-          echo ""
-          echo "=== Test classes (all *Test.java) ==="
-          find src/test/java -name '*Test.java' | wc -l
-          echo "=== Test classes on disk ==="
-          find src/test/java -name '*Test.java' | sort
+          echo "Vega .puml files: $(find src/test/resources/vega -name '*.puml' | wc -l)"
+          echo "Vega subdirs:    $(find src/test/resources/vega -type d | wc -l)"
+          echo "VegaTest.java:   $(test -f src/test/java/test/vega/VegaTest.java && echo OK || echo NOT FOUND)"
+          echo "Test classes:     $(find src/test/java -name '*Test.java' | wc -l)"
 
       - name: Compile
         if: needs.workflow_config.outputs.do_test_linux == 'true'
