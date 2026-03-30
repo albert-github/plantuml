@@ -50,8 +50,8 @@ github.com                    render.githubusercontent.com
 │ Markdown parser  │          │  plantuml.js             │
 │ finds ```plantuml│ ──────►  │  viz-global.js           │
 │ blocks           │ postMsg  │                          │
-│                  │          │  plantumlLoad()           │
-│ Creates <iframe> │ ◄──────  │  plantuml.render(...)     │
+│                  │          │  plantumlLoad()          │
+│ Creates <iframe> │ ◄──────  │  plantuml.render(...)    │
 │ per diagram      │ postMsg  │                          │
 │                  │  (SVG)   │  Runs in sandbox:        │
 │ Inserts SVG      │          │  allow-scripts only      │
