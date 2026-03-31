@@ -16,8 +16,8 @@ public record VegaResult(Path path, VegaStatus status, long durationMs, Class<?>
 		final JsonObject entry = new JsonObject() //
 				.add("file", path.toString().replace('\\', '/')) //
 				.add("folder", path.getParent().toString().replace('\\', '/')) //
-				.add("status", status.name().toLowerCase()) //
-				.add("duration_ms", durationMs);
+				.add("status", status.name().toLowerCase());
+//				.add("duration_ms", durationMs);
 
 		if (tag != null)
 			entry.add("tag", tag);

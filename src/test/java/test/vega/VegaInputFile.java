@@ -76,6 +76,8 @@ public class VegaInputFile {
 	private final Path path;
 	private final Monomorph yaml;
 	private final List<String> pumlSource;
+	private Class<?> diagramClass;
+	private Throwable rootCause;
 
 	static public VegaInputFile parse(Path path) throws IOException {
 		final List<String> allLines = Files.readAllLines(path);
@@ -243,45 +245,43 @@ public class VegaInputFile {
 	public void runSingleFile() throws IOException {
 		final boolean allowFailure = "true".equals(this.getYamlString("allow-failure"));
 		final long startTime = System.currentTimeMillis();
-		Class<?> diagramClass = null;
 
 		try {
-			diagramClass = doRunSingleFile();
-			recordResult(VegaStatus.PASS, System.currentTimeMillis() - startTime, diagramClass, null, allowFailure);
+			doRunSingleFile();
+			recordResult(VegaStatus.PASS, System.currentTimeMillis() - startTime, null, allowFailure);
 		} catch (TestAbortedException e) {
-			recordResult(VegaStatus.SKIPPED, System.currentTimeMillis() - startTime, diagramClass, e, allowFailure);
+			recordResult(VegaStatus.SKIPPED, System.currentTimeMillis() - startTime, e, allowFailure);
 			throw e;
 		} catch (Throwable e) {
 			if (allowFailure) {
-				recordResult(VegaStatus.SKIPPED, System.currentTimeMillis() - startTime, diagramClass, e, allowFailure);
+				recordResult(VegaStatus.SKIPPED, System.currentTimeMillis() - startTime, e, allowFailure);
 				assumeTrue(false, "Known failure (allow-failure: true): " + path + " - " + e.getMessage());
 			} else {
-				recordResult(VegaStatus.FAIL, System.currentTimeMillis() - startTime, diagramClass, e, allowFailure);
+				recordResult(VegaStatus.FAIL, System.currentTimeMillis() - startTime, e, allowFailure);
 				throw e;
 			}
 		}
 	}
 
-	private void recordResult(VegaStatus status, long durationMs, Class<?> diagramClass, Throwable e,
-			boolean allowFailure) {
+	private void recordResult(VegaStatus status, long durationMs, Throwable e, boolean allowFailure) {
 		final Path relativePath = VegaTest.VEGA_RESOURCES.relativize(path);
 		final String tag = getYamlString("tag");
 
-		final JsonObject json = new VegaResult(relativePath, status, durationMs, diagramClass, e, tag, allowFailure)
-				.toJsonObject();
+		final JsonObject json = new VegaResult(relativePath, status, durationMs, diagramClass,
+				rootCause == null ? e : rootCause, tag, allowFailure).toJsonObject();
 
 		synchronized (VegaTest.results) {
 			VegaTest.results.add(json);
 		}
 	}
 
-	private Class<?> doRunSingleFile() throws IOException {
+	private void doRunSingleFile() throws IOException {
 		assertFalse(getPumlSource().isEmpty(), "PlantUML source in " + path);
 
 		final String source = getPumlSourceAsString();
 		final SourceStringReader ssr = new SourceStringReader(source, UTF_8);
 		final Diagram diagram = ssr.getBlocks().get(0).getDiagram();
-		final Class<?> diagramClass = diagram.getClass();
+		this.diagramClass = diagram.getClass();
 
 		// Check expectations on the parsed diagram
 		checkErrorExpectations(ssr);
@@ -290,8 +290,7 @@ public class VegaInputFile {
 
 		// Render in each requested output format (if any)
 		final List<FileFormat> fileFormats = getFileFormats();
-		if (fileFormats.isEmpty())
-			return diagramClass;
+		assert !fileFormats.isEmpty();
 
 		final int nbImages = ssr.getBlocks().get(0).getDiagram().getNbImages();
 		final List<Path> generatedFiles = new ArrayList<>();
@@ -304,6 +303,8 @@ public class VegaInputFile {
 				final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				final DiagramDescription description = ssrForFormat.outputImage(baos, imageIndex,
 						new FileFormatOption(fileFormat));
+				if (description.getImageData() != null)
+					this.rootCause = description.getImageData().getRootCause();
 
 				assertNotNull(description,
 						"No diagram generated for " + path + " [" + fileFormat + " image " + (imageIndex + 1) + "]");
@@ -339,7 +340,6 @@ public class VegaInputFile {
 		if (expectedException != null && generatedFiles.isEmpty() == false)
 			assumeTrue(false, "Expected files created: " + generatedFiles + " - please review and re-run");
 
-		return diagramClass;
 	}
 
 	// ----------------------------------------------------------

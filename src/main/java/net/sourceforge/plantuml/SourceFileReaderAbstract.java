@@ -153,7 +153,8 @@ public abstract class SourceFileReaderAbstract implements ISourceFileReader {
 	}
 
 	private List<GeneratedImage> getCrashedImage(BlockUml blockUml, Throwable t, SFile outputFile) throws IOException {
-		final GeneratedImage image = new GeneratedImageImpl(outputFile, "Crash Error", blockUml, FileImageData.CRASH);
+		final GeneratedImage image = new GeneratedImageImpl(outputFile, "Crash Error", blockUml, FileImageData.CRASH,
+				t);
 		try (OutputStream os = outputFile.createBufferedOutputStream()) {
 			final String flash = blockUml.getFlashData();
 			final CrashReportHandler report = new CrashReportHandler(t, null, flash);
@@ -211,7 +212,8 @@ public abstract class SourceFileReaderAbstract implements ISourceFileReader {
 					final String desc = "[" + file.getName() + "] " + system.getDescription();
 					final SFile f = fdata.getFile();
 					exportWarnOrErrIfWord(f, system);
-					final GeneratedImage generatedImage = new GeneratedImageImpl(f, desc, blockUml, fdata.getStatus());
+					final GeneratedImage generatedImage = new GeneratedImageImpl(f, desc, blockUml, fdata.getStatus(),
+							fdata.getRootCause());
 					result.add(generatedImage);
 				}
 
