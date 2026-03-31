@@ -100,6 +100,7 @@ class VegaTest {
 					sb.append("\n   - " + r.getString("file", ""));
 			sb.append("\n===========================================");
 		}
+		sb.append("\n");
 		Files.write(summaryFile, sb.toString().getBytes(UTF_8));
 	}
 
