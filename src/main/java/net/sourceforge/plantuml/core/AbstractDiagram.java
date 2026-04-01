@@ -39,7 +39,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -260,6 +259,11 @@ public abstract class AbstractDiagram implements Diagram {
 	@Override
 	public InstallationRequirement getInstallationRequirement() {
 		return InstallationRequirement.NONE;
+	}
+
+	@Override
+	public Throwable getRootCause() {
+		return null;
 	}
 
 }

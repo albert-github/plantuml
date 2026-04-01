@@ -277,8 +277,7 @@ public class PSystemBuilder {
 					final ErrorUml err = new ErrorUml(ErrorUmlType.EXECUTION_ERROR, "Fatal crash error: " + t, 0,
 							s.getLocation(), null);
 					errors.add(PSystemErrorUtils.buildV2(umlSource, err, Collections.<String>emptyList(), source,
-							preprocessing));
-					t.printStackTrace();
+							preprocessing, t));
 				}
 			}
 			if (errors.size() == 0)
@@ -288,9 +287,9 @@ public class PSystemBuilder {
 			return result;
 		} finally {
 
-			if (result != null && GlobalConfig.getInstance().boolValue(GlobalConfigKey.ENABLE_STATS)) {
+			if (result != null && GlobalConfig.getInstance().boolValue(GlobalConfigKey.ENABLE_STATS))
 				StatsUtilsIncrement.onceMoreParse(System.currentTimeMillis() - now, result.getClass());
-			}
+
 			Log.info(() -> "Compilation duration " + (System.currentTimeMillis() - now));
 			RegexConcat.printCacheInfo();
 		}

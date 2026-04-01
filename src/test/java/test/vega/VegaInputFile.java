@@ -282,6 +282,7 @@ public class VegaInputFile {
 		final SourceStringReader ssr = new SourceStringReader(source, UTF_8);
 		final Diagram diagram = ssr.getBlocks().get(0).getDiagram();
 		this.diagramClass = diagram.getClass();
+		this.rootCause = diagram.getRootCause();
 
 		// Check expectations on the parsed diagram
 		checkErrorExpectations(ssr);
@@ -303,7 +304,7 @@ public class VegaInputFile {
 				final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				final DiagramDescription description = ssrForFormat.outputImage(baos, imageIndex,
 						new FileFormatOption(fileFormat));
-				if (description.getImageData() != null)
+				if (description.getImageData() != null && description.getImageData().getRootCause() != null)
 					this.rootCause = description.getImageData().getRootCause();
 
 				assertNotNull(description,
