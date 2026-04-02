@@ -34,9 +34,9 @@
         "org.junit.jupiter.api.Assertions.assertFalse(Assertions.java:255)",
         "test.vega.VegaCheckerDebug.checkDebugContains(VegaCheckerDebug.java:33)",
         "test.vega.VegaCheckerDebug.checkOutput(VegaCheckerDebug.java:19)",
-        "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:332)",
+        "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:333)",
         "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:250)",
-        "test.vega.VegaTest.lambda$testAllPumlFiles$6(VegaTest.java:128)"
+        "test.vega.VegaTest.lambda$testAllPumlFiles$6(VegaTest.java:129)"
       ]
     },
     {
@@ -68,9 +68,9 @@
         "net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:158)",
         "net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)",
         "net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)",
-        "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:304)",
+        "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:305)",
         "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:250)",
-        "test.vega.VegaTest.lambda$testAllPumlFiles$6(VegaTest.java:128)"
+        "test.vega.VegaTest.lambda$testAllPumlFiles$6(VegaTest.java:129)"
       ]
     },
     {
@@ -151,9 +151,9 @@
         "net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:158)",
         "net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)",
         "net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)",
-        "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:304)",
+        "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:305)",
         "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:250)",
-        "test.vega.VegaTest.lambda$testAllPumlFiles$6(VegaTest.java:128)"
+        "test.vega.VegaTest.lambda$testAllPumlFiles$6(VegaTest.java:129)"
       ]
     },
     {
@@ -195,9 +195,9 @@
         "org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:184)",
         "org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1199)",
         "test.vega.VegaCheckerSvg.checkOutput(VegaCheckerSvg.java:26)",
-        "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:332)",
+        "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:333)",
         "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:250)",
-        "test.vega.VegaTest.lambda$testAllPumlFiles$6(VegaTest.java:128)"
+        "test.vega.VegaTest.lambda$testAllPumlFiles$6(VegaTest.java:129)"
       ]
     },
     {
@@ -247,9 +247,9 @@
         "org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1199)",
         "test.vega.VegaChecker.checkTextOutput(VegaChecker.java:27)",
         "test.vega.VegaCheckerLatex.checkOutput(VegaCheckerLatex.java:12)",
-        "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:332)",
+        "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:333)",
         "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:250)",
-        "test.vega.VegaTest.lambda$testAllPumlFiles$6(VegaTest.java:128)"
+        "test.vega.VegaTest.lambda$testAllPumlFiles$6(VegaTest.java:129)"
       ]
     },
     {
@@ -363,9 +363,9 @@
         "org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1199)",
         "test.vega.VegaChecker.checkTextOutput(VegaChecker.java:27)",
         "test.vega.VegaCheckerLatex.checkOutput(VegaCheckerLatex.java:12)",
-        "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:332)",
+        "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:333)",
         "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:250)",
-        "test.vega.VegaTest.lambda$testAllPumlFiles$6(VegaTest.java:128)"
+        "test.vega.VegaTest.lambda$testAllPumlFiles$6(VegaTest.java:129)"
       ]
     },
     {
@@ -518,9 +518,9 @@
         "org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1199)",
         "test.vega.VegaChecker.checkTextOutput(VegaChecker.java:27)",
         "test.vega.VegaCheckerLatex.checkOutput(VegaCheckerLatex.java:12)",
-        "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:332)",
+        "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:333)",
         "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:250)",
-        "test.vega.VegaTest.lambda$testAllPumlFiles$6(VegaTest.java:128)"
+        "test.vega.VegaTest.lambda$testAllPumlFiles$6(VegaTest.java:129)"
       ]
     },
     {
@@ -634,9 +634,9 @@
         "org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1199)",
         "test.vega.VegaChecker.checkTextOutput(VegaChecker.java:27)",
         "test.vega.VegaCheckerLatex.checkOutput(VegaCheckerLatex.java:12)",
-        "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:332)",
+        "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:333)",
         "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:250)",
-        "test.vega.VegaTest.lambda$testAllPumlFiles$6(VegaTest.java:128)"
+        "test.vega.VegaTest.lambda$testAllPumlFiles$6(VegaTest.java:129)"
       ]
     },
     {
