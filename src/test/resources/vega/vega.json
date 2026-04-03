@@ -53,6 +53,409 @@
       "diagram_class": "SequenceDiagram"
     },
     {
+      "file": "packet/R02.01-colwidth_0.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R02.02-colwidth_1.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R02.03-colwidth_10.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R02.04-colwidth_16.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R02.05-colwidth_32.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R02.06-colwidth_33.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R03.01-node_height_0.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R03.02-node_height_80.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R03.03-node_height_0_with_range.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R03.04-node_height_80_with_range.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R03.05-node_height_0_at_end_with_range.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R03.06-node_height_80_at_end_with_range.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R04.01-scale_direction_ltr.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R04.02-scale_direction_rtl.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R05.01-scale_interval_0.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R05.02-scale_interval_1.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R05.03-scale_interval_2.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R05.04-scale_interval_4.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R05.05-scale_interval_8.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R06.01-Range_2.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R06.02-Range_8.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R06.03-Range_16.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R07.01-Range_Error1.puml",
+      "folder": "packet",
+      "status": "skipped",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram",
+      "stacktrace": [
+        "java.lang.IllegalArgumentException",
+        "net.sourceforge.plantuml.klimt.geom.XDimension2D.<init>(XDimension2D.java:52)",
+        "net.sourceforge.plantuml.klimt.shape.TextBlockUtils$1.calculateDimension(TextBlockUtils.java:94)",
+        "net.sourceforge.plantuml.packetdiag.PacketBlock$1.calculateDimension(PacketBlock.java:189)",
+        "net.sourceforge.plantuml.packetdiag.PacketDiagram$1.calculateDimension(PacketDiagram.java:143)",
+        "net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.calculateDimension(TextBlockUtils.java:171)",
+        "net.sourceforge.plantuml.core.TextBlockExporter12026.calculateFinalDimension(TextBlockExporter12026.java:195)",
+        "net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:158)",
+        "net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)",
+        "net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)",
+        "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:305)",
+        "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:250)",
+        "test.vega.VegaTest.lambda$testAllPumlFiles$6(VegaTest.java:129)"
+      ]
+    },
+    {
+      "file": "packet/R07.02-Range_Error2.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PSystemErrorV2",
+      "message": "/ by zero",
+      "stacktrace": [
+        "java.lang.ArithmeticException: / by zero",
+        "net.sourceforge.plantuml.packetdiag.PacketDiagram.lambda$adjustIndicators$2(PacketDiagram.java:285)",
+        "java.base/java.util.stream.IntPipeline$1$1.accept(IntPipeline.java:180)",
+        "java.base/java.util.stream.SliceOps$2$1.accept(SliceOps.java:315)",
+        "java.base/java.util.stream.IntStream$1.tryAdvance(IntStream.java:960)",
+        "java.base/java.util.stream.IntPipeline.forEachWithCancel(IntPipeline.java:163)",
+        "java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:527)",
+        "java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:513)",
+        "java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)",
+        "java.base/java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:921)",
+        "java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)",
+        "java.base/java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:682)",
+        "net.sourceforge.plantuml.packetdiag.PacketDiagram.adjustIndicators(PacketDiagram.java:288)",
+        "net.sourceforge.plantuml.packetdiag.PacketDiagram.build(PacketDiagram.java:264)",
+        "net.sourceforge.plantuml.packetdiag.PacketDiagram.checkFinalError(PacketDiagram.java:197)",
+        "net.sourceforge.plantuml.command.PSystemCommandFactory.finalizeDiagram(PSystemCommandFactory.java:118)",
+        "net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:109)",
+        "net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:61)",
+        "net.sourceforge.plantuml.PSystemBuilder.createPSystem(PSystemBuilder.java:269)",
+        "net.sourceforge.plantuml.BlockUml.getDiagram(BlockUml.java:193)",
+        "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:283)",
+        "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:250)",
+        "test.vega.VegaTest.lambda$testAllPumlFiles$6(VegaTest.java:129)"
+      ]
+    },
+    {
+      "file": "packet/R08.01-Automatic_wrapping_0.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R08.02-Automatic_wrapping_1.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R08.03-Automatic_wrapping_2.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R08.04-Automatic_wrapping_4.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R08.05-Automatic_wrapping_8.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R09.01-Range_17_automatic_wrapping.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R10.01-Sparse_packet.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R10.02-Sparse_packet_with_range.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R11.01-len_0.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PSystemErrorV2",
+      "message": "/ by zero",
+      "stacktrace": [
+        "java.lang.ArithmeticException: / by zero",
+        "net.sourceforge.plantuml.packetdiag.PacketDiagram.lambda$adjustIndicators$2(PacketDiagram.java:285)",
+        "java.base/java.util.stream.IntPipeline$1$1.accept(IntPipeline.java:180)",
+        "java.base/java.util.stream.SliceOps$2$1.accept(SliceOps.java:315)",
+        "java.base/java.util.stream.IntStream$1.tryAdvance(IntStream.java:960)",
+        "java.base/java.util.stream.IntPipeline.forEachWithCancel(IntPipeline.java:163)",
+        "java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:527)",
+        "java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:513)",
+        "java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)",
+        "java.base/java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:921)",
+        "java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)",
+        "java.base/java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:682)",
+        "net.sourceforge.plantuml.packetdiag.PacketDiagram.adjustIndicators(PacketDiagram.java:288)",
+        "net.sourceforge.plantuml.packetdiag.PacketDiagram.build(PacketDiagram.java:264)",
+        "net.sourceforge.plantuml.packetdiag.PacketDiagram.checkFinalError(PacketDiagram.java:197)",
+        "net.sourceforge.plantuml.command.PSystemCommandFactory.finalizeDiagram(PSystemCommandFactory.java:118)",
+        "net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:109)",
+        "net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:61)",
+        "net.sourceforge.plantuml.PSystemBuilder.createPSystem(PSystemBuilder.java:269)",
+        "net.sourceforge.plantuml.BlockUml.getDiagram(BlockUml.java:193)",
+        "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:283)",
+        "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:250)",
+        "test.vega.VegaTest.lambda$testAllPumlFiles$6(VegaTest.java:129)"
+      ]
+    },
+    {
+      "file": "packet/R11.02-len_1.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R11.03-len_2.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R11.04-len_16.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R11.05-len_17.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R11.06-len_empty_8.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R11.07-len_0_8.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R11.08-len_1_8.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R11.09-len_8_8.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
+      "file": "packet/R11.10-len_9_8.puml",
+      "folder": "packet",
+      "status": "pass",
+      "tag": "specification",
+      "allow-failure": "true",
+      "diagram_class": "PacketDiagram"
+    },
+    {
       "file": "packet/error-with-exception.puml",
       "folder": "packet",
       "status": "pass",
@@ -701,9 +1104,9 @@
     }
   ],
   "summary": {
-    "total": 34,
-    "passed": 27,
+    "total": 76,
+    "passed": 68,
     "failed": 0,
-    "skipped": 7
+    "skipped": 8
   }
 }

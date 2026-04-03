@@ -1,13 +1,14 @@
 ===========================================
  VEGA TEST SUMMARY
 ===========================================
- Total:    34
- Passed:   27
+ Total:    76
+ Passed:   68
  Failed:   0
- Skipped:  7
+ Skipped:  8
 ===========================================
  Skipped tests:
    - mvp/hello-debug-skipped.puml
+   - packet/R07.01-Range_Error1.puml
    - th/th1.puml
    - tikz/tikz-1926-svg.puml
    - tikz/tikz-1926.puml
