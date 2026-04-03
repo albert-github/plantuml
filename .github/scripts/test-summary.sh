@@ -47,13 +47,13 @@ echo "::endgroup::"
 if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
   cat <<EOF >> "$GITHUB_STEP_SUMMARY"
 ## Test Results
-| Metric   | Count |
-|----------|------:|
-| Total    | $total |
-| :white_check_mark: Passed  | $passed |
-| :fast_forward: Skipped | $skipped |
-| :x: Failed  | $failed |
-| :boom: Errors  | $errors |
+| Metric  | Icon | Count |
+|---------|:----:|------:|
+| Total   | = | $total |
+| Passed  | :white_check_mark: | $passed |
+| Skipped | :fast_forward: | $skipped |
+| Failed  | :x: | $failed |
+| Errors  | :boom: | $errors |
 EOF
 
   # List skipped tests
