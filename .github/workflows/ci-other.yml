@@ -69,72 +69,14 @@ jobs:
         uses: gradle/actions/setup-gradle@v6.0.1
 
       - name: Diagnostic
-        run: |
-          cat <<EOF
-          ===========================================
-          Vega .puml files: $(find src/test/resources/vega -name '*.puml' | wc -l)
-          Vega subdirs:    $(find src/test/resources/vega -type d | wc -l)
-          Test classes:     $(find src/test/java -name '*Test.java' | wc -l)
-          ===========================================
-          EOF
+        run: .github/scripts/diagnostic.sh
 
       - name: Build (GPL only) & Test
         run: ./gradlew test -Pfast --no-daemon -i
 
       - name: Test Summary
         if: always()
-        run: |
-          echo "::group::Test Results"
-          passed=0; failed=0; skipped=0; errors=0
-          for f in build/test-results/test/TEST-*.xml; do
-            [ -f "$f" ] || continue
-            t=$(grep -o 'tests="[0-9]*"'    "$f" | head -1 | grep -o '[0-9]*')
-            s=$(grep -o 'skipped="[0-9]*"'  "$f" | head -1 | grep -o '[0-9]*')
-            fl=$(grep -o 'failures="[0-9]*"' "$f" | head -1 | grep -o '[0-9]*')
-            e=$(grep -o 'errors="[0-9]*"'   "$f" | head -1 | grep -o '[0-9]*')
-            passed=$((passed + ${t:-0} - ${s:-0} - ${fl:-0} - ${e:-0}))
-            failed=$((failed + ${fl:-0}))
-            skipped=$((skipped + ${s:-0}))
-            errors=$((errors + ${e:-0}))
-          done
-          total=$((passed + failed + skipped + errors))
-          echo "==========================================="
-          echo " Tests run:    $total"
-          echo " Passed:       $passed"
-          echo " Skipped:      $skipped"
-          echo " Failed:       $failed"
-          echo " Errors:       $errors"
-          echo "==========================================="
-          echo "::endgroup::"
-          # GitHub Job Summary
-          echo "## Test Results"                                >> $GITHUB_STEP_SUMMARY
-          echo "| Metric   | Count |"                          >> $GITHUB_STEP_SUMMARY
-          echo "|----------|------:|"                          >> $GITHUB_STEP_SUMMARY
-          echo "| Total    | $total |"                         >> $GITHUB_STEP_SUMMARY
-          echo "| :white_check_mark: Passed  | $passed |"      >> $GITHUB_STEP_SUMMARY
-          echo "| :fast_forward: Skipped | $skipped |"         >> $GITHUB_STEP_SUMMARY
-          echo "| :x: Failed  | $failed |"                     >> $GITHUB_STEP_SUMMARY
-          echo "| :boom: Errors  | $errors |"                  >> $GITHUB_STEP_SUMMARY
-          if [ "$failed" -gt 0 ] || [ "$errors" -gt 0 ]; then
-            echo "::error::There are test failures or errors"
-          fi
-          if [ "$skipped" -gt 0 ]; then
-            echo "::warning::$skipped test(s) were skipped"
-          fi
-          # Vega test summary
-          VEGA_SUMMARY="src/test/resources/vega/vega-summary.txt"
-          if [ -f "$VEGA_SUMMARY" ]; then
-            echo "::group::Vega Test Results"
-            cat "$VEGA_SUMMARY"
-            echo "::endgroup::"
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "## Vega Test Results" >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            cat "$VEGA_SUMMARY" >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-          else
-            echo "::warning::vega-summary.txt not found — Vega tests may not have run"
-          fi
+        run: .github/scripts/test-summary.sh
 
       - name: Upload test reports
         uses: actions/upload-artifact@v7
