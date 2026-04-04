@@ -159,6 +159,10 @@ public class SvgSaxParser implements ISvgSpriteParser, GrayLevelRange {
 	private void parseSvg(String svgContent, UGraphicWithScale ugs, ColorResolver colorResolver) throws Exception {
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		factory.setNamespaceAware(true);
+		// Disable external entities to prevent XXE attacks
+		factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+		factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+		factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
 		SAXParser parser = factory.newSAXParser();
 
 		// Pass 1: Collect definitions
@@ -890,6 +894,10 @@ public class SvgSaxParser implements ISvgSpriteParser, GrayLevelRange {
 			try {
 				SAXParserFactory factory = SAXParserFactory.newInstance();
 				factory.setNamespaceAware(true);
+				// Disable external entities to prevent XXE attacks
+				factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+				factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+				factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
 				SAXParser parser = factory.newSAXParser();
 				RenderHandler renderer = new RenderHandler(elementUgs, colorResolver, definitions);
 				parser.parse(new InputSource(new StringReader(svgFragment)), renderer);
