@@ -140,6 +140,9 @@ public class PlantUMLBrowser {
 
 	private static final StringBounder STRING_BOUNDER = new StringBounderTeaVM();
 
+	/** Maximum width or height (in pixels) before refusing to render. */
+	private static final int MAX_SVG_SIZE = 4096;
+
 	// =========================================================================
 	// Worker thread synchronization
 	//
@@ -407,6 +410,12 @@ public class PlantUMLBrowser {
 		tb.drawU(ug);
 
 		final XDimension2D dim = tb.calculateDimension(STRING_BOUNDER);
+
+		if (dim.getWidth() > MAX_SVG_SIZE || dim.getHeight() > MAX_SVG_SIZE)
+			throw new RuntimeException("Diagram too large for browser rendering: "
+					+ (int) dim.getWidth() + "x" + (int) dim.getHeight()
+					+ " (max " + MAX_SVG_SIZE + ")");
+
 		final double scaleFactor = scale == null ? 1.0 : scale.getScale(dim.getWidth(), dim.getHeight());
 		svg.updateSvgSize(dim.getWidth(), dim.getHeight(), scaleFactor);
 		return svg;
