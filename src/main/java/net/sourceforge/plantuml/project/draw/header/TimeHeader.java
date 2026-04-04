@@ -37,6 +37,9 @@ package net.sourceforge.plantuml.project.draw.header;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 import net.sourceforge.plantuml.klimt.UTranslate;
 import net.sourceforge.plantuml.klimt.color.HColor;
@@ -151,12 +154,45 @@ public abstract class TimeHeader {
 
 		return FontConfiguration.create(font, color, color, null);
 	}
+	
+	private static final class TextBlockKey {
+		private final String text;
+		private final FontConfiguration fontConfiguration;
+		private final int hash;
 
-	protected final TextBlock getTextBlock(SName param, String text, boolean bold, HColor color) {
+		TextBlockKey(String text, FontConfiguration fontConfiguration) {
+			this.text = text;
+			this.fontConfiguration = fontConfiguration;
+			this.hash = Objects.hash(text, fontConfiguration);
+		}
+
+		@Override
+		public int hashCode() {
+			return hash;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj instanceof TextBlockKey == false)
+				return false;
+			final TextBlockKey other = (TextBlockKey) obj;
+			return text.equals(other.text) && fontConfiguration.equals(other.fontConfiguration);
+		}
+	}
+
+	private final Map<TextBlockKey, TextBlock> cache = new HashMap<>();
+
+	protected final TextBlock getTextBlockSLOW(String text, FontConfiguration fontConfiguration) {
+		final TextBlockKey key = new TextBlockKey(text, fontConfiguration);
+		return cache.computeIfAbsent(key, k -> Display.getWithNewlines(getPragma(), text).create(fontConfiguration,
+				HorizontalAlignment.LEFT, new SpriteContainerEmpty()));
+	}
+
+	protected final FontConfiguration getFontConfigurationSLOW(SName param, boolean bold, HColor color) {
 		final UFont font = timelineStyle.getFont(param);
-		final FontConfiguration fontConfiguration = getFontConfiguration(font, bold, color);
-		return Display.getWithNewlines(getPragma(), text).create(fontConfiguration, HorizontalAlignment.LEFT,
-				new SpriteContainerEmpty());
+		return getFontConfiguration(font, bold, color);
 	}
 
 	protected final void printCentered(UGraphic ug, TextBlock text, double start, double end) {
