@@ -29,52 +29,38 @@
  * USA.
  *
  *
- * Original Author:  Guillaume Grossetie
- *
+ * Original Author:  Arnaud Roques
  * 
+ *
  */
-package net.sourceforge.plantuml.log;
+package net.sourceforge.plantuml.crash;
 
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 
-import net.sourceforge.plantuml.teavm.TeaVM;
+import net.sourceforge.plantuml.Previous;
+import net.sourceforge.plantuml.command.Command;
+import net.sourceforge.plantuml.command.PSystemCommandFactory;
+import net.sourceforge.plantuml.core.DiagramType;
+import net.sourceforge.plantuml.core.UmlSource;
+import net.sourceforge.plantuml.nio.PathSystem;
+import net.sourceforge.plantuml.preproc.PreprocessingArtifact;
 
-public class Logme {
+public class CrashDiagramFactory extends PSystemCommandFactory {
 
-	private static final Logger logger;
-
-	public static boolean MODE_VEGA;
-
-	static {
-		if (!TeaVM.isTeaVM()) {
-			logger = Logger.getLogger("com.plantuml");
-			logger.setUseParentHandlers(false);
-			final ConsoleHandler handler = new ConsoleHandler();
-			handler.setFormatter(new SimpleFormatter());
-			logger.addHandler(handler);
-		} else {
-			logger = null;
-		}
+	public CrashDiagramFactory() {
+		super(DiagramType.CRASH);
 	}
 
-	public static void error(Throwable thrown) {
-		if (MODE_VEGA)
-			return;
-
-		if (!TeaVM.isTeaVM()) {
-			logger.log(Level.SEVERE, "", thrown);
-		}
+	@Override
+	protected void initCommandsList(List<Command> result) {
+		result.add(new CommandSelectCrash());
+		result.add(new CommandCrashAny());
 	}
 
-	// Unused right now
-	//
-	// public static void error(String msg, Throwable thrown) {
-	// logger.log(Level.SEVERE, msg, thrown);
-	// }
-	//
-	// public static void error(String msg) {
-	// logger.log(Level.SEVERE, msg);
-	// }
+	@Override
+	public CrashDiagram createEmptyDiagram(PathSystem pathSystem, UmlSource source, Previous previous,
+			PreprocessingArtifact preprocessing) {
+		return new CrashDiagram(source, preprocessing);
+	}
+
 }

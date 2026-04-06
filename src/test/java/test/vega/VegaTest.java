@@ -46,12 +46,12 @@ class VegaTest {
 
 	@BeforeEach
 	void setUp() {
-		Logme.HIDE_EXCEPTION = true;
+		Logme.MODE_VEGA = true;
 	}
 
 	@AfterEach
 	void tearDown() {
-		Logme.HIDE_EXCEPTION = false;
+		Logme.MODE_VEGA = false;
 	}
 
 	@AfterAll

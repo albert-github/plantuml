@@ -6,6 +6,7 @@ expected-debug:
     - Bob
     - hello
   not-contains: ERROR
+expected-status: 0
 ---
 @startuml
 Alice -> Bob : hello

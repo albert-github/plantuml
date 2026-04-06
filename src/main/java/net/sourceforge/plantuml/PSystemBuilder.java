@@ -54,6 +54,7 @@ import net.sourceforge.plantuml.cli.GlobalConfigKey;
 import net.sourceforge.plantuml.core.Diagram;
 import net.sourceforge.plantuml.core.DiagramType;
 import net.sourceforge.plantuml.core.UmlSource;
+import net.sourceforge.plantuml.crash.CrashDiagramFactory;
 import net.sourceforge.plantuml.dedication.PSystemDedicationFactory;
 import net.sourceforge.plantuml.definition.PSystemDefinitionFactory;
 import net.sourceforge.plantuml.descdiagram.DescriptionDiagramFactory;
@@ -194,6 +195,7 @@ public class PSystemBuilder {
 		factories.add(new PSystemRegexFactory());
 
 		factories.add(new ChenEerDiagramFactory());
+		factories.add(new CrashDiagramFactory());
 
 	}
 
@@ -274,7 +276,8 @@ public class PSystemBuilder {
 					errors.add((PSystemError) sys);
 				} catch (Throwable t) {
 					final StringLocated s = source.get(0);
-					final ErrorUml err = new ErrorUml(ErrorUmlType.EXECUTION_ERROR, "Fatal crash error: " + t, 0,
+					final ErrorUml err = new ErrorUml(ErrorUmlType.EXECUTION_ERROR,
+							"Fatal crash error, you should send a mail to plantuml@gmail.com with: " + t, 0,
 							s.getLocation(), null);
 					errors.add(PSystemErrorUtils.buildV2(umlSource, err, Collections.<String>emptyList(), source,
 							preprocessing, t));

@@ -78,6 +78,7 @@ public class VegaInputFile {
 	private final List<String> pumlSource;
 	private Class<?> diagramClass;
 	private Throwable rootCause;
+	private String description;
 
 	static public VegaInputFile parse(Path path) throws IOException {
 		final List<String> allLines = Files.readAllLines(path);
@@ -268,7 +269,7 @@ public class VegaInputFile {
 		final String tag = getYamlString("tag");
 
 		final JsonObject json = new VegaResult(relativePath, status, durationMs, diagramClass,
-				rootCause == null ? e : rootCause, tag, allowFailure).toJsonObject();
+				rootCause == null ? e : rootCause, tag, allowFailure, description).toJsonObject();
 
 		synchronized (VegaTest.results) {
 			VegaTest.results.add(json);
@@ -284,11 +285,6 @@ public class VegaInputFile {
 		this.diagramClass = diagram.getClass();
 		this.rootCause = diagram.getRootCause();
 
-		// Check expectations on the parsed diagram
-		checkErrorExpectations(ssr);
-		checkDescriptionExpectation(ssr);
-		checkImageCountExpectation(ssr);
-
 		// Render in each requested output format (if any)
 		final List<FileFormat> fileFormats = getFileFormats();
 		assert !fileFormats.isEmpty();
@@ -296,7 +292,7 @@ public class VegaInputFile {
 		final int nbImages = ssr.getBlocks().get(0).getDiagram().getNbImages();
 		final List<Path> generatedFiles = new ArrayList<>();
 
-		final String expectedException = getYamlString("expected-exception");
+		final String expectedStatus = getYamlString("expected-status");
 
 		for (final FileFormat fileFormat : fileFormats) {
 			for (int imageIndex = 0; imageIndex < nbImages; imageIndex++) {
@@ -304,6 +300,9 @@ public class VegaInputFile {
 				final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				final DiagramDescription description = ssrForFormat.outputImage(baos, imageIndex,
 						new FileFormatOption(fileFormat));
+
+				this.description = description.getDescription();
+
 				if (description.getImageData() != null && description.getImageData().getRootCause() != null)
 					this.rootCause = description.getImageData().getRootCause();
 
@@ -312,23 +311,42 @@ public class VegaInputFile {
 				assertFalse(baos.size() == 0,
 						"Empty output for " + path + " [" + fileFormat + " image " + (imageIndex + 1) + "]");
 
+				if (getActualStringException() != null)
+					assertNotNull(getExpectedException(), "No expected-exception declared in " + path);
+
+				if (getExpectedException() != null || getActualStringException() != null)
+					assertEquals(getExpectedException(), getActualStringException(),
+							"Exception mismatch for " + path + " [" + fileFormat + " image " + (imageIndex + 1) + "]");
+
 				if (fileFormat != FileFormat.PREPROC) {
 					final ImageData imageData = description.getImageData();
 					assertNotNull(imageData);
 					final int status = imageData.getStatus();
-					if (status != 0 && imageData.getRootCause() != null) {
-						assertNotNull(expectedException, "Rendering failed with status " + status
-								+ " but no expected-exception declared in " + path);
-						final String exception = imageData.getRootCause().getClass().getSimpleName();
-						assertEquals(expectedException, exception, "Exception mismatch for " + path + " [" + fileFormat
-								+ " image " + (imageIndex + 1) + "]");
-					} else if (expectedException != null) {
-						throw new AssertionError(
-								"Expected exception " + expectedException + " but rendering succeeded for " + path);
+
+					if (expectedStatus != null) {
+						System.err.println("status=" + status);
+						assertEquals(expectedStatus, "" + status, "Bad status for " + path);
 					}
+
+					if (status != 0 && imageData.getRootCause() != null) {
+						assertNotNull(getExpectedException(), "Rendering failed with status " + status
+								+ " but no expected-exception declared in " + path);
+//					} else if (expectedException != null) {
+//						throw new AssertionError(
+//								"Expected exception " + expectedException + " but rendering succeeded for " + path);
+					}
+
+//					if (status != 0 || getActualStringException() != null) {
+//						assertEquals(expectedException, getActualStringException(), "Exception mismatch for " + path
+//								+ " [" + fileFormat + " image " + (imageIndex + 1) + "]");
+//					} else if (expectedException != null) {
+//						throw new AssertionError(
+//								"Expected exception " + expectedException + " but rendering succeeded for " + path);
+//					}
 				}
 
-				if (expectedException == null && isExpectedError() == false) {
+				if (getExpectedException() == null && getExpectedErrorLine() == null
+						&& getExpectedErrorMessage() == null) {
 					final String suffix = nbImages == 1 ? "" : "-" + (imageIndex + 1);
 					final Path newFile = CHECKERS.get(fileFormat).checkOutput(this, baos, suffix, nbImages, imageIndex);
 					if (newFile != null)
@@ -338,7 +356,12 @@ public class VegaInputFile {
 			}
 		}
 
-		if (expectedException != null && generatedFiles.isEmpty() == false)
+		// Check expectations on the parsed diagram
+		checkErrorExpectations(ssr);
+		checkDescriptionExpectation(ssr);
+		checkImageCountExpectation(ssr);
+
+		if (getExpectedException() != null && generatedFiles.isEmpty() == false)
 			assumeTrue(false, "Expected files created: " + generatedFiles + " - please review and re-run");
 
 	}
@@ -375,46 +398,60 @@ public class VegaInputFile {
 		assertEquals(Integer.parseInt(expectedImageCount), diagram.getNbImages(), "Image count mismatch for " + path);
 	}
 
-	// ----------------------------------------------------------
-	// Error checking: verify PSystemError line and message
-	// ----------------------------------------------------------
+	private String getExpectedException() {
+		return getYamlString("expected-exception");
+	}
 
-	private boolean isExpectedError() {
-		final String expectedErrorLine = getYamlString("expected-error-line");
-		final String expectedErrorMessage = getYamlString("expected-error-message");
-		if (expectedErrorLine == null && expectedErrorMessage == null)
-			return false;
-		return true;
+	private String getExpectedErrorMessage() {
+		return getYamlString("expected-error-message");
+	}
+
+	private String getExpectedErrorLine() {
+		return getYamlString("expected-error-line");
 	}
 
 	private void checkErrorExpectations(SourceStringReader ssr) {
-		final String expectedErrorLine = getYamlString("expected-error-line");
-		final String expectedErrorMessage = getYamlString("expected-error-message");
 
-		if (expectedErrorLine == null && expectedErrorMessage == null)
+		if (getExpectedException() != null)
+			assertEquals(getExpectedException(), getActualStringException(), "Error in expected exception for " + path);
+
+		if (getExpectedErrorLine() == null && getExpectedErrorMessage() == null)
 			return;
+
+//		if (expectedException != null) {
+//			// final String exception = imageData.getRootCause().getClass().getSimpleName();
+//			assertEquals(expectedException, getActualStringException(), "Exception mismatch for " + path);
+//		}
 
 		final List<BlockUml> blocks = ssr.getBlocks();
 		assertFalse(blocks.isEmpty(), "No blocks found in " + path);
 
 		final Diagram diagram = blocks.get(0).getDiagram();
-		if (diagram instanceof PSystemError == false) {
+		if (diagram instanceof PSystemError == false)
 			throw new AssertionError(
 					"Expected a PSystemError but got " + diagram.getClass().getSimpleName() + " for " + path);
-		}
 
 		final PSystemError error = (PSystemError) diagram;
 		final ErrorUml firstError = error.getFirstError();
 		assertNotNull(firstError, "No error found in PSystemError for " + path);
 
-		if (expectedErrorLine != null) {
-			assertEquals(Integer.parseInt(expectedErrorLine), firstError.getPosition(),
+		if (getExpectedErrorLine() != null)
+			assertEquals(Integer.parseInt(getExpectedErrorLine()), firstError.getPosition(),
 					"Error line mismatch for " + path);
-		}
 
-		if (expectedErrorMessage != null) {
-			assertEquals(expectedErrorMessage, firstError.getError(), "Error message mismatch for " + path);
-		}
+		if (getExpectedErrorMessage() != null)
+			assertEquals(getExpectedErrorMessage(), firstError.getError(), "Error message mismatch for " + path);
+
+	}
+
+	private String getActualStringException() {
+		if (this.rootCause == null)
+			return null;
+
+		if (this.rootCause.getMessage() == null)
+			return this.rootCause.getClass().getSimpleName();
+
+		return this.rootCause.getClass().getSimpleName() + " - " + this.rootCause.getMessage();
 	}
 
 }

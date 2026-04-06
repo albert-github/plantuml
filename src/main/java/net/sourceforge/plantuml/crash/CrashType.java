@@ -29,52 +29,14 @@
  * USA.
  *
  *
- * Original Author:  Guillaume Grossetie
+ * Original Author:  Arnaud Roques
  *
- * 
+ *
  */
-package net.sourceforge.plantuml.log;
+package net.sourceforge.plantuml.crash;
 
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+public enum CrashType {
 
-import net.sourceforge.plantuml.teavm.TeaVM;
+	PARSING, FINALIZING, DRAWING
 
-public class Logme {
-
-	private static final Logger logger;
-
-	public static boolean MODE_VEGA;
-
-	static {
-		if (!TeaVM.isTeaVM()) {
-			logger = Logger.getLogger("com.plantuml");
-			logger.setUseParentHandlers(false);
-			final ConsoleHandler handler = new ConsoleHandler();
-			handler.setFormatter(new SimpleFormatter());
-			logger.addHandler(handler);
-		} else {
-			logger = null;
-		}
-	}
-
-	public static void error(Throwable thrown) {
-		if (MODE_VEGA)
-			return;
-
-		if (!TeaVM.isTeaVM()) {
-			logger.log(Level.SEVERE, "", thrown);
-		}
-	}
-
-	// Unused right now
-	//
-	// public static void error(String msg, Throwable thrown) {
-	// logger.log(Level.SEVERE, msg, thrown);
-	// }
-	//
-	// public static void error(String msg) {
-	// logger.log(Level.SEVERE, msg);
-	// }
 }

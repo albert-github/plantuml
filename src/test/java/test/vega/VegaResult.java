@@ -10,7 +10,7 @@ import net.sourceforge.plantuml.json.JsonArray;
 import net.sourceforge.plantuml.json.JsonObject;
 
 public record VegaResult(Path path, VegaStatus status, long durationMs, Class<?> diagramClass, Throwable e, String tag,
-		boolean allowFailure) {
+		boolean allowFailure, String description) {
 
 	public JsonObject toJsonObject() {
 		final JsonObject entry = new JsonObject() //
@@ -18,6 +18,9 @@ public record VegaResult(Path path, VegaStatus status, long durationMs, Class<?>
 				.add("folder", path.getParent().toString().replace('\\', '/')) //
 				.add("status", status.name().toLowerCase());
 //				.add("duration_ms", durationMs);
+
+		if (description != null)
+			entry.add("description", description);
 
 		if (tag != null)
 			entry.add("tag", tag);

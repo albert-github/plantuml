@@ -29,52 +29,38 @@
  * USA.
  *
  *
- * Original Author:  Guillaume Grossetie
+ * Original Author:  Arnaud Roques
  *
- * 
+ *
  */
-package net.sourceforge.plantuml.log;
+package net.sourceforge.plantuml.crash;
 
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.plantuml.ubrex.UnicodeBracketedExpression;
+import com.plantuml.ubrex.builder.UBrexLeaf;
+import com.plantuml.ubrex.builder.UBrexZeroOrMore;
 
-import net.sourceforge.plantuml.teavm.TeaVM;
+import net.sourceforge.plantuml.command.CommandExecutionResult;
+import net.sourceforge.plantuml.command.ParserPass;
+import net.sourceforge.plantuml.command.UBrexSingleLineCommand2;
+import net.sourceforge.plantuml.klimt.color.NoSuchColorException;
+import net.sourceforge.plantuml.regex.RegexResult;
+import net.sourceforge.plantuml.utils.LineLocation;
 
-public class Logme {
+public class CommandCrashAny extends UBrexSingleLineCommand2<CrashDiagram> {
 
-	private static final Logger logger;
-
-	public static boolean MODE_VEGA;
-
-	static {
-		if (!TeaVM.isTeaVM()) {
-			logger = Logger.getLogger("com.plantuml");
-			logger.setUseParentHandlers(false);
-			final ConsoleHandler handler = new ConsoleHandler();
-			handler.setFormatter(new SimpleFormatter());
-			logger.addHandler(handler);
-		} else {
-			logger = null;
-		}
+	public CommandCrashAny() {
+		super(getRegexConcat());
 	}
 
-	public static void error(Throwable thrown) {
-		if (MODE_VEGA)
-			return;
-
-		if (!TeaVM.isTeaVM()) {
-			logger.log(Level.SEVERE, "", thrown);
-		}
+	static UnicodeBracketedExpression getRegexConcat() {
+		return new UBrexZeroOrMore(new UBrexLeaf("〴."));
 	}
 
-	// Unused right now
-	//
-	// public static void error(String msg, Throwable thrown) {
-	// logger.log(Level.SEVERE, msg, thrown);
-	// }
-	//
-	// public static void error(String msg) {
-	// logger.log(Level.SEVERE, msg);
-	// }
+	@Override
+	protected CommandExecutionResult executeArg(CrashDiagram diagram, LineLocation location, RegexResult arg,
+			ParserPass currentPass) throws NoSuchColorException {
+
+		return CommandExecutionResult.ok();
+	}
+
 }

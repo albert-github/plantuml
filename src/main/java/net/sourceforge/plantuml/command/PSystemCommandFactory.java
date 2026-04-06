@@ -150,7 +150,8 @@ public abstract class PSystemCommandFactory extends PSystemAbstractFactory {
 			final LineLocation location = ((StringLocated) step.blocLines.getFirst()).getLocation();
 			final ErrorUml err = new ErrorUml(ErrorUmlType.EXECUTION_ERROR, result.getError(), result.getScore(),
 					location, getDiagramType());
-			sys = PSystemErrorUtils.buildV2(source, err, result.getDebugLines(), it.getTrace(), preprocessing);
+			sys = PSystemErrorUtils.buildV2(source, err, result.getDebugLines(), it.getTrace(), preprocessing,
+					result.getRootCause());
 		}
 		if (result.getNewDiagram() != null)
 			sys = result.getNewDiagram();
