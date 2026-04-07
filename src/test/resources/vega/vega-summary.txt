@@ -1,10 +1,10 @@
 ===========================================
  VEGA TEST SUMMARY
 ===========================================
- Total:    81
- Passed:   71
+ Total:    92
+ Passed:   81
  Failed:   0
- Skipped:  10
+ Skipped:  11
 ===========================================
  Skipped tests:
    - mvp/hello-debug-skipped.puml
@@ -17,4 +17,5 @@
    - tikz/tikz-scale-down.puml
    - tikz/tikz-scale-nested-scale.puml
    - tikz/tikz-scale-up.puml
+   - xgantt/gantt2.puml
 ===========================================

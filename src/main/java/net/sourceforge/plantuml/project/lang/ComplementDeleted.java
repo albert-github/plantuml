@@ -33,37 +33,35 @@
  * 
  *
  */
-package net.sourceforge.plantuml.project.ulang;
+package net.sourceforge.plantuml.project.lang;
 
 import com.plantuml.ubrex.UMatcher;
+import com.plantuml.ubrex.builder.UBrexLeaf;
+import com.plantuml.ubrex.builder.UBrexPart;
 
-public class GanttParseResult {
+import net.sourceforge.plantuml.project.Failable;
+import net.sourceforge.plantuml.project.GanttDiagram;
+import net.sourceforge.plantuml.regex.IRegex;
+import net.sourceforge.plantuml.regex.RegexLeaf;
+import net.sourceforge.plantuml.regex.RegexResult;
 
-	private final UMatcher matcherSubject;
-	private final UMatcher verbMatch;
-	private final UMatcher complementMatcher;
+public class ComplementDeleted implements Something<GanttDiagram> {
 
-	public GanttParseResult(UMatcher matcherSubject, UMatcher verbMatch, UMatcher complementMatcher) {
-		this.matcherSubject = matcherSubject;
-		this.verbMatch = verbMatch;
-		this.complementMatcher = complementMatcher;
+	public IRegex toRegex(String suffix) {
+		return new RegexLeaf("deleted");
 	}
 
 	@Override
-	public String toString() {
-		return "\n {" + matcherSubject.toString() + "} /\n  {" + verbMatch + "} /\n   {" + complementMatcher + "}";
+	public UBrexPart toUnicodeBracketedExpressionComplement() {
+		return new UBrexLeaf("deleted");
 	}
 
-	public UMatcher getMatcherSubject() {
-		return matcherSubject;
+	@Override
+	public Failable<Object> ugetMe(GanttDiagram system, UMatcher arg) {
+		return Failable.ok(new Object());
 	}
 
-	public UMatcher getVerbMatch() {
-		return verbMatch;
+	public Failable<Object> getMe(GanttDiagram system, RegexResult arg, String suffix) {
+		return Failable.ok(new Object());
 	}
-
-	public UMatcher getComplementMatcher() {
-		return complementMatcher;
-	}
-
 }

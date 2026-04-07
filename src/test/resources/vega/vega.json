@@ -22,7 +22,7 @@
         "net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)",
         "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:306)",
         "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:256)",
-        "test.vega.VegaTest.lambda$testAllPumlFiles$10(VegaTest.java:174)"
+        "test.vega.VegaTest.lambda$11(VegaTest.java:174)"
       ]
     },
     {
@@ -37,12 +37,12 @@
         "net.sourceforge.plantuml.crash.CrashDiagram.checkFinalError(CrashDiagram.java:100)",
         "net.sourceforge.plantuml.command.PSystemCommandFactory.finalizeDiagram(PSystemCommandFactory.java:118)",
         "net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:109)",
-        "net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:61)",
+        "net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:1)",
         "net.sourceforge.plantuml.PSystemBuilder.createPSystem(PSystemBuilder.java:271)",
         "net.sourceforge.plantuml.BlockUml.getDiagram(BlockUml.java:193)",
         "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:289)",
         "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:256)",
-        "test.vega.VegaTest.lambda$testAllPumlFiles$10(VegaTest.java:174)"
+        "test.vega.VegaTest.lambda$11(VegaTest.java:174)"
       ]
     },
     {
@@ -55,18 +55,18 @@
       "stacktrace": [
         "java.lang.IllegalStateException: This is a normal crash when PARSING",
         "net.sourceforge.plantuml.crash.CommandSelectCrash.executeArg(CommandSelectCrash.java:78)",
-        "net.sourceforge.plantuml.crash.CommandSelectCrash.executeArg(CommandSelectCrash.java:51)",
+        "net.sourceforge.plantuml.crash.CommandSelectCrash.executeArg(CommandSelectCrash.java:1)",
         "net.sourceforge.plantuml.command.UBrexSingleLineCommand2.execute(UBrexSingleLineCommand2.java:147)",
         "net.sourceforge.plantuml.command.ProtectedCommand.execute(ProtectedCommand.java:57)",
         "net.sourceforge.plantuml.core.AbstractDiagram.executeCommand(AbstractDiagram.java:176)",
         "net.sourceforge.plantuml.command.PSystemCommandFactory.executeFewLines(PSystemCommandFactory.java:148)",
         "net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:104)",
-        "net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:61)",
+        "net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:1)",
         "net.sourceforge.plantuml.PSystemBuilder.createPSystem(PSystemBuilder.java:271)",
         "net.sourceforge.plantuml.BlockUml.getDiagram(BlockUml.java:193)",
         "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:289)",
         "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:256)",
-        "test.vega.VegaTest.lambda$testAllPumlFiles$10(VegaTest.java:174)"
+        "test.vega.VegaTest.lambda$11(VegaTest.java:174)"
       ]
     },
     {
@@ -109,7 +109,7 @@
         "test.vega.VegaCheckerDebug.checkOutput(VegaCheckerDebug.java:19)",
         "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:355)",
         "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:256)",
-        "test.vega.VegaTest.lambda$testAllPumlFiles$10(VegaTest.java:174)"
+        "test.vega.VegaTest.lambda$11(VegaTest.java:174)"
       ]
     },
     {
@@ -345,7 +345,7 @@
         "net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)",
         "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:306)",
         "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:256)",
-        "test.vega.VegaTest.lambda$testAllPumlFiles$10(VegaTest.java:174)"
+        "test.vega.VegaTest.lambda$11(VegaTest.java:174)"
       ]
     },
     {
@@ -359,7 +359,7 @@
       "message": "/ by zero",
       "stacktrace": [
         "java.lang.ArithmeticException: / by zero",
-        "net.sourceforge.plantuml.packetdiag.PacketDiagram.lambda$adjustIndicators$2(PacketDiagram.java:295)",
+        "net.sourceforge.plantuml.packetdiag.PacketDiagram.lambda$3(PacketDiagram.java:295)",
         "java.base/java.util.stream.IntPipeline$1$1.accept(IntPipeline.java:180)",
         "java.base/java.util.stream.SliceOps$2$1.accept(SliceOps.java:315)",
         "java.base/java.util.stream.IntStream$1.tryAdvance(IntStream.java:960)",
@@ -375,12 +375,12 @@
         "net.sourceforge.plantuml.packetdiag.PacketDiagram.checkFinalError(PacketDiagram.java:203)",
         "net.sourceforge.plantuml.command.PSystemCommandFactory.finalizeDiagram(PSystemCommandFactory.java:118)",
         "net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:109)",
-        "net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:61)",
+        "net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:1)",
         "net.sourceforge.plantuml.PSystemBuilder.createPSystem(PSystemBuilder.java:271)",
         "net.sourceforge.plantuml.BlockUml.getDiagram(BlockUml.java:193)",
         "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:289)",
         "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:256)",
-        "test.vega.VegaTest.lambda$testAllPumlFiles$10(VegaTest.java:174)"
+        "test.vega.VegaTest.lambda$11(VegaTest.java:174)"
       ]
     },
     {
@@ -466,7 +466,7 @@
       "message": "/ by zero",
       "stacktrace": [
         "java.lang.ArithmeticException: / by zero",
-        "net.sourceforge.plantuml.packetdiag.PacketDiagram.lambda$adjustIndicators$2(PacketDiagram.java:295)",
+        "net.sourceforge.plantuml.packetdiag.PacketDiagram.lambda$3(PacketDiagram.java:295)",
         "java.base/java.util.stream.IntPipeline$1$1.accept(IntPipeline.java:180)",
         "java.base/java.util.stream.SliceOps$2$1.accept(SliceOps.java:315)",
         "java.base/java.util.stream.IntStream$1.tryAdvance(IntStream.java:960)",
@@ -482,12 +482,12 @@
         "net.sourceforge.plantuml.packetdiag.PacketDiagram.checkFinalError(PacketDiagram.java:203)",
         "net.sourceforge.plantuml.command.PSystemCommandFactory.finalizeDiagram(PSystemCommandFactory.java:118)",
         "net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:109)",
-        "net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:61)",
+        "net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:1)",
         "net.sourceforge.plantuml.PSystemBuilder.createPSystem(PSystemBuilder.java:271)",
         "net.sourceforge.plantuml.BlockUml.getDiagram(BlockUml.java:193)",
         "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:289)",
         "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:256)",
-        "test.vega.VegaTest.lambda$testAllPumlFiles$10(VegaTest.java:174)"
+        "test.vega.VegaTest.lambda$11(VegaTest.java:174)"
       ]
     },
     {
@@ -556,7 +556,7 @@
         "net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)",
         "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:306)",
         "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:256)",
-        "test.vega.VegaTest.lambda$testAllPumlFiles$10(VegaTest.java:174)"
+        "test.vega.VegaTest.lambda$11(VegaTest.java:174)"
       ]
     },
     {
@@ -631,7 +631,7 @@
         "net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)",
         "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:306)",
         "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:256)",
-        "test.vega.VegaTest.lambda$testAllPumlFiles$10(VegaTest.java:174)"
+        "test.vega.VegaTest.lambda$11(VegaTest.java:174)"
       ]
     },
     {
@@ -738,7 +738,7 @@
         "test.vega.VegaCheckerSvg.checkOutput(VegaCheckerSvg.java:26)",
         "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:355)",
         "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:256)",
-        "test.vega.VegaTest.lambda$testAllPumlFiles$10(VegaTest.java:174)"
+        "test.vega.VegaTest.lambda$11(VegaTest.java:174)"
       ]
     },
     {
@@ -791,7 +791,7 @@
         "test.vega.VegaCheckerLatex.checkOutput(VegaCheckerLatex.java:12)",
         "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:355)",
         "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:256)",
-        "test.vega.VegaTest.lambda$testAllPumlFiles$10(VegaTest.java:174)"
+        "test.vega.VegaTest.lambda$11(VegaTest.java:174)"
       ]
     },
     {
@@ -908,7 +908,7 @@
         "test.vega.VegaCheckerLatex.checkOutput(VegaCheckerLatex.java:12)",
         "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:355)",
         "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:256)",
-        "test.vega.VegaTest.lambda$testAllPumlFiles$10(VegaTest.java:174)"
+        "test.vega.VegaTest.lambda$11(VegaTest.java:174)"
       ]
     },
     {
@@ -1064,7 +1064,7 @@
         "test.vega.VegaCheckerLatex.checkOutput(VegaCheckerLatex.java:12)",
         "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:355)",
         "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:256)",
-        "test.vega.VegaTest.lambda$testAllPumlFiles$10(VegaTest.java:174)"
+        "test.vega.VegaTest.lambda$11(VegaTest.java:174)"
       ]
     },
     {
@@ -1181,7 +1181,7 @@
         "test.vega.VegaCheckerLatex.checkOutput(VegaCheckerLatex.java:12)",
         "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:355)",
         "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:256)",
-        "test.vega.VegaTest.lambda$testAllPumlFiles$10(VegaTest.java:174)"
+        "test.vega.VegaTest.lambda$11(VegaTest.java:174)"
       ]
     },
     {
@@ -1211,6 +1211,97 @@
       "status": "pass",
       "description": "Work Breakdown Structure",
       "diagram_class": "WBSDiagram"
+    },
+    {
+      "file": "xgantt/gantt0.puml",
+      "folder": "xgantt",
+      "status": "pass",
+      "description": "(Gantt)",
+      "diagram_class": "GanttDiagram"
+    },
+    {
+      "file": "xgantt/gantt1.puml",
+      "folder": "xgantt",
+      "status": "pass",
+      "description": "(Gantt)",
+      "diagram_class": "GanttDiagram"
+    },
+    {
+      "file": "xgantt/gantt10.puml",
+      "folder": "xgantt",
+      "status": "pass",
+      "description": "(Gantt)",
+      "diagram_class": "GanttDiagram"
+    },
+    {
+      "file": "xgantt/gantt2.puml",
+      "folder": "xgantt",
+      "status": "skipped",
+      "description": "(Error)",
+      "allow-failure": "true",
+      "diagram_class": "PSystemErrorV2",
+      "message": "Error message mismatch for src\\test\\resources\\vega\\xgantt\\gantt2.puml ==> expected: <No matching verb phrase (Assumed diagram type: gantt)> but was: <Syntax Error? (Assumed diagram type: gantt)>",
+      "stacktrace": [
+        "org.opentest4j.AssertionFailedError: Error message mismatch for src\\test\\resources\\vega\\xgantt\\gantt2.puml ==> expected: <No matching verb phrase (Assumed diagram type: gantt)> but was: <Syntax Error? (Assumed diagram type: gantt)>",
+        "org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)",
+        "org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)",
+        "org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:201)",
+        "org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:184)",
+        "org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1199)",
+        "test.vega.VegaInputFile.checkErrorExpectations(VegaInputFile.java:447)",
+        "test.vega.VegaInputFile.doRunSingleFile(VegaInputFile.java:364)",
+        "test.vega.VegaInputFile.runSingleFile(VegaInputFile.java:256)",
+        "test.vega.VegaTest.lambda$11(VegaTest.java:174)"
+      ]
+    },
+    {
+      "file": "xgantt/gantt3.puml",
+      "folder": "xgantt",
+      "status": "pass",
+      "description": "(Gantt)",
+      "diagram_class": "GanttDiagram"
+    },
+    {
+      "file": "xgantt/gantt4.puml",
+      "folder": "xgantt",
+      "status": "pass",
+      "description": "(Gantt)",
+      "diagram_class": "GanttDiagram"
+    },
+    {
+      "file": "xgantt/gantt5.puml",
+      "folder": "xgantt",
+      "status": "pass",
+      "description": "(Gantt)",
+      "diagram_class": "GanttDiagram"
+    },
+    {
+      "file": "xgantt/gantt6.puml",
+      "folder": "xgantt",
+      "status": "pass",
+      "description": "(Gantt)",
+      "diagram_class": "GanttDiagram"
+    },
+    {
+      "file": "xgantt/gantt7.puml",
+      "folder": "xgantt",
+      "status": "pass",
+      "description": "(Gantt)",
+      "diagram_class": "GanttDiagram"
+    },
+    {
+      "file": "xgantt/gantt8.puml",
+      "folder": "xgantt",
+      "status": "pass",
+      "description": "(Gantt)",
+      "diagram_class": "GanttDiagram"
+    },
+    {
+      "file": "xgantt/gantt9.puml",
+      "folder": "xgantt",
+      "status": "pass",
+      "description": "(Gantt)",
+      "diagram_class": "GanttDiagram"
     },
     {
       "file": "xmi/clazz/XMI0000_class.puml",
@@ -1256,9 +1347,9 @@
     }
   ],
   "summary": {
-    "total": 81,
-    "passed": 71,
+    "total": 92,
+    "passed": 81,
     "failed": 0,
-    "skipped": 10
+    "skipped": 11
   }
 }

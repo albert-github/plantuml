@@ -33,42 +33,43 @@
  * 
  *
  */
-package net.sourceforge.plantuml.project.lang;
+package net.sourceforge.plantuml.project.ulang;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import com.plantuml.ubrex.UMatcher;
-import com.plantuml.ubrex.builder.UBrexConcat;
-import com.plantuml.ubrex.builder.UBrexLeaf;
-import com.plantuml.ubrex.builder.UBrexNamed;
-import com.plantuml.ubrex.builder.UBrexPart;
 
-import net.sourceforge.plantuml.project.Failable;
-import net.sourceforge.plantuml.project.GanttDiagram;
-import net.sourceforge.plantuml.regex.IRegex;
-import net.sourceforge.plantuml.regex.RegexLeaf;
-import net.sourceforge.plantuml.regex.RegexResult;
+public class ParsedSentence {
 
-public class ComplementNamed implements Something<GanttDiagram> {
+	private final UMatcher matcherSubject;
+	private final List<VerbPhraseMatcher> verbPhrases;
 
-	public IRegex toRegex(String suffix) {
-		return new RegexLeaf(1, "COMPLEMENT" + suffix, "\\[([^\\[\\]]+)\\]");
+	public ParsedSentence(UMatcher matcherSubject, List<VerbPhraseMatcher> verbPhrases) {
+		this.matcherSubject = matcherSubject;
+		this.verbPhrases = Collections.unmodifiableList(new ArrayList<>(verbPhrases));
 	}
 
 	@Override
-	public UBrexPart toUnicodeBracketedExpressionComplement() {
-		return UBrexConcat.build( //
-				new UBrexLeaf("["), //
-				new UBrexNamed("COMPLEMENT", new UBrexLeaf("〇+「〤[]」")), //
-				new UBrexLeaf("]"));
-	}
-	
-	@Override
-	public Failable<String> ugetMe(GanttDiagram diagram, UMatcher arg) {
-		final String name = arg.get("COMPLEMENT", 0);
-		return Failable.ok(name);
+	public String toString() {
+		return "\n {" + matcherSubject.toString() + "} /\n       " + verbPhrases;
 	}
 
-	public Failable<String> getMe(GanttDiagram system, RegexResult arg, String suffix) {
-		final String name = arg.get("COMPLEMENT" + suffix, 0);
-		return Failable.ok(name);
+	public UMatcher getMatcherSubject() {
+		return matcherSubject;
 	}
+
+	public List<VerbPhraseMatcher> getVerbPhrases() {
+		return verbPhrases;
+	}
+
+	public UMatcher getVerbMatch() {
+		return verbPhrases.get(0).getVerbMatch();
+	}
+
+	public UMatcher getComplementMatcher() {
+		return verbPhrases.get(0).getComplementMatcher();
+	}
+
 }
