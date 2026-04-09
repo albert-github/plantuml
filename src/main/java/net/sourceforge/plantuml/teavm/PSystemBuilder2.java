@@ -185,6 +185,7 @@ public class PSystemBuilder2 {
 			final Diagram sys = lastFactory.createSystem(null, umlSource, null, preprocessing);
 			if (isOk(sys))
 				return sys;
+			errors.add((PSystemError) sys);
 		}
 
 		for (PSystemFactory f : factories) {
