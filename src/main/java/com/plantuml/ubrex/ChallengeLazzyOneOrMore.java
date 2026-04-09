@@ -52,7 +52,7 @@ public class ChallengeLazzyOneOrMore implements Challenge {
 		while (true) {
 			final ChallengeResult match1 = origin.runChallenge(string, currentPos);
 			if (match1.getFullCaptureLength() < 0)
-				return new ChallengeResult(NO_MATCH);
+				return ChallengeResult.NO_MATCH;
 			if (match1.getFullCaptureLength() == 0)
 				throw new IllegalStateException("infinite loop");
 			capture = capture.merge(match1.getCapture());

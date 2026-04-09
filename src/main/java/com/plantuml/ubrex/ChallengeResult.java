@@ -38,6 +38,10 @@ import java.util.List;
 
 public class ChallengeResult {
 
+	public static final ChallengeResult NO_MATCH = new ChallengeResult(Challenge.NO_MATCH);
+	public static final ChallengeResult ZERO = new ChallengeResult(0);
+	public static final ChallengeResult ONE = new ChallengeResult(1);
+
 	private final int fullCaptureLength;
 	private final int onlyNameLength;
 	private final Capture capture;
@@ -86,11 +90,9 @@ public class ChallengeResult {
 		return capture.getKeysToBeRefactored();
 	}
 
-
 	public List<String> getRootKeys() {
 		return capture.getRootKeys();
 	}
-
 
 	public Capture getCapture() {
 		return capture;
