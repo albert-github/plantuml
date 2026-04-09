@@ -76,6 +76,7 @@ public class VegaInputFile {
 	private final Path path;
 	private final Monomorph yaml;
 	private final List<String> pumlSource;
+	private final boolean hasYamlHeader;
 	private Class<?> diagramClass;
 	private Throwable rootCause;
 	private String description;
@@ -111,21 +112,25 @@ public class VegaInputFile {
 		}
 
 		final Monomorph yaml;
+		final boolean hasYamlHeader;
 		if (yamlLines.isEmpty()) {
 			yaml = new Monomorph();
 			yaml.putInMap("allow-failure", Monomorph.scalar("true"));
 			yaml.putInMap("output", Monomorph.scalar("svg"));
 			yaml.putInMap("tag", Monomorph.scalar("specification"));
+			hasYamlHeader = false;
 		} else {
 			yaml = new YamlParser().parse(yamlLines);
+			hasYamlHeader = true;
 		}
-		return new VegaInputFile(path, yaml, pumlLines);
+		return new VegaInputFile(path, yaml, pumlLines, hasYamlHeader);
 	}
 
-	private VegaInputFile(Path path, Monomorph yaml, List<String> pumlSource) {
+	private VegaInputFile(Path path, Monomorph yaml, List<String> pumlSource, boolean hasYamlHeader) {
 		this.path = path;
 		this.yaml = yaml;
 		this.pumlSource = pumlSource;
+		this.hasYamlHeader = hasYamlHeader;
 	}
 
 	public Path getPath() {
@@ -344,8 +349,8 @@ public class VegaInputFile {
 //					}
 				}
 
-				if (getExpectedException() == null && getExpectedErrorLine() == null
-						&& getExpectedErrorMessage() == null) {
+				if (hasYamlHeader == false || (getExpectedException() == null && getExpectedErrorLine() == null
+						&& getExpectedErrorMessage() == null)) {
 					final String suffix = nbImages == 1 ? "" : "-" + (imageIndex + 1);
 					final Path newFile = CHECKERS.get(fileFormat).checkOutput(this, baos, suffix, nbImages, imageIndex);
 					if (newFile != null)
@@ -451,6 +456,10 @@ public class VegaInputFile {
 			return this.rootCause.getClass().getSimpleName();
 
 		return this.rootCause.getClass().getSimpleName() + " - " + this.rootCause.getMessage();
+	}
+
+	public boolean forceWrite() {
+		return hasYamlHeader == false;
 	}
 
 }
