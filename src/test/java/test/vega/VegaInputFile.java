@@ -324,7 +324,6 @@ public class VegaInputFile {
 					final int status = imageData.getStatus();
 
 					if (expectedStatus != null) {
-						System.err.println("status=" + status);
 						assertEquals(expectedStatus, "" + status, "Bad status for " + path);
 					}
 
