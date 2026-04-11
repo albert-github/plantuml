@@ -51,7 +51,7 @@ public class UBrexCommandComment extends UBrexSingleLineCommand2<PSystemEbnf> {
 	}
 
 	static UnicodeBracketedExpression getRegexConcat() {
-		return UnicodeBracketedExpression.build("〇*〴s (* 〶$COMMENT=〄>〘*) 〇*〴s 〒($)〙");
+		return UnicodeBracketedExpression.build("〇*〴s (* 〶$COMMENT=〄>〘*) 〇*〴s 〒$〙");
 	}
 
 	@Override
