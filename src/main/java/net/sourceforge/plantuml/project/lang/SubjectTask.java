@@ -105,6 +105,29 @@ public class SubjectTask implements Subject<GanttDiagram> {
 			}
 		});
 
+		result.add(new VerbPhraseAction(Verbs.starts,
+				new PairOfSomething<>(new ComplementBeforeOrAfterOrAtTaskStartOrEnd(), new ComplementWithColorLink())) {
+			@Override
+			public CommandExecutionResult execute(GanttDiagram diagram, Object subject, Object complement) {
+				final Task task = (Task) subject;
+				final TaskInstant when;
+
+				final Object[] pairs = (Object[]) complement;
+				when = (TaskInstant) pairs[0];
+				final CenterBorderColor complement22 = (CenterBorderColor) pairs[1];
+
+				task.setStart(when.getInstantPrecise());
+				if (when.isTask()) {
+					final HColor color = complement22.getCenter();
+					final GanttConstraint link = new GanttConstraint(diagram.getIHtmlColorSet(),
+							diagram.getCurrentStyleBuilder(), when, new TaskInstant(task, TaskAttribute.START), color);
+					link.applyStyle(complement22.getStyle());
+					diagram.addContraint(link);
+				}
+				return CommandExecutionResult.ok();
+			}
+		});
+
 		result.add(new VerbPhraseAction(Verbs.starts, new ComplementBeforeOrAfterOrAtTaskStartOrEnd()) {
 			@Override
 			public CommandExecutionResult execute(GanttDiagram project, Object subject, Object complement) {
