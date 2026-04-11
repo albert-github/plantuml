@@ -136,13 +136,13 @@ Capture allows you to assign a **name** to a pattern, enabling later reference a
 ### Syntax
 
 ```
-〶$<name>=<pattern>
+〶$<n>=<pattern>
 ```
 
 | Component | Description                                             |
 | --------- | ------------------------------------------------------- |
 | `〶$`      | Indicates the start of a capture.                       |
-| `<name>`  | Assigns a **unique name** to the captured pattern.      |
+| `<n>`  | Assigns a **unique name** to the captured pattern.      |
 | `=`       | Separates the name from the **pattern to be captured**. |
 
 ### Example
@@ -169,16 +169,17 @@ To solve this, **ubrex introduces the "up-to" pattern**, which allows matching *
 〄>[PATTERN]
 ```
 
-| Component   | Description                                                          |
-| ----------- | -------------------------------------------------------------------- |
-| `〄>`        | Consume all characters **until** the specified `[PATTERN]` is found. |
-| `[PATTERN]` | Stopping condition—matching stops once this pattern is encountered.  |
+| Component   | Description                                                                          |
+| ----------- | ------------------------------------------------------------------------------------ |
+| `〄>`        | Consume all characters **up to and including** the specified `[PATTERN]`.             |
+| `[PATTERN]` | Stopping condition—the stop pattern is **consumed and included** in the match result. |
 
 #### Example
 
-| Pattern | Input String       | Match Result     | Explanation                                                                            |
-| ------- | ------------------ | ---------------- | -------------------------------------------------------------------------------------- |
-| `a〄>1`  | `anything until 1` | `anything until` | Starts with `a`, consumes **everything until** `1`. Matching stops just **after** `1`. |
+| Pattern    | Input String       | Match Result        | Explanation                                                                                              |
+| ---------- | ------------------ | ------------------- | -------------------------------------------------------------------------------------------------------- |
+| `a〄>1`     | `anything until 1` | `anything until 1`  | Starts with `a`, consumes **everything up to and including** `1`. The stop pattern is part of the match. |
+| `[[〄>]]`   | `[[link]]`         | `[[link]]`          | Matches `[[`, then consumes everything up to and including `]]`.                                         |
 
 ### Advanced Syntax
 
@@ -199,7 +200,7 @@ The basic syntax **accepts any character** until the stop pattern is reached. Ho
 
 | Pattern                | Input String | Captured Value | Explanation                                                                               |
 | ---------------------- | ------------ | -------------- | ----------------------------------------------------------------------------------------- |
-| `〶$NAME=〄+〴w ->〘zend〙` | `abcdzend`   | `abcd`         | Captures only **word characters** up to the sequence `zend`. Matching stops after `zend`. |
+| `〶$NAME=〄+〴w ->〘zend〙` | `abcdzend`   | `abcd`         | Captures only **word characters** up to the sequence `zend`. Matching stops after `zend`. |
 
 ### Key Notes
 
