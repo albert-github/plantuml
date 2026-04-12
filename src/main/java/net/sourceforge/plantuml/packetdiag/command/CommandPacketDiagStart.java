@@ -29,43 +29,45 @@
  * USA.
  *
  *
- * Original Author:  Duy Nguyen
+ * Original Author:  kolulu23
  *
  * 
  */
-package net.sourceforge.plantuml.packetdiag;
+package net.sourceforge.plantuml.packetdiag.command;
 
 import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.ParserPass;
 import net.sourceforge.plantuml.command.SingleLineCommand2;
 import net.sourceforge.plantuml.klimt.color.NoSuchColorException;
+import net.sourceforge.plantuml.packetdiag.PacketDiagram;
 import net.sourceforge.plantuml.regex.IRegex;
 import net.sourceforge.plantuml.regex.RegexConcat;
 import net.sourceforge.plantuml.regex.RegexLeaf;
 import net.sourceforge.plantuml.regex.RegexResult;
 import net.sourceforge.plantuml.utils.LineLocation;
 
-public class CommandSameHeight extends SingleLineCommand2<PacketDiagram> {
+/**
+ * Parses the start of a {@code packetdiag} diagram block.
+ * <p>
+ * Accepts {@code packetdiag} (optional) followed by optional whitespace and an optional opening brace.
+ * This command mainly serves as a block opener for the packet diagram parser.
+ * </p>
+ */
+public class CommandPacketDiagStart extends SingleLineCommand2<PacketDiagram> {
 
-	public CommandSameHeight() {
+	public CommandPacketDiagStart() {
 		super(getRegexConcat());
 	}
 
 	static IRegex getRegexConcat() {
-		return RegexConcat.build(CommandSameHeight.class.getName(), RegexLeaf.start(), //
-				new RegexLeaf("same_height"), //
-				RegexLeaf.spaceZeroOrMore(), //
-				new RegexLeaf("="), //
-				RegexLeaf.spaceZeroOrMore(), //
-				new RegexLeaf(1, "VALUE", "(true|false);?"), //
-				RegexLeaf.spaceZeroOrMore(), RegexLeaf.end());
+		return RegexConcat.build(CommandPacketDiagStart.class.getName(), RegexLeaf.start(), //
+						new RegexLeaf(1, "TYPE", "(packetdiag)?"), //
+						RegexLeaf.spaceZeroOrMore(), //
+						new RegexLeaf("\\{?"), RegexLeaf.end()); //
 	}
 
 	@Override
-	protected CommandExecutionResult executeArg(PacketDiagram system, LineLocation location, RegexResult arg,
-			ParserPass currentPass) throws NoSuchColorException {
-		final String value = arg.get("VALUE", 0);
-		system.setSameHeight("true".equalsIgnoreCase(value));
+	protected CommandExecutionResult executeArg(PacketDiagram system, LineLocation location, RegexResult arg, ParserPass currentPass) throws NoSuchColorException {
 		return CommandExecutionResult.ok();
 	}
 }

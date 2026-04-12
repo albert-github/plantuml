@@ -33,18 +33,26 @@
  *
  * 
  */
-package net.sourceforge.plantuml.packetdiag;
+package net.sourceforge.plantuml.packetdiag.command;
 
 import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.ParserPass;
 import net.sourceforge.plantuml.command.SingleLineCommand2;
 import net.sourceforge.plantuml.klimt.color.NoSuchColorException;
+import net.sourceforge.plantuml.packetdiag.PacketDiagram;
 import net.sourceforge.plantuml.regex.IRegex;
 import net.sourceforge.plantuml.regex.RegexConcat;
 import net.sourceforge.plantuml.regex.RegexLeaf;
 import net.sourceforge.plantuml.regex.RegexResult;
 import net.sourceforge.plantuml.utils.LineLocation;
 
+/**
+ * Parses and applies the {@code scale_interval=<N>} directive for {@code packetdiag} diagrams.
+ * <p>
+ * Controls how often bit positions are numbered on the scale by calling
+ * {@link PacketDiagram#updateScaleInterval(int)}.
+ * </p>
+ */
 public class CommandScaleInterval extends SingleLineCommand2<PacketDiagram> {
 
 	public CommandScaleInterval() {

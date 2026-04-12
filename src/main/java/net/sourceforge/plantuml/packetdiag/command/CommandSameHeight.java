@@ -29,46 +29,51 @@
  * USA.
  *
  *
- * Original Author:  kolulu23
+ * Original Author:  Duy Nguyen
  *
  * 
  */
-package net.sourceforge.plantuml.packetdiag;
+package net.sourceforge.plantuml.packetdiag.command;
 
 import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.ParserPass;
 import net.sourceforge.plantuml.command.SingleLineCommand2;
 import net.sourceforge.plantuml.klimt.color.NoSuchColorException;
+import net.sourceforge.plantuml.packetdiag.PacketDiagram;
 import net.sourceforge.plantuml.regex.IRegex;
 import net.sourceforge.plantuml.regex.RegexConcat;
 import net.sourceforge.plantuml.regex.RegexLeaf;
 import net.sourceforge.plantuml.regex.RegexResult;
 import net.sourceforge.plantuml.utils.LineLocation;
 
-public class CommandNodeHeight extends SingleLineCommand2<PacketDiagram> {
+/**
+ * Parses and applies the {@code same_height=<true|false>} directive for {@code packetdiag} diagrams.
+ * <p>
+ * When enabled, forces all blocks within the same row to share the row maximum height by calling
+ * {@link PacketDiagram#setSameHeight(boolean)}.
+ * </p>
+ */
+public class CommandSameHeight extends SingleLineCommand2<PacketDiagram> {
 
-	public CommandNodeHeight() {
+	public CommandSameHeight() {
 		super(getRegexConcat());
 	}
 
 	static IRegex getRegexConcat() {
-		return RegexConcat.build(CommandNodeHeight.class.getName(), RegexLeaf.start(), //
-						new RegexLeaf("node_height"), //
-						RegexLeaf.spaceZeroOrMore(), //
-						new RegexLeaf("="), //
-						RegexLeaf.spaceZeroOrMore(), //
-						new RegexLeaf(1, "HEIGHT", "(\\d{1,3});?"), //
-						RegexLeaf.spaceZeroOrMore(), RegexLeaf.end());
+		return RegexConcat.build(CommandSameHeight.class.getName(), RegexLeaf.start(), //
+				new RegexLeaf("same_height"), //
+				RegexLeaf.spaceZeroOrMore(), //
+				new RegexLeaf("="), //
+				RegexLeaf.spaceZeroOrMore(), //
+				new RegexLeaf(1, "VALUE", "(true|false);?"), //
+				RegexLeaf.spaceZeroOrMore(), RegexLeaf.end());
 	}
 
 	@Override
-	protected CommandExecutionResult executeArg(PacketDiagram system, LineLocation location, RegexResult arg, ParserPass currentPass) throws NoSuchColorException {
-		try {
-			// The original python implementation takes int, but it really should be a float number
-			system.updateNodeHeight(Integer.parseInt(arg.get("HEIGHT", 0)));
-		} catch (NumberFormatException e) {
-			return CommandExecutionResult.error("Height must be an integer", e);
-		}
+	protected CommandExecutionResult executeArg(PacketDiagram system, LineLocation location, RegexResult arg,
+			ParserPass currentPass) throws NoSuchColorException {
+		final String value = arg.get("VALUE", 0);
+		system.setSameHeight("true".equalsIgnoreCase(value));
 		return CommandExecutionResult.ok();
 	}
 }
