@@ -297,8 +297,6 @@ public class VegaInputFile {
 		final int nbImages = ssr.getBlocks().get(0).getDiagram().getNbImages();
 		final List<Path> generatedFiles = new ArrayList<>();
 
-		final String expectedStatus = getYamlString("expected-status");
-
 		for (final FileFormat fileFormat : fileFormats) {
 			for (int imageIndex = 0; imageIndex < nbImages; imageIndex++) {
 				final SourceStringReader ssrForFormat = new SourceStringReader(source, UTF_8);
@@ -328,9 +326,7 @@ public class VegaInputFile {
 					assertNotNull(imageData);
 					final int status = imageData.getStatus();
 
-					if (expectedStatus != null) {
-						assertEquals(expectedStatus, "" + status, "Bad status for " + path);
-					}
+					assertEquals(getExpectedStatus(), status, "Bad status for " + path);
 
 					if (status != 0 && imageData.getRootCause() != null) {
 						assertNotNull(getExpectedException(), "Rendering failed with status " + status
@@ -412,6 +408,13 @@ public class VegaInputFile {
 
 	private String getExpectedErrorLine() {
 		return getYamlString("expected-error-line");
+	}
+
+	private int getExpectedStatus() {
+		final String value = getYamlString("expected-status");
+		if (value == null)
+			return 0;
+		return Integer.parseInt(value);
 	}
 
 	private void checkErrorExpectations(SourceStringReader ssr) {
