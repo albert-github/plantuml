@@ -212,22 +212,22 @@ public class I18nTimeDataGenerator {
 	private static String dayShortName(DayOfWeek d, Locale locale) {
 		if (locale == Locale.ENGLISH || "en".equals(locale.getLanguage()))
 			return capitalize(d.name().substring(0, 2));
-		final String s = capitalize(d.getDisplayName(TextStyle.SHORT_STANDALONE, locale));
+		final String s = d.getDisplayName(TextStyle.SHORT_STANDALONE, locale);
 		if (s.length() > 2)
-			return capitalize(s.substring(0, 2));
-		return capitalize(s);
+			return s.substring(0, 2);
+		return s;
 	}
 
 	private static String monthShortName(Month m, Locale locale) {
 		if (locale == Locale.ENGLISH || "en".equals(locale.getLanguage()))
 			return capitalize(m.name()).substring(0, 3);
-		return capitalize(m.getDisplayName(TextStyle.SHORT_STANDALONE, locale));
+		return m.getDisplayName(TextStyle.SHORT_STANDALONE, locale);
 	}
 
 	private static String monthLongName(Month m, Locale locale) {
 		if (locale == Locale.ENGLISH || "en".equals(locale.getLanguage()))
 			return capitalize(m.name());
-		return capitalize(m.getDisplayName(TextStyle.FULL_STANDALONE, locale));
+		return m.getDisplayName(TextStyle.FULL_STANDALONE, locale);
 	}
 
 	// Escape only characters that have a special meaning inside a Java string

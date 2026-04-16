@@ -24,24 +24,24 @@ public class I18nTimeData {
 			break;
 		case "es":
 			switch (dayOfWeek) {
-			case MONDAY: return "Lu";
-			case TUESDAY: return "Ma";
-			case WEDNESDAY: return "Mi";
-			case THURSDAY: return "Ju";
-			case FRIDAY: return "Vi";
-			case SATURDAY: return "Sá";
-			case SUNDAY: return "Do";
+			case MONDAY: return "lu";
+			case TUESDAY: return "ma";
+			case WEDNESDAY: return "mi";
+			case THURSDAY: return "ju";
+			case FRIDAY: return "vi";
+			case SATURDAY: return "sá";
+			case SUNDAY: return "do";
 			}
 			break;
 		case "fr":
 			switch (dayOfWeek) {
-			case MONDAY: return "Lu";
-			case TUESDAY: return "Ma";
-			case WEDNESDAY: return "Me";
-			case THURSDAY: return "Je";
-			case FRIDAY: return "Ve";
-			case SATURDAY: return "Sa";
-			case SUNDAY: return "Di";
+			case MONDAY: return "lu";
+			case TUESDAY: return "ma";
+			case WEDNESDAY: return "me";
+			case THURSDAY: return "je";
+			case FRIDAY: return "ve";
+			case SATURDAY: return "sa";
+			case SUNDAY: return "di";
 			}
 			break;
 		case "ja":
@@ -68,13 +68,13 @@ public class I18nTimeData {
 			break;
 		case "ru":
 			switch (dayOfWeek) {
-			case MONDAY: return "Пн";
-			case TUESDAY: return "Вт";
-			case WEDNESDAY: return "Ср";
-			case THURSDAY: return "Чт";
-			case FRIDAY: return "Пт";
-			case SATURDAY: return "Сб";
-			case SUNDAY: return "Вс";
+			case MONDAY: return "пн";
+			case TUESDAY: return "вт";
+			case WEDNESDAY: return "ср";
+			case THURSDAY: return "чт";
+			case FRIDAY: return "пт";
+			case SATURDAY: return "сб";
+			case SUNDAY: return "вс";
 			}
 			break;
 		case "zh":
@@ -123,34 +123,34 @@ public class I18nTimeData {
 			break;
 		case "es":
 			switch (month) {
-			case JANUARY: return "Ene";
-			case FEBRUARY: return "Feb";
-			case MARCH: return "Mar";
-			case APRIL: return "Abr";
-			case MAY: return "May";
-			case JUNE: return "Jun";
-			case JULY: return "Jul";
-			case AUGUST: return "Ago";
-			case SEPTEMBER: return "Sept";
-			case OCTOBER: return "Oct";
-			case NOVEMBER: return "Nov";
-			case DECEMBER: return "Dic";
+			case JANUARY: return "ene";
+			case FEBRUARY: return "feb";
+			case MARCH: return "mar";
+			case APRIL: return "abr";
+			case MAY: return "may";
+			case JUNE: return "jun";
+			case JULY: return "jul";
+			case AUGUST: return "ago";
+			case SEPTEMBER: return "sept";
+			case OCTOBER: return "oct";
+			case NOVEMBER: return "nov";
+			case DECEMBER: return "dic";
 			}
 			break;
 		case "fr":
 			switch (month) {
-			case JANUARY: return "Janv.";
-			case FEBRUARY: return "Févr.";
-			case MARCH: return "Mars";
-			case APRIL: return "Avr.";
-			case MAY: return "Mai";
-			case JUNE: return "Juin";
-			case JULY: return "Juil.";
-			case AUGUST: return "Août";
-			case SEPTEMBER: return "Sept.";
-			case OCTOBER: return "Oct.";
-			case NOVEMBER: return "Nov.";
-			case DECEMBER: return "Déc.";
+			case JANUARY: return "janv.";
+			case FEBRUARY: return "févr.";
+			case MARCH: return "mars";
+			case APRIL: return "avr.";
+			case MAY: return "mai";
+			case JUNE: return "juin";
+			case JULY: return "juil.";
+			case AUGUST: return "août";
+			case SEPTEMBER: return "sept.";
+			case OCTOBER: return "oct.";
+			case NOVEMBER: return "nov.";
+			case DECEMBER: return "déc.";
 			}
 			break;
 		case "ja":
@@ -187,18 +187,18 @@ public class I18nTimeData {
 			break;
 		case "ru":
 			switch (month) {
-			case JANUARY: return "Янв.";
-			case FEBRUARY: return "Февр.";
-			case MARCH: return "Март";
-			case APRIL: return "Апр.";
-			case MAY: return "Май";
-			case JUNE: return "Июнь";
-			case JULY: return "Июль";
-			case AUGUST: return "Авг.";
-			case SEPTEMBER: return "Сент.";
-			case OCTOBER: return "Окт.";
-			case NOVEMBER: return "Нояб.";
-			case DECEMBER: return "Дек.";
+			case JANUARY: return "янв.";
+			case FEBRUARY: return "февр.";
+			case MARCH: return "март";
+			case APRIL: return "апр.";
+			case MAY: return "май";
+			case JUNE: return "июнь";
+			case JULY: return "июль";
+			case AUGUST: return "авг.";
+			case SEPTEMBER: return "сент.";
+			case OCTOBER: return "окт.";
+			case NOVEMBER: return "нояб.";
+			case DECEMBER: return "дек.";
 			}
 			break;
 		case "zh":
@@ -257,34 +257,34 @@ public class I18nTimeData {
 			break;
 		case "es":
 			switch (month) {
-			case JANUARY: return "Enero";
-			case FEBRUARY: return "Febrero";
-			case MARCH: return "Marzo";
-			case APRIL: return "Abril";
-			case MAY: return "Mayo";
-			case JUNE: return "Junio";
-			case JULY: return "Julio";
-			case AUGUST: return "Agosto";
-			case SEPTEMBER: return "Septiembre";
-			case OCTOBER: return "Octubre";
-			case NOVEMBER: return "Noviembre";
-			case DECEMBER: return "Diciembre";
+			case JANUARY: return "enero";
+			case FEBRUARY: return "febrero";
+			case MARCH: return "marzo";
+			case APRIL: return "abril";
+			case MAY: return "mayo";
+			case JUNE: return "junio";
+			case JULY: return "julio";
+			case AUGUST: return "agosto";
+			case SEPTEMBER: return "septiembre";
+			case OCTOBER: return "octubre";
+			case NOVEMBER: return "noviembre";
+			case DECEMBER: return "diciembre";
 			}
 			break;
 		case "fr":
 			switch (month) {
-			case JANUARY: return "Janvier";
-			case FEBRUARY: return "Février";
-			case MARCH: return "Mars";
-			case APRIL: return "Avril";
-			case MAY: return "Mai";
-			case JUNE: return "Juin";
-			case JULY: return "Juillet";
-			case AUGUST: return "Août";
-			case SEPTEMBER: return "Septembre";
-			case OCTOBER: return "Octobre";
-			case NOVEMBER: return "Novembre";
-			case DECEMBER: return "Décembre";
+			case JANUARY: return "janvier";
+			case FEBRUARY: return "février";
+			case MARCH: return "mars";
+			case APRIL: return "avril";
+			case MAY: return "mai";
+			case JUNE: return "juin";
+			case JULY: return "juillet";
+			case AUGUST: return "août";
+			case SEPTEMBER: return "septembre";
+			case OCTOBER: return "octobre";
+			case NOVEMBER: return "novembre";
+			case DECEMBER: return "décembre";
 			}
 			break;
 		case "ja":
@@ -321,18 +321,18 @@ public class I18nTimeData {
 			break;
 		case "ru":
 			switch (month) {
-			case JANUARY: return "Январь";
-			case FEBRUARY: return "Февраль";
-			case MARCH: return "Март";
-			case APRIL: return "Апрель";
-			case MAY: return "Май";
-			case JUNE: return "Июнь";
-			case JULY: return "Июль";
-			case AUGUST: return "Август";
-			case SEPTEMBER: return "Сентябрь";
-			case OCTOBER: return "Октябрь";
-			case NOVEMBER: return "Ноябрь";
-			case DECEMBER: return "Декабрь";
+			case JANUARY: return "январь";
+			case FEBRUARY: return "февраль";
+			case MARCH: return "март";
+			case APRIL: return "апрель";
+			case MAY: return "май";
+			case JUNE: return "июнь";
+			case JULY: return "июль";
+			case AUGUST: return "август";
+			case SEPTEMBER: return "сентябрь";
+			case OCTOBER: return "октябрь";
+			case NOVEMBER: return "ноябрь";
+			case DECEMBER: return "декабрь";
 			}
 			break;
 		case "zh":
